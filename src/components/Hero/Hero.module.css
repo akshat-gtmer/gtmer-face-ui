@@ -1,0 +1,391 @@
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-4xl) var(--space-xl) var(--space-3xl);
+  position: relative;
+  overflow: hidden;
+  scroll-snap-align: start;
+}
+
+/* Ambient light effects */
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(77, 168, 218, 0.06) 0%, transparent 70%);
+  pointer-events: none;
+  animation: ambientPulse 8s ease-in-out infinite;
+}
+
+@keyframes ambientPulse {
+
+  0%,
+  100% {
+    opacity: 0.6;
+    transform: translateX(-50%) scale(1);
+  }
+
+  50% {
+    opacity: 1;
+    transform: translateX(-50%) scale(1.1);
+  }
+}
+
+/* Content wrapper */
+.heroContent {
+  max-width: 720px;
+  text-align: center;
+  position: relative;
+  z-index: 2;
+}
+
+/* System status indicator above headline */
+.systemStatus {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-xs) var(--space-md);
+  background: rgba(77, 168, 218, 0.06);
+  border: 1px solid rgba(77, 168, 218, 0.12);
+  border-radius: 100px;
+  margin-bottom: var(--space-xl);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--color-text-muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  animation: fadeInDown 0.8s ease forwards;
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.statusIndicator {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #27c93f;
+  animation: statusPulse 2s ease-in-out infinite;
+}
+
+@keyframes statusPulse {
+
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(39, 201, 63, 0.4);
+  }
+
+  50% {
+    box-shadow: 0 0 0 4px rgba(39, 201, 63, 0.1);
+  }
+}
+
+/* Headline */
+.headline {
+  font-family: var(--font-sans);
+  font-size: clamp(2.2rem, 5vw, 3.5rem);
+  font-weight: 600;
+  line-height: 1.15;
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-lg);
+  letter-spacing: -0.03em;
+  animation: fadeInUp 0.8s ease 0.2s forwards;
+  opacity: 0;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.headlineAccent {
+  color: var(--color-accent);
+  position: relative;
+}
+
+.headlineAccent::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--color-accent), transparent);
+  opacity: 0.4;
+}
+
+/* Subtext */
+.subtext {
+  font-size: clamp(0.95rem, 1.5vw, 1.1rem);
+  font-weight: 300;
+  color: var(--color-text-secondary);
+  line-height: 1.7;
+  max-width: 540px;
+  margin: 0 auto var(--space-2xl);
+  animation: fadeInUp 0.8s ease 0.4s forwards;
+  opacity: 0;
+}
+
+/* ===== /GTMER MARK ===== */
+.heroMark {
+  font-family: var(--font-mono);
+  font-size: clamp(4.5rem, 10vw, 7rem);
+  font-weight: 700;
+  letter-spacing: -0.05em;
+  line-height: 1;
+  user-select: none;
+  margin-bottom: var(--space-xl);
+  animation: fadeInUp 0.8s ease 0.15s forwards;
+  opacity: 0;
+  position: relative;
+}
+
+/* The slash — accent color, soft breathe */
+.markSlash {
+  color: var(--color-accent);
+  opacity: 0.7;
+  animation: slashBreathe 4s ease-in-out infinite;
+}
+
+/* The name — chalk on blueprint */
+.markName {
+  color: rgba(212, 227, 240, 0.92);
+  text-shadow:
+    /* Chalk grain — multiple offset micro-shadows */
+    0 0 1px rgba(212, 227, 240, 0.4),
+    1px 0 2px rgba(212, 227, 240, 0.08),
+    -1px 0 2px rgba(212, 227, 240, 0.05),
+    0 1px 1px rgba(212, 227, 240, 0.06),
+    /* Soft ambient glow underneath */
+    0 0 40px rgba(77, 168, 218, 0.08),
+    0 0 80px rgba(77, 168, 218, 0.04);
+}
+
+/* Slow breathe — the mark is alive */
+@keyframes slashBreathe {
+
+  0%,
+  100% {
+    opacity: 0.55;
+    text-shadow: none;
+  }
+
+  50% {
+    opacity: 0.9;
+    text-shadow: 0 0 16px rgba(77, 168, 218, 0.25);
+  }
+}
+
+/* CTA Group */
+.ctaGroup {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-md);
+  animation: fadeInUp 0.8s ease 0.6s forwards;
+  opacity: 0;
+  margin-bottom: var(--space-3xl);
+}
+
+.ctaPrimary {
+  padding: 14px 32px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-text-primary);
+  background: rgba(77, 168, 218, 0.15);
+  border: 1px solid rgba(77, 168, 218, 0.3);
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-base);
+  font-family: var(--font-sans);
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.ctaPrimary::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  background: linear-gradient(135deg, rgba(77, 168, 218, 0.2), rgba(77, 168, 218, 0.05));
+  opacity: 0;
+  transition: opacity var(--transition-base);
+  border-radius: inherit;
+}
+
+.ctaPrimary:hover {
+  background: rgba(77, 168, 218, 0.22);
+  border-color: rgba(77, 168, 218, 0.45);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(77, 168, 218, 0.15);
+}
+
+.ctaPrimary:hover::before {
+  opacity: 1;
+}
+
+.ctaSecondary {
+  padding: 14px 28px;
+  font-size: 0.875rem;
+  font-weight: 400;
+  color: var(--color-text-secondary);
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-base);
+  font-family: var(--font-sans);
+  cursor: pointer;
+}
+
+.ctaSecondary:hover {
+  color: var(--color-text-primary);
+  border-color: var(--color-border-active);
+  transform: translateY(-2px);
+  background: rgba(77, 168, 218, 0.04);
+}
+
+/* Activity indicators — subtle "system alive" feel */
+.activityLayer {
+  position: absolute;
+  bottom: var(--space-3xl);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: var(--space-lg);
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  color: var(--color-text-muted);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  opacity: 0;
+  animation: fadeInUp 0.8s ease 1.5s forwards;
+}
+
+.activityItem {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.activityDot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--color-text-muted);
+  animation: activityBlink 3s ease-in-out infinite;
+}
+
+.activityDot:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.activityDot:nth-child(2) {
+  animation-delay: 1s;
+}
+
+@keyframes activityBlink {
+
+  0%,
+  100% {
+    opacity: 0.3;
+  }
+
+  50% {
+    opacity: 0.8;
+    background: var(--color-accent);
+  }
+}
+
+/* Scroll down chevron */
+.scrollChevron {
+  position: absolute;
+  bottom: calc(var(--space-3xl) + 40px);
+  left: 50%;
+  transform: translateX(-50%);
+  cursor: pointer;
+  z-index: 3;
+  opacity: 0;
+  animation: fadeInUp 0.8s ease 2s forwards;
+}
+
+.chevronIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: 1px solid rgba(77, 168, 218, 0.2);
+  border-radius: 50%;
+  font-size: 1rem;
+  color: var(--color-text-muted);
+  animation: chevronBounce 2s ease-in-out infinite;
+  transition: border-color var(--transition-fast), color var(--transition-fast);
+}
+
+.scrollChevron:hover .chevronIcon {
+  border-color: rgba(77, 168, 218, 0.5);
+  color: var(--color-accent);
+}
+
+@keyframes chevronBounce {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(6px);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .hero {
+    padding: var(--space-4xl) var(--space-md) var(--space-2xl);
+  }
+
+  .ctaGroup {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .ctaPrimary,
+  .ctaSecondary {
+    width: 100%;
+    text-align: center;
+  }
+
+  .activityLayer {
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+
+  .scrollChevron {
+    display: none;
+  }
+}

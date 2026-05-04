@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <defs>
+    <linearGradient id="strokeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#e8f0f8;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#8ba4bd;stop-opacity:0.9" />
+    </linearGradient>
+  </defs>
+  <!-- /g logo mark - slash + g with arrow, inspired by the user's handwritten logos -->
+  <g transform="translate(100,100)" stroke="url(#strokeGrad)" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Slash -->
+    <line x1="-25" y1="-55" x2="5" y2="25" stroke-width="6"/>
+    <!-- g curve - top arc -->
+    <path d="M 5,-30 C 30,-45 45,-25 35,-10 C 25,5 5,5 0,0" stroke-width="6"/>
+    <!-- g curve - bottom loop and arrow -->
+    <path d="M 0,0 C -10,15 -5,35 10,30 C 25,25 35,15 45,10" stroke-width="6"/>
+    <!-- Arrow head -->
+    <path d="M 38,5 L 48,10 L 38,16" stroke-width="4"/>
+  </g>
+</svg>

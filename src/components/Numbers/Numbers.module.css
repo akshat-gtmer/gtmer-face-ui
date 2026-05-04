@@ -1,0 +1,249 @@
+.section {
+  position: relative;
+  padding: var(--space-4xl) var(--space-xl);
+  overflow: hidden;
+  scroll-snap-align: start;
+}
+
+/* Divider */
+.section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 10%;
+  right: 10%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(120, 190, 240, 0.15), transparent);
+}
+
+/* ===== INTEGRATIONS TICKER ===== */
+
+.tickerBlock {
+  margin-bottom: var(--space-4xl);
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.tickerBlock.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.tickerLabel {
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--color-text-muted);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: var(--space-lg);
+}
+
+.tickerTrack {
+  position: relative;
+  overflow: hidden;
+  mask-image: linear-gradient(90deg, transparent, black 10%, black 90%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, black 10%, black 90%, transparent);
+}
+
+.tickerInner {
+  display: flex;
+  gap: var(--space-md);
+  width: max-content;
+  animation: tickerScroll 35s linear infinite;
+}
+
+.tickerInner:hover {
+  animation-play-state: paused;
+}
+
+@keyframes tickerScroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* Reverse row */
+.tickerInnerReverse {
+  composes: tickerInner;
+  animation-direction: reverse;
+  margin-top: var(--space-sm);
+}
+
+.tickerBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: 6px 16px;
+  background: rgba(10, 31, 53, 0.6);
+  border: 1px solid rgba(77, 168, 218, 0.1);
+  border-radius: 100px;
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  font-weight: 400;
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+  transition: border-color var(--transition-fast), background var(--transition-fast);
+  flex-shrink: 0;
+}
+
+.tickerBadge:hover {
+  border-color: rgba(77, 168, 218, 0.25);
+  background: rgba(10, 31, 53, 0.8);
+}
+
+.tickerBadgeIcon {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: var(--color-accent);
+  background: rgba(77, 168, 218, 0.12);
+  padding: 2px 6px;
+  border-radius: 3px;
+  letter-spacing: 0.02em;
+}
+
+/* ===== NUMBERS SECTION ===== */
+
+.numbersBlock {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.numbersBlock.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.numbersHeadline {
+  text-align: center;
+  font-family: var(--font-sans);
+  font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-sm);
+  letter-spacing: -0.03em;
+}
+
+.numbersAccent {
+  color: var(--color-accent);
+}
+
+.numbersSubtext {
+  text-align: center;
+  font-size: clamp(0.85rem, 1.2vw, 0.95rem);
+  font-weight: 300;
+  color: var(--color-text-secondary);
+  max-width: 480px;
+  margin: 0 auto var(--space-3xl);
+  line-height: 1.7;
+}
+
+/* Stats grid */
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: var(--space-lg);
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+/* Individual stat card */
+.statCard {
+  position: relative;
+  background: rgba(10, 31, 53, 0.65);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(77, 168, 218, 0.1);
+  border-radius: var(--radius-md);
+  padding: var(--space-xl) var(--space-lg);
+  transition: all var(--transition-base);
+  overflow: hidden;
+  /* Staggered reveal */
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.statCard.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.statCard:hover {
+  border-color: rgba(77, 168, 218, 0.25);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+}
+
+/* Metric number */
+.statMetric {
+  font-family: var(--font-sans);
+  font-size: clamp(2rem, 3vw, 2.8rem);
+  font-weight: 700;
+  line-height: 1.1;
+  margin-bottom: var(--space-sm);
+  letter-spacing: -0.03em;
+}
+
+/* Color variants for metrics */
+.metricGreen { color: #34d399; }
+.metricPurple { color: #a78bfa; }
+.metricCyan { color: var(--color-accent-neon); }
+.metricBlue { color: var(--color-accent); }
+.metricOrange { color: #fb923c; }
+
+/* Stat title */
+.statTitle {
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin-bottom: 2px;
+}
+
+/* Stat comparison */
+.statVs {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--color-text-muted);
+  letter-spacing: 0.03em;
+  margin-bottom: var(--space-md);
+}
+
+/* Stat description */
+.statDesc {
+  font-size: 0.78rem;
+  font-weight: 300;
+  color: var(--color-text-secondary);
+  line-height: 1.55;
+}
+
+/* ===== COUNTER ANIMATION ===== */
+
+.counterAnimating {
+  display: inline-block;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .statsGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 700px) {
+  .statsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .section {
+    padding: var(--space-3xl) var(--space-md);
+  }
+}
+
+@media (max-width: 480px) {
+  .statsGrid {
+    grid-template-columns: 1fr;
+  }
+}
