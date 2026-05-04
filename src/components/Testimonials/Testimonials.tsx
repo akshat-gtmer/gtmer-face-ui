@@ -47,6 +47,73 @@ const TESTIMONIALS: Testimonial[] = [
   },
 ]
 
+/* ===== GLIMPSE BADGES ===== */
+
+const GlimpsePipelineBar = () => (
+  <div className={styles.glimpseBadge}>
+    <div className={styles.glimpseBadgeHeader}>
+      <span className={styles.glimpseBadgeIcon}>📊</span>
+      <span className={styles.glimpseBadgeTitle}>Verified Outcome</span>
+    </div>
+    <div className={styles.pipelineMini}>
+      <div className={styles.pipelineMiniLabel}>
+        <span>Pipeline</span>
+        <span className={styles.pipelineMiniValue}>3×</span>
+      </div>
+      <div className={styles.pipelineMiniTrack}>
+        <div className={styles.pipelineMiniSegment} style={{ width: '33%', background: '#94a3b8' }} />
+        <div className={styles.pipelineMiniSegment} style={{ width: '100%', background: 'linear-gradient(90deg, #3b82f6, #6366f1)' }} />
+      </div>
+      <div className={styles.pipelineMiniLabels}>
+        <span>Before</span>
+        <span>After GTMer</span>
+      </div>
+    </div>
+  </div>
+)
+
+const GlimpseLeadCounter = () => (
+  <div className={styles.glimpseBadge}>
+    <div className={styles.glimpseBadgeHeader}>
+      <span className={styles.glimpseBadgeIcon}>🎯</span>
+      <span className={styles.glimpseBadgeTitle}>Verified Outcome</span>
+    </div>
+    <div className={styles.counterMini}>
+      <div className={styles.counterMiniNum}>40+</div>
+      <div className={styles.counterMiniDetail}>
+        <span className={styles.counterMiniLabel}>Qualified Leads</span>
+        <span className={styles.counterMiniPeriod}>per month</span>
+      </div>
+      <div className={styles.counterMiniDots}>
+        {Array.from({ length: 8 }).map((_, i) => (
+          <span key={i} className={styles.counterMiniDot} style={{ animationDelay: `${i * 120}ms` }} />
+        ))}
+      </div>
+    </div>
+  </div>
+)
+
+const GlimpseClientGrid = () => (
+  <div className={styles.glimpseBadge}>
+    <div className={styles.glimpseBadgeHeader}>
+      <span className={styles.glimpseBadgeIcon}>🏢</span>
+      <span className={styles.glimpseBadgeTitle}>Verified Outcome</span>
+    </div>
+    <div className={styles.clientGridMini}>
+      {Array.from({ length: 12 }).map((_, i) => (
+        <div
+          key={i}
+          className={styles.clientGridTile}
+          style={{ animationDelay: `${i * 80}ms` }}
+        />
+      ))}
+    </div>
+    <div className={styles.clientGridLabel}>12 clients · 1 operator</div>
+  </div>
+)
+
+const GLIMPSE_BADGES = [GlimpsePipelineBar, GlimpseLeadCounter, GlimpseClientGrid]
+
 /* ===== COMPONENT ===== */
 
 const Testimonials = () => {
@@ -87,34 +154,40 @@ const Testimonials = () => {
 
       {/* Testimonial cards */}
       <div ref={cardsReveal.ref} className={styles.cardsGrid}>
-        {TESTIMONIALS.map((t, index) => (
-          <div
-            key={t.name}
-            className={`${styles.card} ${visibleCards.includes(index) ? styles.cardVisible : ''}`}
-          >
-            {/* Quote */}
-            <div className={styles.quoteBlock}>
-              <span className={styles.quoteMark}>"</span>
-              <p className={styles.quoteText}>{t.quote}</p>
-            </div>
+        {TESTIMONIALS.map((t, index) => {
+          const GlimpseBadgeComponent = GLIMPSE_BADGES[index]
+          return (
+            <div
+              key={t.name}
+              className={`${styles.card} ${visibleCards.includes(index) ? styles.cardVisible : ''}`}
+            >
+              {/* Quote */}
+              <div className={styles.quoteBlock}>
+                <span className={styles.quoteMark}>"</span>
+                <p className={styles.quoteText}>{t.quote}</p>
+              </div>
 
-            {/* Author */}
-            <div className={styles.authorBlock}>
-              <div className={styles.avatar}>{t.initials}</div>
-              <div className={styles.authorInfo}>
-                <div className={styles.authorName}>{t.name}</div>
-                <div className={styles.authorRole}>{t.role}</div>
-                <div className={styles.authorCompany}>{t.company}</div>
+              {/* Verified Outcome Glimpse */}
+              <GlimpseBadgeComponent />
+
+              {/* Author */}
+              <div className={styles.authorBlock}>
+                <div className={styles.avatar}>{t.initials}</div>
+                <div className={styles.authorInfo}>
+                  <div className={styles.authorName}>{t.name}</div>
+                  <div className={styles.authorRole}>{t.role}</div>
+                  <div className={styles.authorCompany}>{t.company}</div>
+                </div>
+              </div>
+
+              {/* Key metric */}
+              <div className={styles.metricBar}>
+                <span className={styles.metricValue}>{t.metric}</span>
+                <span className={styles.metricLabel}>{t.metricLabel}</span>
               </div>
             </div>
-
-            {/* Key metric */}
-            <div className={styles.metricBar}>
-              <span className={styles.metricValue}>{t.metric}</span>
-              <span className={styles.metricLabel}>{t.metricLabel}</span>
-            </div>
-          </div>
-        ))}
+          )
+        })}
       </div>
     </section>
   )

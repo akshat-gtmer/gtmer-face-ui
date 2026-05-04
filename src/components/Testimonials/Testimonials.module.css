@@ -3,6 +3,10 @@
   padding: var(--space-4xl) var(--space-xl);
   overflow: hidden;
   scroll-snap-align: start;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .section::before {
@@ -201,6 +205,178 @@
   color: var(--color-text-muted);
   text-transform: uppercase;
   letter-spacing: 0.08em;
+}
+
+/* ===== GLIMPSE BADGE — Verified Outcome ===== */
+
+.glimpseBadge {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  padding: 10px 12px;
+  margin-bottom: var(--space-md);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06), 0 0 1px rgba(0, 0, 0, 0.1);
+}
+
+.glimpseBadgeHeader {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.glimpseBadgeIcon {
+  font-size: 0.7rem;
+}
+
+.glimpseBadgeTitle {
+  font-family: var(--font-mono);
+  font-size: 0.5rem;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* ===== Pipeline Bar Chart ===== */
+
+.pipelineMini {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.pipelineMiniLabel {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  font-family: var(--font-sans);
+  font-size: 0.55rem;
+  color: #475569;
+  font-weight: 500;
+}
+
+.pipelineMiniValue {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #3b82f6;
+}
+
+.pipelineMiniTrack {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.pipelineMiniSegment {
+  height: 6px;
+  border-radius: 3px;
+  transition: width 1s ease;
+}
+
+.pipelineMiniLabels {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: 0.4rem;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* ===== Lead Counter ===== */
+
+.counterMini {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.counterMiniNum {
+  font-family: var(--font-sans);
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #3b82f6;
+  line-height: 1;
+}
+
+.counterMiniDetail {
+  display: flex;
+  flex-direction: column;
+}
+
+.counterMiniLabel {
+  font-family: var(--font-sans);
+  font-size: 0.55rem;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.counterMiniPeriod {
+  font-family: var(--font-mono);
+  font-size: 0.4rem;
+  color: #94a3b8;
+  text-transform: uppercase;
+}
+
+.counterMiniDots {
+  display: flex;
+  gap: 3px;
+  margin-top: 4px;
+  width: 100%;
+}
+
+.counterMiniDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #3b82f6;
+  animation: dotPop 0.4s ease forwards;
+  opacity: 0;
+  transform: scale(0);
+}
+
+@keyframes dotPop {
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ===== Client Grid ===== */
+
+.clientGridMini {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 3px;
+  margin-bottom: 6px;
+}
+
+.clientGridTile {
+  aspect-ratio: 1;
+  border-radius: 3px;
+  background: linear-gradient(135deg, #e0e7ff, #c7d2fe);
+  animation: tilePop 0.3s ease forwards;
+  opacity: 0;
+  transform: scale(0.5);
+}
+
+@keyframes tilePop {
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.clientGridLabel {
+  font-family: var(--font-mono);
+  font-size: 0.45rem;
+  color: #64748b;
+  text-align: center;
+  letter-spacing: 0.04em;
 }
 
 @media (max-width: 900px) {

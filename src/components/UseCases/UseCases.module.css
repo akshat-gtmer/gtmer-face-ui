@@ -8,6 +8,10 @@
   padding: var(--space-4xl) var(--space-xl);
   overflow: hidden;
   scroll-snap-align: start;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .section::before {
@@ -217,6 +221,272 @@
   color: var(--color-text-muted);
   text-transform: uppercase;
   letter-spacing: 0.08em;
+}
+
+/* ===== GLIMPSE — White UI Mockup Card ===== */
+
+.glimpse {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  padding: 10px 12px;
+  margin-bottom: var(--space-lg);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06), 0 0 1px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.glimpseHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.glimpseTitle {
+  font-family: var(--font-sans);
+  font-size: 0.6rem;
+  font-weight: 600;
+  color: #1e293b;
+  letter-spacing: 0.01em;
+}
+
+.glimpseSubtitle {
+  font-family: var(--font-mono);
+  font-size: 0.5rem;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* ===== Glimpse: Quick Launch Form ===== */
+
+.launchForm {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.launchField {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.launchLabel {
+  font-family: var(--font-mono);
+  font-size: 0.45rem;
+  font-weight: 600;
+  color: #94a3b8;
+  text-transform: uppercase;
+  width: 36px;
+  flex-shrink: 0;
+}
+
+.launchSelect {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 8px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+  font-family: var(--font-sans);
+  font-size: 0.55rem;
+  color: #334155;
+}
+
+.launchChevron {
+  font-size: 0.5rem;
+  color: #94a3b8;
+}
+
+.launchProgress {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 2px;
+}
+
+.launchProgressBar {
+  flex: 1;
+  height: 3px;
+  background: #e2e8f0;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.launchProgressFill {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, #3b82f6, #6366f1);
+  border-radius: 2px;
+}
+
+.launchProgressLabel {
+  font-family: var(--font-mono);
+  font-size: 0.45rem;
+  color: #16a34a;
+  flex-shrink: 0;
+}
+
+.launchBtn {
+  text-align: center;
+  padding: 5px 0;
+  background: #3b82f6;
+  color: #ffffff;
+  font-family: var(--font-sans);
+  font-size: 0.55rem;
+  font-weight: 600;
+  border-radius: 4px;
+  letter-spacing: 0.02em;
+  margin-top: 2px;
+}
+
+/* ===== Glimpse: Buying Committee ===== */
+
+.committeeList {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.committeeRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.committeeRow:last-child {
+  border-bottom: none;
+}
+
+.committeeAvatar {
+  width: 22px;
+  height: 22px;
+  border-radius: 4px;
+  background: #e0e7ff;
+  color: #4338ca;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 0.4rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.committeeInfo {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+
+.committeeName {
+  font-family: var(--font-sans);
+  font-size: 0.55rem;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.committeeRole {
+  font-family: var(--font-mono);
+  font-size: 0.4rem;
+  color: #64748b;
+}
+
+.committeeIntent {
+  font-family: var(--font-mono);
+  font-size: 0.4rem;
+  font-weight: 600;
+  padding: 1px 5px;
+  border-radius: 2px;
+  border: 1px solid;
+  background: rgba(255, 255, 255, 0.8);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  flex-shrink: 0;
+}
+
+/* ===== Glimpse: Client Overview Table ===== */
+
+.clientTable {
+  display: flex;
+  flex-direction: column;
+}
+
+.clientTableHead {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 0.5fr;
+  gap: 4px;
+  padding: 3px 0;
+  border-bottom: 1px solid #e2e8f0;
+  font-family: var(--font-mono);
+  font-size: 0.4rem;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.clientTableRow {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 0.5fr;
+  gap: 4px;
+  padding: 5px 0;
+  border-bottom: 1px solid #f1f5f9;
+  align-items: center;
+}
+
+.clientTableRow:last-child {
+  border-bottom: none;
+}
+
+.clientName {
+  font-family: var(--font-sans);
+  font-size: 0.55rem;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.clientLeads {
+  font-family: var(--font-mono);
+  font-size: 0.5rem;
+  color: #334155;
+  font-weight: 500;
+}
+
+.clientReply {
+  font-family: var(--font-mono);
+  font-size: 0.5rem;
+  color: #16a34a;
+  font-weight: 500;
+}
+
+.clientStatus {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.clientStatusDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+.active .clientStatusDot {
+  background: #16a34a;
+  box-shadow: 0 0 4px rgba(22, 163, 74, 0.3);
+}
+
+.paused .clientStatusDot {
+  background: #f59e0b;
+  box-shadow: 0 0 4px rgba(245, 158, 11, 0.3);
 }
 
 /* Responsive */

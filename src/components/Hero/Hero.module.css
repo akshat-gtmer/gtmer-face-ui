@@ -271,7 +271,6 @@
 .activityLayer {
   position: absolute;
   bottom: var(--space-3xl);
-  left: 50%;
   transform: translateX(-50%);
   display: flex;
   align-items: center;

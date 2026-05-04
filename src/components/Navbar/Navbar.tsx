@@ -104,7 +104,6 @@ const Navbar = ({ onNavigate, activeView }: NavbarProps) => {
           id={item.id}
           onClick={() => handleItemClick(item)}
         >
-          <span className={styles.itemIcon}>{item.icon}</span>
           <div className={styles.itemText}>
             <span className={styles.itemLabel}>{item.label}</span>
             <span className={styles.itemDesc}>{item.desc}</span>

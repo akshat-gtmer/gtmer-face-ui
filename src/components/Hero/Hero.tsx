@@ -37,14 +37,16 @@ const Hero = () => {
 
         {/* Headline */}
         <h1 className={styles.headline}>
-          Define intent.{' '}
-          <span className={styles.headlineAccent}>Agents execute.</span>
+          <span className={styles.headlineAccent}>Missing 5x sales? </span>
+          Let the {' '}
+          <span className={styles.headlineAccent}>GTMers </span>
+          handle it
         </h1>
 
         {/* Subtext */}
         <p className={styles.subtext}>
-          AI agents that find, enrich, and engage your ideal prospects — 
-          autonomously. Set the rules. The system runs outbound at scale, 
+          AI agents that find, enrich, and engage your ideal prospects
+          autonomously. Set the rules. The system runs outbound at scale,
           with every message personalized and every reply tracked.
         </p>
 

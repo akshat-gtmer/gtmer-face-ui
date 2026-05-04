@@ -39,12 +39,12 @@ const App = () => {
       {activeView === 'main' && (
         <>
           <Hero />
-          <Numbers />
           <HowItWorks
             onAgentsClick={() => navigate('agents')}
             onDataEngineClick={() => navigate('data-engine')}
             onProductClick={() => navigate('product')}
           />
+          <Numbers />
           <Pipeline />
           <UseCases />
           <Testimonials />
