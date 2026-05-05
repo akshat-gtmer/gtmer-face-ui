@@ -7,7 +7,6 @@ import Pipeline from './components/Pipeline/Pipeline'
 import UseCases from './components/UseCases/UseCases'
 import Testimonials from './components/Testimonials/Testimonials'
 import FAQ from './components/FAQ/FAQ'
-import Contact from './components/Contact/Contact'
 import Footer from './components/Footer/Footer'
 import Agents from './components/Agents/Agents'
 import DataEngine from './components/DataEngine/DataEngine'
@@ -49,7 +48,6 @@ const App = () => {
           <UseCases />
           <Testimonials />
           <FAQ />
-          <Contact />
           <Footer onNavigate={navigate} />
         </>
       )}
