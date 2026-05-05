@@ -1,8 +1,7 @@
+import { Link } from 'react-router-dom'
 import styles from './Security.module.css'
 
-interface SecurityProps {
-  onBack: () => void
-}
+
 
 const SECURITY_FEATURES = [
   {
@@ -40,14 +39,21 @@ const PRACTICES = [
   '99.9% uptime SLA with real-time status monitoring',
 ]
 
-const Security = ({ onBack }: SecurityProps) => {
+const Security = () => {
   return (
-    <div className={styles.page}>
+    <article className={styles.page} aria-label="GTMer Security — Enterprise-Grade Data Protection">
+      {/* Breadcrumb for crawlers */}
+      <nav className="sr-only" aria-label="Breadcrumb">
+        <ol>
+          <li><a href="/">GTMer</a></li>
+          <li aria-current="page">Security</li>
+        </ol>
+      </nav>
       <div className={styles.backBar}>
-        <button className={styles.backButton} onClick={onBack}>
+        <Link to="/" className={styles.backButton}>
           <span className={styles.backArrow}>←</span>
           Back to <span className={styles.backSlash}>/</span>gtmer
-        </button>
+        </Link>
       </div>
 
       {/* Header */}
@@ -56,10 +62,10 @@ const Security = ({ onBack }: SecurityProps) => {
           <span className={styles.badgeDot} />
           <span>Enterprise-Grade Security</span>
         </div>
-        <h2 className={styles.headline}>
+        <h1 className={styles.headline}>
           Your Data Is
           <span className={styles.headlineAccent}> Non-Negotiable.</span>
-        </h2>
+        </h1>
         <p className={styles.subtext}>
           We handle sensitive prospect data every day. Security isn't a feature —
           it's the foundation everything else is built on.
@@ -99,7 +105,7 @@ const Security = ({ onBack }: SecurityProps) => {
           Request Documentation →
         </a>
       </div>
-    </div>
+    </article>
   )
 }
 

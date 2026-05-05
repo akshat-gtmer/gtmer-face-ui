@@ -1,34 +1,29 @@
 import { useState, useEffect, useRef } from 'react'
+import { useNavigate, useLocation, Link } from 'react-router-dom'
 import styles from './Navbar.module.css'
-
-interface NavbarProps {
-  onNavigate: (view: string) => void
-  activeView: string
-}
 
 interface DropdownItem {
   id: string
   icon: string
   label: string
   desc: string
-  action: 'view' | 'scroll'
   target: string
 }
 
 const PLATFORM_ITEMS: DropdownItem[] = [
-  { id: 'dd-product', icon: '⊞', label: '/gtmer-product', desc: 'Command center overview', action: 'view', target: 'product' },
-  { id: 'dd-agents', icon: '⚡', label: '/gtmer-agents', desc: 'Custom-built GTM agents', action: 'view', target: 'agents' },
-  { id: 'dd-data-engine', icon: '◎', label: '/gtmer-data-engine', desc: 'Real-time B2B intelligence', action: 'view', target: 'data-engine' },
+  { id: 'dd-product', icon: '⊞', label: '/gtmer-product', desc: 'Command center overview', target: '/product' },
+  { id: 'dd-agents', icon: '⚡', label: '/gtmer-agents', desc: 'Custom-built GTM agents', target: '/agents' },
+  { id: 'dd-data-engine', icon: '◎', label: '/gtmer-data-engine', desc: 'Real-time B2B intelligence', target: '/data-engine' },
 ]
 
 const EXPLORE_ITEMS: DropdownItem[] = [
-  { id: 'dd-pricing', icon: '◇', label: '/gtmer-pricing', desc: 'Plans & tiers', action: 'view', target: 'pricing' },
-  { id: 'dd-security', icon: '⬡', label: '/gtmer-security', desc: 'Compliance & data protection', action: 'view', target: 'security' },
-  { id: 'dd-integrations', icon: '⊕', label: '/gtmer-integrations', desc: '100+ connected tools', action: 'view', target: 'integrations' },
-  { id: 'dd-about', icon: '△', label: '/gtmer-about', desc: 'Our mission & team', action: 'view', target: 'about' },
+  { id: 'dd-pricing', icon: '◇', label: '/gtmer-pricing', desc: 'Plans & tiers', target: '/pricing' },
+  { id: 'dd-security', icon: '⬡', label: '/gtmer-security', desc: 'Compliance & data protection', target: '/security' },
+  { id: 'dd-integrations', icon: '⊕', label: '/gtmer-integrations', desc: '100+ connected tools', target: '/integrations' },
+  { id: 'dd-about', icon: '△', label: '/gtmer-about', desc: 'Our mission & team', target: '/about' },
 ]
 
-/* Sections for the center tab switcher */
+/* Sections for the center tab switcher (only visible on landing page) */
 const NAV_SECTIONS = [
   { id: 'hero-section', label: 'gtmer/home' },
   { id: 'how-it-works', label: 'gtmer/how-it-works' },
@@ -40,7 +35,11 @@ const NAV_SECTIONS = [
   { id: 'contact', label: 'gtmer/contact' },
 ]
 
-const Navbar = ({ onNavigate, activeView }: NavbarProps) => {
+const Navbar = () => {
+  const navigate = useNavigate()
+  const location = useLocation()
+  const isMainPage = location.pathname === '/'
+
   const [scrolled, setScrolled] = useState(false)
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const [sectionMenuOpen, setSectionMenuOpen] = useState(false)
@@ -51,7 +50,7 @@ const Navbar = ({ onNavigate, activeView }: NavbarProps) => {
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20)
-      if (activeView !== 'main') return
+      if (!isMainPage) return
       const scrollPos = window.scrollY + 120
       for (let i = NAV_SECTIONS.length - 1; i >= 0; i--) {
         const el = document.getElementById(NAV_SECTIONS[i].id)
@@ -63,7 +62,7 @@ const Navbar = ({ onNavigate, activeView }: NavbarProps) => {
     }
     window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
-  }, [activeView])
+  }, [isMainPage])
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -80,29 +79,27 @@ const Navbar = ({ onNavigate, activeView }: NavbarProps) => {
 
   const handleItemClick = (item: DropdownItem) => {
     setDropdownOpen(false)
-    if (item.action === 'view') {
-      onNavigate(item.target)
-    } else {
-      if (activeView !== 'main') {
-        onNavigate('main')
-        setTimeout(() => {
-          document.getElementById(item.target)?.scrollIntoView({ behavior: 'smooth' })
-        }, 100)
-      } else {
-        document.getElementById(item.target)?.scrollIntoView({ behavior: 'smooth' })
-      }
-    }
+    navigate(item.target)
   }
 
   const handleSectionClick = (sectionId: string) => {
     setSectionMenuOpen(false)
-    if (activeView !== 'main') {
-      onNavigate('main')
+    if (!isMainPage) {
+      navigate('/')
       setTimeout(() => {
         document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' })
       }, 100)
     } else {
       document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' })
+    }
+  }
+
+  const handleCtaClick = () => {
+    if (!isMainPage) {
+      navigate('/')
+      setTimeout(() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' }), 100)
+    } else {
+      document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })
     }
   }
 
@@ -163,8 +160,8 @@ const Navbar = ({ onNavigate, activeView }: NavbarProps) => {
         </div>
       </div>
 
-      {/* Center: Section tab switcher */}
-      {scrolled && activeView === 'main' && (
+      {/* Center: Section tab switcher (only on main landing page) */}
+      {scrolled && isMainPage && (
         <div className={styles.center} ref={sectionRef}>
           <button
             className={styles.sectionToggle}
@@ -195,14 +192,7 @@ const Navbar = ({ onNavigate, activeView }: NavbarProps) => {
         <button
           className={styles.ctaButton}
           id="nav-cta-start"
-          onClick={() => {
-            if (activeView !== 'main') {
-              onNavigate('main')
-              setTimeout(() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' }), 100)
-            } else {
-              document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })
-            }
-          }}
+          onClick={handleCtaClick}
         >
           Start Automating
         </button>

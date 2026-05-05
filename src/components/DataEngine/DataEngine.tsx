@@ -1,8 +1,7 @@
+import { Link } from 'react-router-dom'
 import styles from './DataEngine.module.css'
 
-interface DataEngineProps {
-  onBack: () => void
-}
+
 
 /* ===== DATA ===== */
 
@@ -44,16 +43,23 @@ const DATA_SOURCES: SourceCard[] = [
 
 /* ===== COMPONENT ===== */
 
-const DataEngine = ({ onBack }: DataEngineProps) => {
+const DataEngine = () => {
   return (
-    <div className={styles.page}>
+    <article className={styles.page} aria-label="GTMer Data Engine — Real-Time B2B Intelligence">
+      {/* Breadcrumb for crawlers */}
+      <nav className="sr-only" aria-label="Breadcrumb">
+        <ol>
+          <li><a href="/">GTMer</a></li>
+          <li aria-current="page">Data Engine</li>
+        </ol>
+      </nav>
 
       {/* Back button */}
       <div className={styles.backBar}>
-        <button className={styles.backButton} onClick={onBack}>
+        <Link to="/" className={styles.backButton}>
           <span className={styles.backArrow}>←</span>
           Back to /gtmer
-        </button>
+        </Link>
       </div>
 
       {/* ===== Hero Section ===== */}
@@ -69,12 +75,12 @@ const DataEngine = ({ onBack }: DataEngineProps) => {
             </div>
           </div>
 
-          <h2 className={styles.headline}>
+          <h1 className={styles.headline}>
             Real-Time B2B Intelligence.
             <span className={styles.headlineAccent}>
               Always Fresh. Always Accurate.
             </span>
-          </h2>
+          </h1>
 
           <p className={styles.subtext}>
             The foundation of effective GTM automation is accurate, enriched,
@@ -197,7 +203,7 @@ const DataEngine = ({ onBack }: DataEngineProps) => {
         </div>
 
       </div>
-    </div>
+    </article>
   )
 }
 

@@ -170,6 +170,14 @@
   line-height: 1.7;
 }
 
+/* CTA */
+.ctaWrapper { display: flex; flex-direction: column; align-items: center; gap: var(--space-md); margin-top: var(--space-3xl); max-width: 720px; margin-left: auto; margin-right: auto; }
+.ctaText { font-family: var(--font-sans); font-size: 0.9rem; font-weight: 400; color: var(--color-text-muted); }
+.ctaButton { display: inline-flex; align-items: center; gap: var(--space-sm); padding: 14px 32px; font-size: 0.85rem; font-weight: 500; color: var(--color-text-primary); background: rgba(77,168,218,0.12); border: 1px solid rgba(77,168,218,0.25); border-radius: var(--radius-sm); transition: all var(--transition-base); font-family: var(--font-sans); letter-spacing: 0.02em; cursor: pointer; }
+.ctaButton:hover { background: rgba(77,168,218,0.2); border-color: rgba(77,168,218,0.4); transform: translateY(-2px); box-shadow: 0 8px 30px rgba(77,168,218,0.12); }
+.ctaArrow { font-size: 0.9rem; transition: transform var(--transition-fast); }
+.ctaButton:hover .ctaArrow { transform: translateX(3px); }
+
 @media (max-width: 540px) {
   .section {
     padding: var(--space-3xl) var(--space-md);

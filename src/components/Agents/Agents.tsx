@@ -1,8 +1,7 @@
+import { Link } from 'react-router-dom'
 import styles from './Agents.module.css'
 
-interface AgentsProps {
-  onBack: () => void
-}
+
 
 /* ===== NETWORK NODES ===== */
 
@@ -76,16 +75,23 @@ const AGENT_TYPES: AgentType[] = [
 
 /* ===== COMPONENT ===== */
 
-const Agents = ({ onBack }: AgentsProps) => {
+const Agents = () => {
   return (
-    <div className={styles.page}>
+    <article className={styles.page} aria-label="GTMer AI Agents — Custom-Built SDR Agents">
+      {/* Breadcrumb for crawlers */}
+      <nav className="sr-only" aria-label="Breadcrumb">
+        <ol>
+          <li><a href="/">GTMer</a></li>
+          <li aria-current="page">AI Agents</li>
+        </ol>
+      </nav>
 
       {/* Back button */}
       <div className={styles.backBar}>
-        <button className={styles.backButton} onClick={onBack}>
+        <Link to="/" className={styles.backButton}>
           <span className={styles.backArrow}>←</span>
           Back to /gtmer
-        </button>
+        </Link>
       </div>
 
       {/* ===== Hero Section ===== */}
@@ -98,10 +104,10 @@ const Agents = ({ onBack }: AgentsProps) => {
             <span className={styles.badgeLabel}>Custom AI Agents</span>
           </div>
 
-          <h2 className={styles.headline}>
+          <h1 className={styles.headline}>
             Built Specifically.
             <span className={styles.headlineAccent}>For Your GTM.</span>
-          </h2>
+          </h1>
 
           <p className={styles.subtext}>
             Not every GTM challenge fits a standard template. We build fully
@@ -212,7 +218,7 @@ const Agents = ({ onBack }: AgentsProps) => {
         </div>
       </div>
 
-    </div>
+    </article>
   )
 }
 

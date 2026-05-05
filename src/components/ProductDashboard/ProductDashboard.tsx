@@ -1,8 +1,7 @@
+import { Link, useNavigate } from 'react-router-dom'
 import styles from './ProductDashboard.module.css'
 
-interface ProductDashboardProps {
-  onBack: () => void
-}
+
 
 /* ===== VISUAL CARD DATA ===== */
 
@@ -87,16 +86,24 @@ const CAPABILITIES = [
 
 /* ===== COMPONENT ===== */
 
-const ProductDashboard = ({ onBack }: ProductDashboardProps) => {
+const ProductDashboard = () => {
+  const navigate = useNavigate()
   return (
-    <div className={styles.page}>
+    <article className={styles.page} aria-label="GTMer Product — Autonomous Sales Pipeline Command Center">
+      {/* Breadcrumb for crawlers */}
+      <nav className="sr-only" aria-label="Breadcrumb">
+        <ol>
+          <li><a href="/">GTMer</a></li>
+          <li aria-current="page">Product</li>
+        </ol>
+      </nav>
 
       {/* Back button */}
       <div className={styles.backBar}>
-        <button className={styles.backButton} onClick={onBack}>
+        <Link to="/" className={styles.backButton}>
           <span className={styles.backArrow}>←</span>
           Back to <span className={styles.backSlash}>/</span>gtmer
-        </button>
+        </Link>
       </div>
 
       {/* ===== Hero Section ===== */}
@@ -112,12 +119,12 @@ const ProductDashboard = ({ onBack }: ProductDashboardProps) => {
             </div>
           </div>
 
-          <h2 className={styles.headline}>
+          <h1 className={styles.headline}>
             Your Entire GTM Pipeline.
             <span className={styles.headlineAccent}>
               One Autonomous System.
             </span>
-          </h2>
+          </h1>
 
           <p className={styles.subtext}>
             A single command center where AI agents source, enrich, engage, and
@@ -128,7 +135,7 @@ const ProductDashboard = ({ onBack }: ProductDashboardProps) => {
           <button
             className={styles.ctaButton}
             onClick={() => {
-              onBack()
+              navigate('/')
               setTimeout(() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' }), 300)
             }}
           >
@@ -267,7 +274,7 @@ const ProductDashboard = ({ onBack }: ProductDashboardProps) => {
         </div>
 
       </div>
-    </div>
+    </article>
   )
 }
 

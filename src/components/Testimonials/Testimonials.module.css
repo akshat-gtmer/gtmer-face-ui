@@ -117,7 +117,8 @@
 
 .quoteBlock {
   flex: 1;
-  margin-bottom: var(--space-xl);
+  margin: 0 0 var(--space-xl);
+  padding: 0;
   position: relative;
 }
 
@@ -171,6 +172,7 @@
   font-size: 0.85rem;
   font-weight: 600;
   color: var(--color-text-primary);
+  font-style: normal;
 }
 
 .authorRole {

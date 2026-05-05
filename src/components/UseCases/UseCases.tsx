@@ -17,48 +17,48 @@ interface UseCase {
 const USE_CASES: UseCase[] = [
   {
     icon: '⚡',
-    tag: 'SAAS STARTUPS',
-    title: 'Scale Outbound Without Hiring',
+    tag: 'B2B SAAS & STARTUPS',
+    title: 'Scale Outbound Without Hiring SDRs',
     description:
-      'Early-stage teams can\'t afford a 5-person SDR team. GTMer replaces the entire top-of-funnel motion with AI agents that prospect, enrich, and engage — 24/7.',
+      'Early-stage teams can\'t afford a 5-person SDR team. GTMer\'s AI agents replace your entire top-of-funnel — prospecting, enrichment, personalized outreach, and follow-ups — running 24/7 from day one.',
     bullets: [
-      'Auto-source from YC batches, Product Hunt, and LinkedIn',
-      'AI writes hyper-personalised cold emails per ICP',
-      'Follow-up sequences that adapt to reply signals',
-      'Pipeline built in days, not quarters',
+      'Auto-source leads from YC batches, Product Hunt, and LinkedIn',
+      'AI writes hyper-personalized cold emails matched to your ICP',
+      'Multi-step follow-up sequences that adapt to reply signals',
+      'Qualified pipeline built in days, not quarters',
     ],
     metric: '10×',
-    metricLabel: 'pipeline velocity',
+    metricLabel: 'faster pipeline generation',
   },
   {
     icon: '🏢',
-    tag: 'ENTERPRISE SALES',
-    title: 'Multi-Thread Every Deal',
+    tag: 'ENTERPRISE & MID-MARKET',
+    title: 'Multi-Thread Complex Enterprise Deals',
     description:
-      'Enterprise cycles are long and complex. GTMer agents monitor buying committees, enrich stakeholder data, and keep every thread warm — automatically.',
+      'Enterprise sales cycles are long and involve multiple stakeholders. GTMer agents map buying committees, enrich decision-maker data, and keep every thread warm across months-long deal cycles.',
     bullets: [
-      'Map entire buying committees across departments',
-      'Intent-scored outreach to champions and decision-makers',
-      'Automated nurture sequences for long-cycle deals',
+      'Auto-map buying committees across departments and titles',
+      'Intent-scored outreach to champions and budget holders',
+      'Automated nurture sequences for 6–12 month deal cycles',
       'CRM-synced pipeline with real-time deal health scoring',
     ],
     metric: '70%',
-    metricLabel: 'lower CAC',
+    metricLabel: 'lower customer acquisition cost',
   },
   {
     icon: '🎯',
     tag: 'AGENCIES & CONSULTANCIES',
-    title: 'White-Label GTM-as-a-Service',
+    title: 'White-Label AI Outbound for Clients',
     description:
-      'Agencies managing outbound for multiple clients get a unified platform. Custom agents per client, separate pipelines, shared reporting dashboard.',
+      'Agencies running outbound for multiple clients get a multi-tenant AI platform. Separate data, separate brand voice, separate pipelines — one operator dashboard to manage them all.',
     bullets: [
-      'Multi-tenant setup — separate data per client',
-      'Custom brand voice calibration per campaign',
-      'Real-time reporting dashboards for client visibility',
-      'Scale to 50+ clients without adding headcount',
+      'Multi-tenant workspace — isolated data per client',
+      'Custom brand voice and tone calibration per campaign',
+      'Real-time performance dashboards for client reporting',
+      'Scale to 50+ clients without adding sales ops headcount',
     ],
     metric: '50+',
-    metricLabel: 'clients per operator',
+    metricLabel: 'clients managed per operator',
   },
 ]
 
@@ -177,7 +177,11 @@ const UseCases = () => {
   }, [cardsReveal.isVisible])
 
   return (
-    <section className={styles.section} id="use-cases">
+    <section
+      className={styles.section}
+      id="use-cases"
+      aria-label="GTMer use cases for SaaS startups, enterprise sales, and agencies"
+    >
       {/* Header */}
       <div
         ref={headerReveal.ref}
@@ -185,17 +189,18 @@ const UseCases = () => {
       >
         <div className={styles.badge}>
           <span className={styles.badgeDot} />
-          <span>Built For Your Vertical</span>
+          <span>Use Cases by Team Type</span>
         </div>
 
         <h2 className={styles.headline}>
-          Who Uses GTMer?
-          <span className={styles.headlineAccent}> Everyone Who Sells.</span>
+          Who Is GTMer For?
+          <span className={styles.headlineAccent}> Startups. Enterprise. Agencies.</span>
         </h2>
 
         <p className={styles.subtext}>
-          Whether you're a 3-person startup or a 300-person sales org — GTMer
-          adapts to your workflow, your data, and your market.
+          GTMer adapts to your team size, sales cycle, and market. Whether you're
+          a seed-stage startup building first pipeline or an agency managing outbound
+          for 50 clients — the AI agents configure to your workflow.
         </p>
       </div>
 
@@ -235,6 +240,19 @@ const UseCases = () => {
             </div>
           )
         })}
+      </div>
+
+      {/* Bottom CTA */}
+      <div className={styles.ctaWrapper}>
+        <button
+          className={styles.ctaButton}
+          id="usecase-cta-demo"
+          onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
+          aria-label="Book a demo to see GTMer for your team"
+        >
+          See How GTMer Fits Your Team
+          <span className={styles.ctaArrow}>→</span>
+        </button>
       </div>
     </section>
   )

@@ -1,8 +1,7 @@
+import { Link } from 'react-router-dom'
 import styles from './IntegrationsPage.module.css'
 
-interface IntegrationsPageProps {
-  onBack: () => void
-}
+
 
 interface Integration {
   code: string
@@ -64,14 +63,21 @@ const CATEGORIES: { title: string; items: Integration[] }[] = [
 const STATUS_LABELS = { live: 'Live', beta: 'Beta', soon: 'Coming Soon' }
 const STATUS_COLORS = { live: '#34d399', beta: '#f59e0b', soon: '#8ba4bd' }
 
-const IntegrationsPage = ({ onBack }: IntegrationsPageProps) => {
+const IntegrationsPage = () => {
   return (
-    <div className={styles.page}>
+    <article className={styles.page} aria-label="GTMer Integrations — 100+ Connected Tools">
+      {/* Breadcrumb for crawlers */}
+      <nav className="sr-only" aria-label="Breadcrumb">
+        <ol>
+          <li><a href="/">GTMer</a></li>
+          <li aria-current="page">Integrations</li>
+        </ol>
+      </nav>
       <div className={styles.backBar}>
-        <button className={styles.backButton} onClick={onBack}>
+        <Link to="/" className={styles.backButton}>
           <span className={styles.backArrow}>←</span>
           Back to <span className={styles.backSlash}>/</span>gtmer
-        </button>
+        </Link>
       </div>
 
       <div className={styles.header}>
@@ -79,10 +85,10 @@ const IntegrationsPage = ({ onBack }: IntegrationsPageProps) => {
           <span className={styles.badgeDot} />
           <span>Integration Ecosystem</span>
         </div>
-        <h2 className={styles.headline}>
+        <h1 className={styles.headline}>
           Connects To
           <span className={styles.headlineAccent}> Everything.</span>
-        </h2>
+        </h1>
         <p className={styles.subtext}>
           GTMer plugs into your existing stack. CRMs, data providers, intent
           platforms, communication tools — all connected out of the box.
@@ -119,7 +125,7 @@ const IntegrationsPage = ({ onBack }: IntegrationsPageProps) => {
           Request an Integration →
         </a>
       </div>
-    </div>
+    </article>
   )
 }
 

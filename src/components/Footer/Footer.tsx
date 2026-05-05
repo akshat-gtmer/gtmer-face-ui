@@ -1,3 +1,4 @@
+import { useNavigate, useLocation, Link } from 'react-router-dom'
 import { useScrollReveal } from '../../hooks/useScrollReveal'
 import styles from './Footer.module.css'
 
@@ -5,29 +6,29 @@ import styles from './Footer.module.css'
 
 interface FooterLink {
   label: string
-  action?: string
+  path?: string
   scroll?: string
   href?: string
 }
 
 const FOOTER_LINKS: Record<string, FooterLink[]> = {
   Platform: [
-    { label: 'Product Overview', action: 'product' },
-    { label: 'AI Agents', action: 'agents' },
-    { label: 'Data Engine', action: 'data-engine' },
-    { label: 'Integrations', action: 'integrations' },
+    { label: 'Product Overview', path: '/product' },
+    { label: 'AI SDR Agents', path: '/agents' },
+    { label: 'Data Engine', path: '/data-engine' },
+    { label: 'Integrations', path: '/integrations' },
+    { label: 'Pricing', path: '/pricing' },
   ],
   Company: [
-    { label: 'About', action: 'about' },
-    { label: 'Pricing', action: 'pricing' },
-    { label: 'Security', action: 'security' },
+    { label: 'About GTMer', path: '/about' },
+    { label: 'Security & Compliance', path: '/security' },
+    { label: 'Contact Us', scroll: 'contact' },
   ],
   Resources: [
-    { label: 'Documentation', href: '#' },
-    { label: 'API Reference', href: '#' },
-    { label: 'Blog', href: '#' },
-    { label: 'Changelog', href: '#' },
-    { label: 'Status', href: '#' },
+    { label: 'How It Works', scroll: 'how-it-works' },
+    { label: 'Use Cases', scroll: 'use-cases' },
+    { label: 'FAQ', scroll: 'faq' },
+    { label: 'Customer Stories', scroll: 'testimonials' },
   ],
 }
 
@@ -51,46 +52,65 @@ const CONTACT_METHODS: ContactMethod[] = [
   },
   {
     icon: '☎',
-    label: 'Phone',
+    label: 'Primary Phone',
     value: '+91 8989 606 740',
     href: 'tel:+918989606740',
-    sub: 'Primary line',
+    sub: 'Mon–Fri · 9 AM – 7 PM IST',
   },
   {
     icon: '☎',
-    label: 'Phone',
+    label: 'Alternate Phone',
     value: '+91 8291 111 188',
     href: 'tel:+918291111188',
-    sub: 'Alternate line',
+    sub: 'Mon–Fri · 9 AM – 7 PM IST',
   },
   {
-    icon: '◆',
+    icon: 'in',
     label: 'LinkedIn',
     value: 'GTMer AI',
     href: 'https://www.linkedin.com/company/gtmer-ai',
-    sub: 'linkedin.com/company/gtmer-ai',
+    sub: 'Follow for updates & insights',
   },
 ]
 
 /* ===== COMPONENT ===== */
 
-interface FooterProps {
-  onNavigate: (view: string) => void
-}
-
-const Footer = ({ onNavigate }: FooterProps) => {
+const Footer = () => {
+  const navigate = useNavigate()
+  const location = useLocation()
   const textReveal = useScrollReveal({ threshold: 0.2 })
   const cardsReveal = useScrollReveal({ threshold: 0.1 })
 
-  const handleClick = (link: { action?: string; scroll?: string; href?: string }) => {
-    if (link.action) { onNavigate(link.action); return }
+  const handleClick = (link: FooterLink) => {
+    if (link.path) {
+      navigate(link.path)
+      return
+    }
     if (link.scroll) {
-      document.getElementById(link.scroll)?.scrollIntoView({ behavior: 'smooth' })
+      if (location.pathname !== '/') {
+        navigate('/')
+        setTimeout(() => {
+          document.getElementById(link.scroll!)?.scrollIntoView({ behavior: 'smooth' })
+        }, 100)
+      } else {
+        document.getElementById(link.scroll)?.scrollIntoView({ behavior: 'smooth' })
+      }
     }
   }
 
   return (
-    <footer className={styles.footer} id="contact">
+    <footer
+      className={styles.footer}
+      id="contact"
+      aria-label="GTMer contact information and site navigation"
+      itemScope
+      itemType="https://schema.org/Organization"
+    >
+      <meta itemProp="name" content="GTMer AI" />
+      <meta itemProp="url" content="https://gtmer.ai" />
+      <meta itemProp="email" content="akshat@gtmer.ai" />
+      <meta itemProp="telephone" content="+91-8989-606-740" />
+      <link itemProp="sameAs" href="https://www.linkedin.com/company/gtmer-ai" />
       <div className={styles.inner}>
 
         {/* ===== CONTACT SECTION ===== */}
@@ -100,27 +120,22 @@ const Footer = ({ onNavigate }: FooterProps) => {
             ref={textReveal.ref}
             className={`${styles.textBlock} ${textReveal.isVisible ? styles.visible : ''}`}
           >
-            <div className={styles.contactLabel}>Contact</div>
+            <div className={styles.contactLabel}>Get in Touch</div>
             <h2 className={styles.headline}>
-              Let's talk.
+              Ready to Automate Your Outbound?
             </h2>
             <p className={styles.subtext}>
-              Ready to see GTMer in action? Want to book a demo, explore a
-              partnership, or just chat about autonomous GTM?
-              Reach out — we'd love to hear from you.
-            </p>
-            <p className={styles.subtext}>
-              Whether you want to <strong>book a demo</strong>, discuss integrations,
-              or learn how AI agents can run your outbound — we're one message away.
+              Book a free live demo and see GTMer's AI SDR agents prospect,
+              enrich, and engage your ICP — in real time. No commitment required.
             </p>
 
             <div className={styles.demoNote}>
               <span className={styles.demoNoteIcon}>◎</span>
               <div className={styles.demoNoteText}>
-                <strong>Interested in a demo?</strong>
+                <strong>Free personalized demo</strong>
                 <br />
-                Contact us directly via email or phone and we'll set up a
-                personalized walkthrough of the GTMer platform.
+                We'll run a real prospecting cycle on your ICP so you can see
+                actual leads, enrichment, and AI-generated outreach before signing up.
               </div>
             </div>
 
@@ -128,8 +143,9 @@ const Footer = ({ onNavigate }: FooterProps) => {
               href="mailto:akshat@gtmer.ai?subject=Demo%20Request%20-%20GTMer&body=Hi%2C%20I%27d%20like%20to%20book%20a%20demo%20of%20GTMer."
               className={styles.bookDemoBtn}
               id="contact-book-demo"
+              aria-label="Book a free demo of GTMer via email"
             >
-              Book a Demo
+              Book a Demo — It's Free
               <span className={styles.bookDemoArrow}>→</span>
             </a>
           </div>
@@ -159,6 +175,7 @@ const Footer = ({ onNavigate }: FooterProps) => {
                     rel={method.href.startsWith('http') ? 'noopener noreferrer' : undefined}
                     className={styles.contactCard}
                     style={{ animationDelay: `${0.3 + i * 0.1}s` }}
+                    aria-label={`${method.label}: ${method.value}`}
                   >
                     <div className={styles.contactCardIcon}>{method.icon}</div>
                     <div className={styles.contactCardBody}>
@@ -166,7 +183,7 @@ const Footer = ({ onNavigate }: FooterProps) => {
                       <div className={styles.contactCardValue}>{method.value}</div>
                       <div className={styles.contactCardSub}>{method.sub}</div>
                     </div>
-                    <span className={styles.contactCardArrow}>→</span>
+                    <span className={styles.contactCardArrow} aria-hidden="true">→</span>
                   </a>
                 ))}
               </div>
@@ -175,7 +192,7 @@ const Footer = ({ onNavigate }: FooterProps) => {
               <div className={styles.windowFooter}>
                 <span className={styles.contactPulse} />
                 <span className={styles.contactPulseText}>
-                  Typically respond within a few hours
+                  Typically respond within 2 hours during business hours
                 </span>
               </div>
             </div>
@@ -186,15 +203,15 @@ const Footer = ({ onNavigate }: FooterProps) => {
         <div className={styles.divider} />
 
         {/* ===== FOOTER LINKS ===== */}
-        <div className={styles.topSection}>
+        <nav className={styles.topSection} aria-label="Footer navigation">
           {/* Brand */}
           <div className={styles.brandBlock}>
             <div className={styles.brandName}>
               <span className={styles.brandSlash}>/</span>gtmer
             </div>
             <p className={styles.brandDesc}>
-              Autonomous GTM execution. AI agents that find, enrich, and
-              engage your ideal prospects at scale.
+              AI-powered go-to-market execution platform. Autonomous SDR agents that
+              prospect, enrich, personalize outreach, and book meetings — at scale.
             </p>
             <div className={styles.systemStatus}>
               <span className={styles.statusDot} />
@@ -202,30 +219,39 @@ const Footer = ({ onNavigate }: FooterProps) => {
             </div>
           </div>
 
-          {/* Link columns */}
+          {/* Link columns — proper href for crawlability */}
           {Object.entries(FOOTER_LINKS).map(([title, links]) => (
             <div className={styles.linkColumn} key={title}>
               <div className={styles.columnTitle}>{title}</div>
-              {links.map(link => (
-                <a
-                  key={link.label}
-                  href={link.href && link.href.startsWith('http') ? link.href : undefined}
-                  target={link.href && link.href.startsWith('http') ? '_blank' : undefined}
-                  rel={link.href && link.href.startsWith('http') ? 'noopener noreferrer' : undefined}
-                  className={styles.footerLink}
-                  onClick={(e) => {
-                    if (!link.href || !link.href.startsWith('http')) {
-                      e.preventDefault()
-                      handleClick(link)
-                    }
-                  }}
-                >
-                  {link.label}
-                </a>
-              ))}
+              {links.map(link => {
+                const href = link.href && link.href.startsWith('http')
+                  ? link.href
+                  : link.path
+                    ? link.path
+                    : link.scroll
+                      ? `/#${link.scroll}`
+                      : '#'
+                return (
+                  <a
+                    key={link.label}
+                    href={href}
+                    target={link.href && link.href.startsWith('http') ? '_blank' : undefined}
+                    rel={link.href && link.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+                    className={styles.footerLink}
+                    onClick={(e) => {
+                      if (!link.href || !link.href.startsWith('http')) {
+                        e.preventDefault()
+                        handleClick(link)
+                      }
+                    }}
+                  >
+                    {link.label}
+                  </a>
+                )
+              })}
             </div>
           ))}
-        </div>
+        </nav>
 
         {/* ===== BOTTOM BAR ===== */}
         <div className={styles.bottomBar}>
@@ -233,9 +259,9 @@ const Footer = ({ onNavigate }: FooterProps) => {
             © {new Date().getFullYear()} GTMer AI. All rights reserved.
           </span>
           <div className={styles.legalLinks}>
-            <a href="#" className={styles.legalLink}>Privacy</a>
-            <a href="#" className={styles.legalLink}>Terms</a>
-            <a href="#" className={styles.legalLink}>Security</a>
+            <a href="/privacy" className={styles.legalLink}>Privacy Policy</a>
+            <a href="/terms" className={styles.legalLink}>Terms of Service</a>
+            <Link to="/security" className={styles.legalLink}>Security</Link>
           </div>
         </div>
       </div>

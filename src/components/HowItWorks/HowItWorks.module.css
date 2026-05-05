@@ -28,8 +28,8 @@
 .badgeInner { display: inline-flex; align-items: center; gap: var(--space-sm); padding: var(--space-xs) var(--space-md); background: rgba(77,168,218,0.06); border: 1px solid rgba(77,168,218,0.12); border-radius: 100px; font-family: var(--font-mono); font-size: 0.65rem; color: var(--color-accent); letter-spacing: 0.08em; text-transform: uppercase; }
 .badgeDot { width: 5px; height: 5px; border-radius: 50%; background: var(--color-accent); opacity: 0.7; }
 .headline { text-align: center; font-family: var(--font-sans); font-size: clamp(1.8rem,4vw,2.8rem); font-weight: 600; line-height: 1.2; color: var(--color-text-primary); margin-bottom: var(--space-sm); letter-spacing: -0.03em; }
-.headlineAccent { color: var(--color-accent); display: block; }
-.subtext { text-align: center; font-size: clamp(0.9rem,1.3vw,1rem); font-weight: 300; color: var(--color-text-secondary); max-width: 520px; margin: 0 auto var(--space-xl); line-height: 1.7; }
+.headlineAccent { color: var(--color-accent); }
+.subtext { text-align: center; font-size: clamp(0.9rem,1.3vw,1rem); font-weight: 300; color: var(--color-text-secondary); max-width: 580px; margin: 0 auto var(--space-xl); line-height: 1.7; }
 
 /* ===== SHOWCASE AREA ===== */
 .showcaseArea { width: 100%; max-width: 1100px; margin: 0 auto var(--space-lg); position: relative; }
@@ -38,7 +38,14 @@
 .showcaseStageLabel { display: flex; align-items: center; gap: var(--space-sm); margin-bottom: var(--space-md); }
 .showcaseStageBadge { font-family: var(--font-mono); font-size: 0.6rem; color: var(--color-accent); letter-spacing: 0.1em; text-transform: uppercase; padding: 2px 10px; background: rgba(77,168,218,0.1); border-radius: 3px; }
 .showcaseStageIcon { font-size: 1.1rem; }
-.showcaseStageTitle { font-family: var(--font-sans); font-size: 1.15rem; font-weight: 600; color: var(--color-text-primary); letter-spacing: -0.01em; }
+.showcaseStageTitle { font-family: var(--font-sans); font-size: 1.15rem; font-weight: 600; color: var(--color-text-primary); letter-spacing: -0.01em; margin: 0; }
+
+/* Step description text — visible below stage title */
+.showcaseDescription { font-family: var(--font-sans); font-size: 0.85rem; font-weight: 300; color: var(--color-text-secondary); line-height: 1.6; margin: 0 0 var(--space-md); max-width: 700px; }
+
+/* Crossfade wrapper for stage label + description */
+.stageLabelWrap { animation: labelFadeIn 0.3s ease forwards; }
+@keyframes labelFadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
 
 /* Showcase panel — the white card */
 .showcasePanel { position: relative; width: 100%; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; box-shadow: 0 4px 24px rgba(0,0,0,0.12), 0 1px 3px rgba(0,0,0,0.08), 0 0 80px rgba(77,168,218,0.08); overflow: hidden; z-index: 2; aspect-ratio: 3 / 1; }
@@ -47,11 +54,15 @@
 .showcaseGlow { position: absolute; top: 50%; left: 50%; width: 80%; height: 70%; transform: translate(-50%,-50%); background: radial-gradient(ellipse, rgba(77,168,218,0.12) 0%, transparent 70%); border-radius: 50%; z-index: 0; pointer-events: none; filter: blur(40px); animation: glowPulse 4s ease-in-out infinite; }
 @keyframes glowPulse { 0%,100% { opacity: 0.6; } 50% { opacity: 1; } }
 
-/* Showcase enter/exit */
-.showcaseInner { position: absolute; inset: 0; padding: 24px 28px; transition: opacity 0.3s ease, transform 0.3s ease, filter 0.3s ease; }
-.showcaseEnter { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); animation: showcaseIn 0.35s ease forwards; }
-.showcaseExit { opacity: 0; transform: translateY(-8px) scale(0.98); filter: blur(2px); }
-@keyframes showcaseIn { from { opacity: 0; transform: translateY(12px) scale(0.98); filter: blur(2px); } to { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); } }
+/* Horizontal slide track */
+.slideTrack { display: flex; width: 100%; height: 100%; transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1); will-change: transform; }
+.slide { min-width: 100%; width: 100%; height: 100%; padding: 24px 28px; box-sizing: border-box; overflow-y: auto; }
+
+/* Slide dot indicators */
+.slideDots { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: var(--space-md); position: relative; z-index: 3; }
+.slideDot { width: 8px; height: 8px; border-radius: 50%; border: 1.5px solid rgba(77,168,218,0.3); background: transparent; cursor: pointer; padding: 0; transition: all 0.3s ease; }
+.slideDot:hover { border-color: rgba(77,168,218,0.6); }
+.slideDotActive { background: var(--color-accent); border-color: var(--color-accent); transform: scale(1.25); box-shadow: 0 0 8px rgba(77,168,218,0.3); }
 
 /* ===== SHOWCASE CONTENT ===== */
 .showcaseContent { display: flex; flex-direction: column; gap: 14px; }
@@ -143,33 +154,13 @@
 .successTitle { font-family: var(--font-sans); font-size: 0.75rem; font-weight: 600; color: #166534; }
 .successSub { font-family: var(--font-mono); font-size: 0.55rem; color: #64748b; }
 
-/* ===== STEP NAVIGATION (cards + progress) ===== */
+/* ===== STEP NAVIGATION ===== */
 .stepNavigation {
   display: flex;
   align-items: stretch;
-  gap: var(--space-md);
   max-width: 1100px;
   width: 100%;
   margin: 0 auto var(--space-xl);
-}
-
-/* Vertical progress track */
-.progressTrack {
-  width: 3px;
-  background: rgba(77,168,218,0.12);
-  border-radius: 2px;
-  position: relative;
-  flex-shrink: 0;
-  overflow: hidden;
-}
-.progressFill {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  background: linear-gradient(180deg, var(--color-accent), var(--color-accent-neon));
-  border-radius: 2px;
-  transition: height 0.15s ease-out;
 }
 
 /* Step cards */
@@ -193,6 +184,19 @@
 .stepCardIndicator { position: absolute; bottom: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--color-accent), var(--color-accent-neon)); transform: scaleX(0); transition: transform 0.4s ease; }
 .stepCardActive .stepCardIndicator { transform: scaleX(1); }
 
+/* ===== KANBAN (Pipeline Showcase) ===== */
+.kanbanBoard { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; flex: 1; }
+.kanbanCol { display: flex; flex-direction: column; background: #f1f5f9; border-radius: 6px; padding: 8px; min-height: 120px; }
+.kanbanColHeader { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; padding: 0 2px; }
+.kanbanColTitle { display: flex; align-items: center; gap: 5px; font-family: var(--font-sans); font-size: 0.65rem; font-weight: 600; color: #1e293b; }
+.kanbanDot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+.kanbanCount { font-family: var(--font-mono); font-size: 0.5rem; color: #94a3b8; background: #e2e8f0; padding: 1px 5px; border-radius: 3px; }
+.kanbanCard { background: #fff; border: 1px solid #e2e8f0; border-radius: 4px; padding: 7px 9px; margin-bottom: 5px; transition: box-shadow 0.2s ease; }
+.kanbanCard:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+.kanbanCardName { font-family: var(--font-sans); font-size: 0.65rem; font-weight: 500; color: #1e293b; margin-bottom: 1px; }
+.kanbanCardCompany { font-family: var(--font-mono); font-size: 0.5rem; color: #6366f1; margin-bottom: 2px; }
+.kanbanCardMeta { font-family: var(--font-mono); font-size: 0.45rem; color: #94a3b8; }
+
 /* CTA */
 .ctaWrapper { display: flex; justify-content: center; }
 .ctaButton { display: inline-flex; align-items: center; gap: var(--space-sm); padding: 14px 32px; font-size: 0.85rem; font-weight: 500; color: var(--color-text-primary); background: rgba(77,168,218,0.12); border: 1px solid rgba(77,168,218,0.25); border-radius: var(--radius-sm); transition: all var(--transition-base); font-family: var(--font-sans); letter-spacing: 0.02em; cursor: pointer; }
@@ -205,11 +209,13 @@
   .stepCards { flex-wrap: wrap; }
   .stepCard { flex: 0 1 calc(50% - 4px); }
   .showcasePanel { padding: 0; }
-  .progressTrack { display: none; }
+  .kanbanBoard { grid-template-columns: repeat(2, 1fr); }
 }
 @media (max-width: 540px) {
   .stepCard { flex: 0 1 100%; }
   .section { padding: var(--space-3xl) var(--space-md); }
-  .showcasePanel { padding: 0; }
+  .showcasePanel { padding: 0; aspect-ratio: auto; min-height: 280px; }
   .showcaseArea { margin-bottom: var(--space-xl); }
+  .kanbanBoard { grid-template-columns: 1fr; }
+  .slide { padding: 16px; }
 }

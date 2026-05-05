@@ -1,9 +1,10 @@
-import { useState } from 'react'
+import { Routes, Route, useLocation } from 'react-router-dom'
+import { useEffect } from 'react'
+import { useDocumentHead } from './hooks/useDocumentHead'
 import Navbar from './components/Navbar/Navbar'
 import Hero from './components/Hero/Hero'
 import Numbers from './components/Numbers/Numbers'
 import HowItWorks from './components/HowItWorks/HowItWorks'
-import Pipeline from './components/Pipeline/Pipeline'
 import UseCases from './components/UseCases/UseCases'
 import Testimonials from './components/Testimonials/Testimonials'
 import FAQ from './components/FAQ/FAQ'
@@ -16,49 +17,49 @@ import Security from './components/Security/Security'
 import IntegrationsPage from './components/IntegrationsPage/IntegrationsPage'
 import About from './components/About/About'
 
-type ActiveView = 'main' | 'agents' | 'data-engine' | 'product' | 'pricing' | 'security' | 'integrations' | 'about'
+/* Scroll to top on route change — preserves SPA feel */
+const ScrollToTop = () => {
+  const { pathname } = useLocation()
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }, [pathname])
+  return null
+}
+
+/* Landing page — the main "/" view with all scroll sections */
+const LandingPage = () => (
+  <>
+    <Hero />
+    <Numbers />
+    <HowItWorks />
+    <UseCases />
+    <Testimonials />
+    <FAQ />
+    <Footer />
+  </>
+)
 
 const App = () => {
-  const [activeView, setActiveView] = useState<ActiveView>('main')
-
-  const navigate = (view: string) => {
-    setActiveView(view as ActiveView)
-    window.scrollTo({ top: 0, behavior: 'smooth' })
-  }
-
-  const goHome = () => navigate('main')
+  // Dynamic <title> and <meta> per route — SEO/AEO critical
+  useDocumentHead()
 
   return (
     <>
-      <Navbar
-        onNavigate={navigate}
-        activeView={activeView}
-      />
+      <ScrollToTop />
+      <Navbar />
 
-      {activeView === 'main' && (
-        <>
-          <Hero />
-          <HowItWorks
-            onAgentsClick={() => navigate('agents')}
-            onDataEngineClick={() => navigate('data-engine')}
-            onProductClick={() => navigate('product')}
-          />
-          <Numbers />
-          <Pipeline />
-          <UseCases />
-          <Testimonials />
-          <FAQ />
-          <Footer onNavigate={navigate} />
-        </>
-      )}
-
-      {activeView === 'agents' && <Agents onBack={goHome} />}
-      {activeView === 'data-engine' && <DataEngine onBack={goHome} />}
-      {activeView === 'product' && <ProductDashboard onBack={goHome} />}
-      {activeView === 'pricing' && <Pricing onBack={goHome} />}
-      {activeView === 'security' && <Security onBack={goHome} />}
-      {activeView === 'integrations' && <IntegrationsPage onBack={goHome} />}
-      {activeView === 'about' && <About onBack={goHome} />}
+      <main id="main-content" role="main">
+        <Routes>
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/agents" element={<Agents />} />
+          <Route path="/data-engine" element={<DataEngine />} />
+          <Route path="/product" element={<ProductDashboard />} />
+          <Route path="/pricing" element={<Pricing />} />
+          <Route path="/security" element={<Security />} />
+          <Route path="/integrations" element={<IntegrationsPage />} />
+          <Route path="/about" element={<About />} />
+        </Routes>
+      </main>
     </>
   )
 }

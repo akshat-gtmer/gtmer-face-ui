@@ -1,8 +1,7 @@
+import { Link } from 'react-router-dom'
 import styles from './About.module.css'
 
-interface AboutProps {
-  onBack: () => void
-}
+
 
 const VALUES = [
   {
@@ -31,14 +30,21 @@ const TIMELINE = [
   { year: '2026', event: 'Processing 1M+ leads monthly across all clients' },
 ]
 
-const About = ({ onBack }: AboutProps) => {
+const About = () => {
   return (
-    <div className={styles.page}>
+    <article className={styles.page} aria-label="About GTMer — Our Mission">
+      {/* Breadcrumb for crawlers */}
+      <nav className="sr-only" aria-label="Breadcrumb">
+        <ol>
+          <li><a href="/">GTMer</a></li>
+          <li aria-current="page">About</li>
+        </ol>
+      </nav>
       <div className={styles.backBar}>
-        <button className={styles.backButton} onClick={onBack}>
+        <Link to="/" className={styles.backButton}>
           <span className={styles.backArrow}>←</span>
           Back to <span className={styles.backSlash}>/</span>gtmer
-        </button>
+        </Link>
       </div>
 
       {/* Header */}
@@ -47,10 +53,10 @@ const About = ({ onBack }: AboutProps) => {
           <span className={styles.badgeDot} />
           <span>About GTMer</span>
         </div>
-        <h2 className={styles.headline}>
+        <h1 className={styles.headline}>
           The GTM Problem Is
           <span className={styles.headlineAccent}> Execution.</span>
-        </h2>
+        </h1>
         <p className={styles.subtext}>
           Every company knows who they want to sell to. The problem is doing the
           work — finding, enriching, writing, sending, following up, booking.
@@ -114,7 +120,7 @@ const About = ({ onBack }: AboutProps) => {
           Get In Touch →
         </a>
       </div>
-    </div>
+    </article>
   )
 }
 

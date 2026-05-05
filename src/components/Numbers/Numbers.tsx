@@ -5,18 +5,18 @@ import styles from './Numbers.module.css'
 /* ===== DATA ===== */
 
 const INTEGRATIONS_ROW1 = [
-  { code: 'NT', name: 'Notion' },
-  { code: 'OR', name: 'Outreach' },
-  { code: 'AP', name: 'Apollo' },
-  { code: 'ZI', name: 'ZoomInfo' },
-  { code: 'G2', name: 'G2' },
-  { code: 'BO', name: 'Bombora' },
-  { code: 'LI', name: 'LinkedIn' },
-  { code: 'CB', name: 'Clearbit' },
   { code: 'SF', name: 'Salesforce' },
   { code: 'HS', name: 'HubSpot' },
+  { code: 'LI', name: 'LinkedIn' },
+  { code: 'AP', name: 'Apollo' },
+  { code: 'ZI', name: 'ZoomInfo' },
+  { code: 'OR', name: 'Outreach' },
+  { code: 'G2', name: 'G2' },
+  { code: 'CB', name: 'Clearbit' },
   { code: 'PD', name: 'Pipedrive' },
   { code: 'SL', name: 'Slack' },
+  { code: 'NT', name: 'Notion' },
+  { code: 'BO', name: 'Bombora' },
 ]
 
 const INTEGRATIONS_ROW2 = [
@@ -49,45 +49,45 @@ const STATS: StatData[] = [
     metric: '10×',
     numericValue: 10,
     suffix: '×',
-    title: 'Faster Pipeline',
-    vs: 'vs. manual SDR research',
-    desc: 'Teams that automate data collection and prospecting build pipeline 10× faster than…',
+    title: 'Faster Pipeline Generation',
+    vs: 'vs. manual SDR prospecting',
+    desc: 'Teams using GTMer build qualified sales pipeline 10× faster than manual research and cold outreach. AI agents source, score, and engage prospects in minutes — not weeks.',
     colorClass: 'metricGreen',
   },
   {
     metric: '18%',
     numericValue: 18,
     suffix: '%',
-    title: 'Reply Rate',
-    vs: 'vs. 1.8% industry avg',
-    desc: 'AI-personalised emails achieve 18% average reply rates — compared to 1.8% for generic…',
+    title: 'Average Reply Rate',
+    vs: 'vs. 1.8% industry average',
+    desc: 'AI-personalized outreach achieves 18% reply rates by referencing each prospect\'s company signals, tech stack, and recent milestones — 10× higher than generic template campaigns.',
     colorClass: 'metricPurple',
   },
   {
     metric: '70%',
     numericValue: 70,
     suffix: '%',
-    title: 'Lower CAC',
-    vs: 'after 90 days of automation',
-    desc: 'Customer Acquisition Cost drops by an average of 70% within 90 days as AI replaces…',
+    title: 'Lower Acquisition Cost',
+    vs: 'after 90 days of AI outbound',
+    desc: 'Customer Acquisition Cost drops an average of 70% within 90 days as AI SDR agents replace expensive manual outbound while delivering higher-quality meetings to your AEs.',
     colorClass: 'metricCyan',
   },
   {
     metric: '100%',
     numericValue: 100,
     suffix: '%',
-    title: 'Follow-up Rate',
+    title: 'Follow-up Coverage',
     vs: 'zero missed touchpoints',
-    desc: 'AI-powered sequences follow up with every single prospect — no lead goes cold due to a…',
+    desc: 'Every single prospect receives timely, relevant follow-ups. AI sequences never forget, never get busy, and never let a warm lead go cold due to human bandwidth limits.',
     colorClass: 'metricBlue',
   },
   {
     metric: '48h',
     numericValue: 48,
     suffix: 'h',
-    title: 'Time to Live',
-    vs: 'from signup to first sequence',
-    desc: 'Most clients are live and sending their first AI-powered outreach sequences within 4…',
+    title: 'Deployment Time',
+    vs: 'from signup to first outreach',
+    desc: 'Most GTMer clients go live within 48 hours — connecting their CRM, defining their ICP, and launching their first AI-powered outreach sequence the same week they sign up.',
     colorClass: 'metricOrange',
   },
 ]
@@ -142,12 +142,14 @@ const StatCard = ({ stat, index, parentVisible }: { stat: StatData; index: numbe
     <div
       className={`${styles.statCard} ${cardVisible ? styles.visible : ''}`}
       style={{ transitionDelay: `${index * 100}ms` }}
+      role="figure"
+      aria-label={`${stat.metric} — ${stat.title}`}
     >
       <div className={`${styles.statMetric} ${styles[stat.colorClass]}`}>
         <span className={styles.counterAnimating}>{count}</span>
         {stat.suffix}
       </div>
-      <div className={styles.statTitle}>{stat.title}</div>
+      <h3 className={styles.statTitle}>{stat.title}</h3>
       <div className={styles.statVs}>{stat.vs}</div>
       <p className={styles.statDesc}>{stat.desc}</p>
     </div>
@@ -165,17 +167,33 @@ const Numbers = () => {
   const row2Items = [...INTEGRATIONS_ROW2, ...INTEGRATIONS_ROW2]
 
   return (
-    <section className={styles.section} id="numbers-section">
+    <section
+      className={styles.section}
+      id="numbers-section"
+      aria-label="GTMer platform performance metrics and integration partners"
+    >
+      {/* GEO: Crawlable summary of key performance claims */}
+      <div className="sr-only" role="note" aria-label="GTMer performance metrics summary">
+        <p>
+          GTMer delivers proven AI outbound results: 10× faster pipeline generation compared to manual SDR prospecting,
+          18% average email reply rate (versus the 1.8% industry average), 70% lower customer acquisition cost within
+          90 days, 100% follow-up coverage with zero missed touchpoints, and 48-hour deployment time from signup to
+          first outreach. GTMer integrates with Salesforce, HubSpot, LinkedIn, Apollo, ZoomInfo, Outreach, G2, Clearbit,
+          Pipedrive, Slack, Notion, and Bombora.
+        </p>
+      </div>
 
       {/* ===== Integration Ticker ===== */}
       <div
         ref={tickerReveal.ref}
         className={`${styles.tickerBlock} ${tickerReveal.isVisible ? styles.visible : ''}`}
       >
-        <p className={styles.tickerLabel}>Integrates with your existing GTM stack</p>
+        <p className={styles.tickerLabel}>
+          Connects to Salesforce, HubSpot, LinkedIn, Apollo & 30+ GTM tools
+        </p>
 
         {/* Row 1 — scrolls left */}
-        <div className={styles.tickerTrack}>
+        <div className={styles.tickerTrack} aria-label="Integration partner logos scrolling">
           <div className={styles.tickerInner}>
             {row1Items.map((item, i) => (
               <span className={styles.tickerBadge} key={`r1-${i}`}>
@@ -205,11 +223,11 @@ const Numbers = () => {
         className={`${styles.numbersBlock} ${numbersReveal.isVisible ? styles.visible : ''}`}
       >
         <h2 className={styles.numbersHeadline}>
-          Numbers That Actually <span className={styles.numbersAccent}>Matter</span>
+          Proven AI Outbound <span className={styles.numbersAccent}>Results</span>
         </h2>
         <p className={styles.numbersSubtext}>
-          Not vanity metrics. Verified outcomes from real client data — with the
-          context that tells you what they actually mean.
+          Real performance data from GTMer clients. These are verified outcomes
+          from AI-powered outbound campaigns — not projections.
         </p>
 
         <div className={styles.statsGrid}>

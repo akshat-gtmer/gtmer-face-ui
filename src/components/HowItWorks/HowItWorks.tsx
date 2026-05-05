@@ -1,48 +1,52 @@
 import { useState, useEffect, useRef } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useScrollReveal } from '../../hooks/useScrollReveal'
 import styles from './HowItWorks.module.css'
-
-interface HowItWorksProps {
-  onAgentsClick?: () => void
-  onDataEngineClick?: () => void
-  onProductClick?: () => void
-}
 
 const STEPS = [
   {
     number: '01',
     label: 'STEP 01',
     icon: '⛏',
-    title: 'Crawl Data',
-    body: '100+ sources scraped automatically, every day. Firmographics, technographics, hiring signals — all indexed.',
-    link: 'Learn more',
+    title: 'Prospect Discovery',
+    shortTitle: 'Discover',
+    body: 'AI crawls 100+ B2B data sources daily — LinkedIn, Crunchbase, G2, job boards, and funding databases — to surface companies matching your Ideal Customer Profile.',
     linkAction: 'data-engine',
   },
   {
     number: '02',
     label: 'STEP 02',
     icon: '⚡',
-    title: 'Score Leads',
-    body: 'Every lead profiled & scored against your ICP. Only high-intent prospects move forward.',
-    link: 'Learn more',
+    title: 'ICP Scoring & Enrichment',
+    shortTitle: 'Score',
+    body: 'Every prospect is enriched with firmographic, technographic, and intent signals, then scored against your ICP criteria. Only qualified leads advance to outreach.',
     linkAction: 'agents',
   },
   {
     number: '03',
     label: 'STEP 03',
     icon: '✉',
-    title: 'Send Emails',
-    body: 'AI writes unique, personalised emails per prospect. No templates. Every message is contextual.',
-    link: 'Learn more',
+    title: 'AI-Written Outreach',
+    shortTitle: 'Engage',
+    body: 'AI SDR agents craft unique, hyper-personalized emails and LinkedIn messages for each prospect — no templates, no copy-paste. Every touchpoint references real buyer context.',
     linkAction: 'agents',
   },
   {
     number: '04',
     label: 'STEP 04',
     icon: '📅',
-    title: 'Book Demos',
-    body: 'Engaged leads auto-convert to booked demos. Follow-ups, replies, scheduling — all handled.',
-    link: 'Learn more',
+    title: 'Autonomous Meeting Booking',
+    shortTitle: 'Book',
+    body: 'Engaged prospects are auto-scheduled into your team\'s calendar. Follow-ups, reply handling, and rescheduling — fully managed by the AI agent.',
+    linkAction: 'product',
+  },
+  {
+    number: '05',
+    label: 'STEP 05',
+    icon: '📊',
+    title: 'Live Pipeline Tracking',
+    shortTitle: 'Track',
+    body: 'Every conversation is tracked in a real-time kanban board. Leads move automatically through stages — New, Contacted, Replied, Qualified — so your team always knows pipeline status.',
     linkAction: 'product',
   },
 ]
@@ -51,9 +55,9 @@ const STEPS = [
 /* ===== GLIMPSE SUB-COMPONENTS (showcase versions) ===== */
 
 const GlimpseCrawl = () => (
-  <div className={styles.showcaseContent}>
+  <div className={styles.showcaseContent} role="img" aria-label="Live data feed showing companies being discovered from LinkedIn, Crunchbase, Product Hunt, and G2">
     <div className={styles.showcaseInnerHeader}>
-      <span className={styles.showcaseInnerTitle}>Live Data Feed</span>
+      <span className={styles.showcaseInnerTitle}>Live Prospect Feed</span>
       <span className={styles.showcaseBadgeLive}>
         <span className={styles.liveDot} />
         Crawling
@@ -79,25 +83,25 @@ const GlimpseCrawl = () => (
     <div className={styles.showcaseStats}>
       <div className={styles.statItem}>
         <span className={styles.statValue}>12,847</span>
-        <span className={styles.statLabel}>Records Today</span>
+        <span className={styles.statLabel}>Prospects Today</span>
       </div>
       <div className={styles.statItem}>
         <span className={styles.statValue}>100+</span>
-        <span className={styles.statLabel}>Sources</span>
+        <span className={styles.statLabel}>Data Sources</span>
       </div>
       <div className={styles.statItem}>
         <span className={styles.statValue}>98.2%</span>
-        <span className={styles.statLabel}>Accuracy</span>
+        <span className={styles.statLabel}>Data Accuracy</span>
       </div>
     </div>
   </div>
 )
 
 const GlimpseScore = () => (
-  <div className={styles.showcaseContent}>
+  <div className={styles.showcaseContent} role="img" aria-label="Lead scoring engine showing ICP match analysis with buyer intent signals">
     <div className={styles.showcaseInnerHeader}>
-      <span className={styles.showcaseInnerTitle}>Lead Scoring Engine</span>
-      <span className={styles.showcaseSubLabel}>ICP Match Analysis</span>
+      <span className={styles.showcaseInnerTitle}>ICP Scoring Engine</span>
+      <span className={styles.showcaseSubLabel}>Buyer Intent Analysis</span>
     </div>
     <div className={styles.scoreShowcase}>
       {/* Lead 1 */}
@@ -186,10 +190,10 @@ const GlimpseScore = () => (
 )
 
 const GlimpseEmail = () => (
-  <div className={styles.showcaseContent}>
+  <div className={styles.showcaseContent} role="img" aria-label="AI-generated personalized sales email with dynamic merge fields for prospect name and company">
     <div className={styles.showcaseInnerHeader}>
-      <span className={styles.showcaseInnerTitle}>AI Email Draft</span>
-      <span className={styles.showcaseSubLabel}>Auto-Generated · Personalised</span>
+      <span className={styles.showcaseInnerTitle}>AI-Generated Email</span>
+      <span className={styles.showcaseSubLabel}>Context-Aware · Personalized</span>
     </div>
     <div className={styles.emailShowcase}>
       <div className={styles.emailMeta}>
@@ -234,9 +238,9 @@ const GlimpseEmail = () => (
 )
 
 const GlimpseBooking = () => (
-  <div className={styles.showcaseContent}>
+  <div className={styles.showcaseContent} role="img" aria-label="Autonomous demo booking calendar showing a confirmed meeting with Tessera Labs">
     <div className={styles.showcaseInnerHeader}>
-      <span className={styles.showcaseInnerTitle}>Demo Scheduler</span>
+      <span className={styles.showcaseInnerTitle}>Auto-Scheduled Meeting</span>
       <span className={styles.showcaseBadgeConfirmed}>✓ Confirmed</span>
     </div>
     <div className={styles.bookingShowcase}>
@@ -273,7 +277,7 @@ const GlimpseBooking = () => (
           </svg>
         </div>
         <div className={styles.successText}>
-          <span className={styles.successTitle}>Meeting Booked</span>
+          <span className={styles.successTitle}>Meeting Booked Autonomously</span>
           <span className={styles.successSub}>Calendar invite sent to all attendees</span>
         </div>
       </div>
@@ -281,14 +285,62 @@ const GlimpseBooking = () => (
   </div>
 )
 
-const SHOWCASE_COMPONENTS = [GlimpseCrawl, GlimpseScore, GlimpseEmail, GlimpseBooking]
+const KANBAN_COLUMNS = [
+  { title: 'New Lead', dot: '#4da8da', cards: [
+    { name: 'Arjun Mehta', company: 'Tessera Labs', meta: 'Added from YC batch' },
+    { name: 'Sophie Keller', company: 'Crossbeam SaaS', meta: 'Added from YC batch' },
+    { name: 'Nikhil Rao', company: 'Heron Analytics', meta: 'Added from YC batch' },
+  ]},
+  { title: 'Contacted', dot: '#a78bfa', cards: [
+    { name: 'Clara Voss', company: 'Relay.xyz', meta: 'LinkedIn message sent' },
+    { name: 'Tomás Aguilar', company: 'Compvox', meta: 'Follow-up email sent' },
+  ]},
+  { title: 'Replied', dot: '#fb923c', cards: [
+    { name: 'Marcus Chen', company: 'Firelane', meta: 'Interested in demo' },
+  ]},
+  { title: 'Qualified', dot: '#34d399', cards: [
+    { name: 'Lena Strickland', company: 'Bridgepoint', meta: 'Demo booked Feb 18' },
+    { name: 'Viktor Jansen', company: 'SoleFire', meta: 'Pricing discussion' },
+  ]},
+]
+
+const GlimpsePipeline = () => (
+  <div className={styles.showcaseContent} role="img" aria-label="Real-time sales pipeline kanban board showing leads across New, Contacted, Replied, and Qualified stages">
+    <div className={styles.showcaseInnerHeader}>
+      <span className={styles.showcaseInnerTitle}>Sales Pipeline</span>
+      <span className={styles.showcaseSubLabel}>↔ Auto-Updated</span>
+    </div>
+    <div className={styles.kanbanBoard}>
+      {KANBAN_COLUMNS.map((col) => (
+        <div className={styles.kanbanCol} key={col.title}>
+          <div className={styles.kanbanColHeader}>
+            <span className={styles.kanbanColTitle}>
+              <span className={styles.kanbanDot} style={{ background: col.dot }} />
+              {col.title}
+            </span>
+            <span className={styles.kanbanCount}>{col.cards.length}</span>
+          </div>
+          {col.cards.map((card, i) => (
+            <div className={styles.kanbanCard} key={i}>
+              <div className={styles.kanbanCardName}>{card.name}</div>
+              <div className={styles.kanbanCardCompany}>{card.company}</div>
+              <div className={styles.kanbanCardMeta}>{card.meta}</div>
+            </div>
+          ))}
+        </div>
+      ))}
+    </div>
+  </div>
+)
+
+const SHOWCASE_COMPONENTS = [GlimpseCrawl, GlimpseScore, GlimpseEmail, GlimpseBooking, GlimpsePipeline]
 
 /* ===== MAIN COMPONENT ===== */
 
-const HowItWorks = ({ onAgentsClick, onDataEngineClick, onProductClick }: HowItWorksProps) => {
+const HowItWorks = () => {
+  const navigate = useNavigate()
   const headerReveal = useScrollReveal({ threshold: 0.2 })
   const [activeStep, setActiveStep] = useState(0)
-  const [isTransitioning, setIsTransitioning] = useState(false)
   const sectionRef = useRef<HTMLElement>(null)
   const isLockedRef = useRef(false)
   const activeStepRef = useRef(0)
@@ -311,17 +363,13 @@ const HowItWorks = ({ onAgentsClick, onDataEngineClick, onProductClick }: HowItW
       ? Math.min(STEPS.length - 1, step + 1)
       : Math.max(0, step - 1)
 
-    setIsTransitioning(true)
-    setTimeout(() => {
-      setActiveStep(nextStep)
-      activeStepRef.current = nextStep
-      setTimeout(() => setIsTransitioning(false), 80)
-    }, 200)
+    setActiveStep(nextStep)
+    activeStepRef.current = nextStep
 
     if (cooldownTimer.current) clearTimeout(cooldownTimer.current)
     cooldownTimer.current = setTimeout(() => {
       isLockedRef.current = false
-    }, 700)
+    }, 600)
   }
 
   // ── Release helper ──
@@ -469,24 +517,20 @@ const HowItWorks = ({ onAgentsClick, onDataEngineClick, onProductClick }: HowItW
     }
   }, [])
 
-  const ActiveShowcase = SHOWCASE_COMPONENTS[activeStep]
-
   // Click a step card to jump directly
   const handleStepClick = (index: number) => {
-    if (index === activeStep || isTransitioning) return
-    setIsTransitioning(true)
-    setTimeout(() => {
-      setActiveStep(index)
-      activeStepRef.current = index
-      setTimeout(() => setIsTransitioning(false), 80)
-    }, 200)
+    if (index === activeStep) return
+    setActiveStep(index)
+    activeStepRef.current = index
   }
 
-  // Progress for the vertical bar (based on active step)
-  const stepProgress = activeStep / (STEPS.length - 1)
-
   return (
-    <section className={styles.section} id="how-it-works" ref={sectionRef}>
+    <section
+      className={styles.section}
+      id="how-it-works"
+      ref={sectionRef}
+      aria-label="How GTMer's autonomous outbound pipeline works in 5 steps"
+    >
       {/* Header */}
       <div
         ref={headerReveal.ref}
@@ -495,59 +539,85 @@ const HowItWorks = ({ onAgentsClick, onDataEngineClick, onProductClick }: HowItW
         <div className={styles.badge}>
           <div className={styles.badgeInner}>
             <span className={styles.badgeDot} />
-            <span>Fully Automated Pipeline</span>
+            <span>Autonomous Outbound Pipeline</span>
           </div>
         </div>
 
         <h2 className={styles.headline}>
-          <span className={styles.headlineAccent}>4 Steps.</span> Zero Manual Work.
+          <span className={styles.headlineAccent}>How GTMer Works:</span>{' '}
+          From Data to Booked Meeting
         </h2>
+
+        <p className={styles.subtext}>
+          GTMer runs your entire outbound sales pipeline autonomously — prospecting, enrichment,
+          personalized outreach, and meeting booking — without any manual effort from your team.
+        </p>
       </div>
 
       {/* ===== SHOWCASE — The Main Stage ===== */}
       <div className={styles.showcaseArea}>
-        {/* Showcase stage label */}
-        <div className={styles.showcaseStageLabel}>
-          <span className={styles.showcaseStageBadge}>{STEPS[activeStep].label}</span>
-          <span className={styles.showcaseStageIcon}>{STEPS[activeStep].icon}</span>
-          <span className={styles.showcaseStageTitle}>{STEPS[activeStep].title}</span>
+        {/* Showcase stage label — crossfades on step change */}
+        <div className={styles.stageLabelWrap} key={`label-${activeStep}`}>
+          <div className={styles.showcaseStageLabel}>
+            <span className={styles.showcaseStageBadge}>{STEPS[activeStep].label}</span>
+            <span className={styles.showcaseStageIcon} aria-hidden="true">{STEPS[activeStep].icon}</span>
+            <h3 className={styles.showcaseStageTitle}>{STEPS[activeStep].title}</h3>
+          </div>
+          <p className={styles.showcaseDescription}>{STEPS[activeStep].body}</p>
         </div>
 
-        {/* The white showcase panel */}
+        {/* The white showcase panel — horizontal slide track */}
         <div className={styles.showcasePanel}>
           <div
-            className={`${styles.showcaseInner} ${isTransitioning ? styles.showcaseExit : styles.showcaseEnter
-              }`}
-            key={activeStep}
+            className={styles.slideTrack}
+            style={{ transform: `translateX(-${activeStep * 100}%)` }}
           >
-            <ActiveShowcase />
+            {SHOWCASE_COMPONENTS.map((Comp, i) => (
+              <div className={styles.slide} key={i}>
+                <Comp />
+              </div>
+            ))}
           </div>
+        </div>
+
+        {/* Slide dot indicators */}
+        <div className={styles.slideDots} aria-hidden="true">
+          {STEPS.map((_, i) => (
+            <button
+              key={i}
+              className={`${styles.slideDot} ${i === activeStep ? styles.slideDotActive : ''}`}
+              onClick={() => handleStepClick(i)}
+              aria-label={`Go to step ${i + 1}`}
+            />
+          ))}
         </div>
 
         {/* Decorative glow behind the showcase */}
         <div className={styles.showcaseGlow} />
       </div>
 
-      {/* Step cards + progress indicator */}
+      {/* Step cards */}
       <div className={styles.stepNavigation}>
-        <div className={styles.progressTrack}>
-          <div
-            className={styles.progressFill}
-            style={{ height: `${stepProgress * 100}%` }}
-          />
-        </div>
-        <div className={styles.stepCards}>
+        <div className={styles.stepCards} role="tablist" aria-label="Pipeline steps">
           {STEPS.map((step, index) => (
             <div
               className={`${styles.stepCard} ${index === activeStep ? styles.stepCardActive : ''} ${index < activeStep ? styles.stepCardDone : ''}`}
               key={step.number}
               onClick={() => handleStepClick(index)}
-              role="button"
+              role="tab"
               tabIndex={0}
+              aria-selected={index === activeStep}
+              aria-label={`Step ${step.number}: ${step.title}`}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault()
+                  handleStepClick(index)
+                }
+              }}
             >
               <span className={styles.stepCardNumber}>{step.number}</span>
-              <span className={styles.stepCardIcon}>{step.icon}</span>
-              <span className={styles.stepCardTitle}>{step.title}</span>
+              <span className={styles.stepCardIcon} aria-hidden="true">{step.icon}</span>
+              <span className={styles.stepCardTitle}>{step.shortTitle}</span>
               <div className={styles.stepCardIndicator} />
             </div>
           ))}
@@ -558,9 +628,10 @@ const HowItWorks = ({ onAgentsClick, onDataEngineClick, onProductClick }: HowItW
         <button
           className={styles.ctaButton}
           id="how-cta-explore"
-          onClick={() => onProductClick?.()}
+          onClick={() => navigate('/product')}
+          aria-label="See GTMer's full autonomous pipeline in action"
         >
-          Explore Platform
+          See the Full Pipeline in Action
           <span className={styles.ctaArrow}>→</span>
         </button>
       </div>

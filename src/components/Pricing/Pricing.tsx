@@ -1,8 +1,7 @@
+import { Link } from 'react-router-dom'
 import styles from './Pricing.module.css'
 
-interface PricingProps {
-  onBack: () => void
-}
+
 
 const TIERS = [
   {
@@ -64,14 +63,21 @@ const TIERS = [
   },
 ]
 
-const Pricing = ({ onBack }: PricingProps) => {
+const Pricing = () => {
   return (
-    <div className={styles.page}>
+    <article className={styles.page} aria-label="GTMer Pricing — AI SDR Agent Plans & Tiers">
+      {/* Breadcrumb for crawlers */}
+      <nav className="sr-only" aria-label="Breadcrumb">
+        <ol>
+          <li><a href="/">GTMer</a></li>
+          <li aria-current="page">Pricing</li>
+        </ol>
+      </nav>
       <div className={styles.backBar}>
-        <button className={styles.backButton} onClick={onBack}>
+        <Link to="/" className={styles.backButton}>
           <span className={styles.backArrow}>←</span>
           Back to <span className={styles.backSlash}>/</span>gtmer
-        </button>
+        </Link>
       </div>
 
       {/* Header */}
@@ -80,10 +86,10 @@ const Pricing = ({ onBack }: PricingProps) => {
           <span className={styles.badgeDot} />
           <span>Simple, Transparent Pricing</span>
         </div>
-        <h2 className={styles.headline}>
+        <h1 className={styles.headline}>
           Plans That Scale
           <span className={styles.headlineAccent}> With You.</span>
-        </h2>
+        </h1>
         <p className={styles.subtext}>
           Start small, grow fast. Every plan includes AI-powered prospecting,
           enrichment, and outreach — no hidden fees.
@@ -128,7 +134,7 @@ const Pricing = ({ onBack }: PricingProps) => {
           Need a custom plan? <a href="mailto:akshat@gtmer.ai" className={styles.bottomLink}>Contact us</a>
         </p>
       </div>
-    </div>
+    </article>
   )
 }
 

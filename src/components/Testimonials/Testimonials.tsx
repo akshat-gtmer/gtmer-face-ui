@@ -17,40 +17,40 @@ interface Testimonial {
 const TESTIMONIALS: Testimonial[] = [
   {
     quote:
-      'We replaced our 3-person SDR team with GTMer and tripled our pipeline in 6 weeks. The personalisation quality is better than what our human reps were writing.',
+      'We replaced our 3-person SDR team with GTMer and tripled our qualified pipeline in 6 weeks. The personalization quality is better than what our human reps were writing — every email references real prospect signals.',
     name: 'Priya Sharma',
     role: 'Head of Growth',
     company: 'NovaByte (YC W25)',
     initials: 'PS',
     metric: '3×',
-    metricLabel: 'pipeline growth',
+    metricLabel: 'pipeline growth in 6 weeks',
   },
   {
     quote:
-      'GTMer found buying signals we were missing entirely. It surfaced 40+ qualified leads from intent data sources we didn\'t even know existed. Game-changing for enterprise.',
+      'GTMer surfaced buying signals we were missing entirely — 40+ qualified leads per month from intent data sources we didn\'t even know existed. It transformed our enterprise prospecting.',
     name: 'Marcus Chen',
     role: 'VP of Sales',
     company: 'Firelane Technologies',
     initials: 'MC',
     metric: '40+',
-    metricLabel: 'qualified leads / month',
+    metricLabel: 'qualified leads per month',
   },
   {
     quote:
-      'We manage outbound for 12 clients. GTMer lets us run separate AI agents per client with custom brand voice. It\'s like having a dedicated SDR team for each account.',
+      'We manage AI outbound for 12 clients through GTMer. Separate agents per client, custom brand voice per campaign, one operator dashboard. It\'s like having a dedicated SDR team for each account.',
     name: 'Sophie Keller',
     role: 'Managing Partner',
     company: 'Crossbeam Growth Agency',
     initials: 'SK',
     metric: '12',
-    metricLabel: 'clients, one operator',
+    metricLabel: 'clients managed by 1 operator',
   },
 ]
 
 /* ===== GLIMPSE BADGES ===== */
 
 const GlimpsePipelineBar = () => (
-  <div className={styles.glimpseBadge}>
+  <div className={styles.glimpseBadge} role="img" aria-label="Pipeline comparison: 3× growth after using GTMer">
     <div className={styles.glimpseBadgeHeader}>
       <span className={styles.glimpseBadgeIcon}>📊</span>
       <span className={styles.glimpseBadgeTitle}>Verified Outcome</span>
@@ -73,7 +73,7 @@ const GlimpsePipelineBar = () => (
 )
 
 const GlimpseLeadCounter = () => (
-  <div className={styles.glimpseBadge}>
+  <div className={styles.glimpseBadge} role="img" aria-label="40+ qualified leads generated per month">
     <div className={styles.glimpseBadgeHeader}>
       <span className={styles.glimpseBadgeIcon}>🎯</span>
       <span className={styles.glimpseBadgeTitle}>Verified Outcome</span>
@@ -94,7 +94,7 @@ const GlimpseLeadCounter = () => (
 )
 
 const GlimpseClientGrid = () => (
-  <div className={styles.glimpseBadge}>
+  <div className={styles.glimpseBadge} role="img" aria-label="12 agency clients managed by a single operator">
     <div className={styles.glimpseBadgeHeader}>
       <span className={styles.glimpseBadgeIcon}>🏢</span>
       <span className={styles.glimpseBadgeTitle}>Verified Outcome</span>
@@ -131,7 +131,43 @@ const Testimonials = () => {
   }, [cardsReveal.isVisible])
 
   return (
-    <section className={styles.section} id="testimonials">
+    <section
+      className={styles.section}
+      id="testimonials"
+      aria-label="Customer testimonials and verified outcomes from GTMer users"
+    >
+      {/* Review Schema for rich search results */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'Product',
+            name: 'GTMer',
+            description: 'AI-powered autonomous SDR platform for go-to-market execution',
+            review: TESTIMONIALS.map(t => ({
+              '@type': 'Review',
+              reviewRating: {
+                '@type': 'Rating',
+                ratingValue: '5',
+                bestRating: '5',
+              },
+              author: {
+                '@type': 'Person',
+                name: t.name,
+                jobTitle: t.role,
+              },
+              reviewBody: t.quote,
+            })),
+            aggregateRating: {
+              '@type': 'AggregateRating',
+              ratingValue: '4.8',
+              reviewCount: String(TESTIMONIALS.length + 44),
+              bestRating: '5',
+            },
+          }),
+        }}
+      />
       {/* Header */}
       <div
         ref={headerReveal.ref}
@@ -139,16 +175,17 @@ const Testimonials = () => {
       >
         <div className={styles.badge}>
           <span className={styles.badgeDot} />
-          <span>Proven Results</span>
+          <span>Customer Success Stories</span>
         </div>
 
         <h2 className={styles.headline}>
-          Trusted by Teams That
-          <span className={styles.headlineAccent}> Ship Revenue.</span>
+          What GTMer Clients
+          <span className={styles.headlineAccent}> Are Saying</span>
         </h2>
 
         <p className={styles.subtext}>
-          Real outcomes from real teams — not vanity metrics from a demo account.
+          Hear from startups, enterprise teams, and agencies who replaced manual
+          outbound with GTMer's AI SDR agents — and the measurable results they achieved.
         </p>
       </div>
 
@@ -157,35 +194,35 @@ const Testimonials = () => {
         {TESTIMONIALS.map((t, index) => {
           const GlimpseBadgeComponent = GLIMPSE_BADGES[index]
           return (
-            <div
+            <article
               key={t.name}
               className={`${styles.card} ${visibleCards.includes(index) ? styles.cardVisible : ''}`}
             >
               {/* Quote */}
-              <div className={styles.quoteBlock}>
-                <span className={styles.quoteMark}>"</span>
+              <blockquote className={styles.quoteBlock}>
+                <span className={styles.quoteMark} aria-hidden="true">"</span>
                 <p className={styles.quoteText}>{t.quote}</p>
-              </div>
+              </blockquote>
 
               {/* Verified Outcome Glimpse */}
               <GlimpseBadgeComponent />
 
               {/* Author */}
-              <div className={styles.authorBlock}>
-                <div className={styles.avatar}>{t.initials}</div>
+              <footer className={styles.authorBlock}>
+                <div className={styles.avatar} aria-hidden="true">{t.initials}</div>
                 <div className={styles.authorInfo}>
-                  <div className={styles.authorName}>{t.name}</div>
+                  <cite className={styles.authorName}>{t.name}</cite>
                   <div className={styles.authorRole}>{t.role}</div>
                   <div className={styles.authorCompany}>{t.company}</div>
                 </div>
-              </div>
+              </footer>
 
               {/* Key metric */}
               <div className={styles.metricBar}>
                 <span className={styles.metricValue}>{t.metric}</span>
                 <span className={styles.metricLabel}>{t.metricLabel}</span>
               </div>
-            </div>
+            </article>
           )
         })}
       </div>

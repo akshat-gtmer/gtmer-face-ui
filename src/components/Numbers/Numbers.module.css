@@ -203,7 +203,7 @@
   font-size: 0.9rem;
   font-weight: 600;
   color: var(--color-text-primary);
-  margin-bottom: 2px;
+  margin: 0 0 2px;
 }
 
 /* Stat comparison */

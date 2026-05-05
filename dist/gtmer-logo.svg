@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 64" fill="none">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@700&amp;display=swap');
+    .slash { fill: #4da8da; opacity: 0.8; }
+    .name  { fill: rgba(212, 227, 240, 0.92); }
+    .mark  { font-family: 'JetBrains Mono', 'Fira Code', monospace; font-size: 56px; font-weight: 700; letter-spacing: -0.05em; }
+  </style>
+  <text class="mark" y="52">
+    <tspan class="slash">/</tspan><tspan class="name">gtmer</tspan>
+  </text>
+</svg>
