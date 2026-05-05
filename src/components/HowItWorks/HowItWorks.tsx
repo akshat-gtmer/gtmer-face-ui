@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useScrollReveal } from '../../hooks/useScrollReveal'
 import styles from './HowItWorks.module.css'
 
@@ -287,53 +287,206 @@ const SHOWCASE_COMPONENTS = [GlimpseCrawl, GlimpseScore, GlimpseEmail, GlimpseBo
 
 const HowItWorks = ({ onAgentsClick, onDataEngineClick, onProductClick }: HowItWorksProps) => {
   const headerReveal = useScrollReveal({ threshold: 0.2 })
-  const showcaseReveal = useScrollReveal({ threshold: 0.1 })
   const [activeStep, setActiveStep] = useState(0)
   const [isTransitioning, setIsTransitioning] = useState(false)
-  const [introComplete, setIntroComplete] = useState(false)
+  const sectionRef = useRef<HTMLElement>(null)
+  const isLockedRef = useRef(false)
+  const activeStepRef = useRef(0)
+  const cooldownTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const engagedRef = useRef(false)
+  const isSnappingRef = useRef(false)
+  const justReleasedRef = useRef(false) // prevents immediate re-engagement
 
-  const goToStep = useCallback(
-    (step: number) => {
-      if (step === activeStep || isTransitioning) return
-      setIsTransitioning(true)
-      setTimeout(() => {
-        setActiveStep(step)
-        setTimeout(() => setIsTransitioning(false), 60)
-      }, 300)
-    },
-    [activeStep, isTransitioning]
-  )
-
-  // Auto-cycle once through all 4 steps (1s each), then stop
   useEffect(() => {
-    if (!showcaseReveal.isVisible || introComplete) return
-    let step = 0
-    const timer = setInterval(() => {
-      step++
-      if (step >= STEPS.length) {
-        clearInterval(timer)
-        setIntroComplete(true)
+    activeStepRef.current = activeStep
+  }, [activeStep])
+
+  // ── Helper: advance or retreat one step ──
+  const advanceStep = (direction: 'down' | 'up') => {
+    if (isLockedRef.current) return
+    isLockedRef.current = true
+
+    const step = activeStepRef.current
+    const nextStep = direction === 'down'
+      ? Math.min(STEPS.length - 1, step + 1)
+      : Math.max(0, step - 1)
+
+    setIsTransitioning(true)
+    setTimeout(() => {
+      setActiveStep(nextStep)
+      activeStepRef.current = nextStep
+      setTimeout(() => setIsTransitioning(false), 80)
+    }, 200)
+
+    if (cooldownTimer.current) clearTimeout(cooldownTimer.current)
+    cooldownTimer.current = setTimeout(() => {
+      isLockedRef.current = false
+    }, 700)
+  }
+
+  // ── Release helper ──
+  const releaseScroll = () => {
+    engagedRef.current = false
+    justReleasedRef.current = true
+    setTimeout(() => { justReleasedRef.current = false }, 1200)
+  }
+
+  // ── Wheel-hijack ──
+  useEffect(() => {
+    const section = sectionRef.current
+    if (!section) return
+
+    const handleWheel = (e: WheelEvent) => {
+      if (isSnappingRef.current) {
+        e.preventDefault()
         return
       }
-      setIsTransitioning(true)
-      setTimeout(() => {
-        setActiveStep(step)
-        setTimeout(() => setIsTransitioning(false), 60)
-      }, 250)
-    }, 1000)
-    return () => clearInterval(timer)
-  }, [showcaseReveal.isVisible, introComplete])
+
+      const rect = section.getBoundingClientRect()
+      const vh = window.innerHeight
+      const step = activeStepRef.current
+      const scrollingDown = e.deltaY > 0
+      const scrollingUp = e.deltaY < 0
+
+      // ── NOT ENGAGED ──
+      if (!engagedRef.current) {
+        // Don't re-engage right after releasing
+        if (justReleasedRef.current) return
+
+        // Scrolling DOWN: engage when section top enters viewport
+        if (scrollingDown && rect.top > 0 && rect.top < vh * 0.7) {
+          engagedRef.current = true
+          setActiveStep(0)
+          activeStepRef.current = 0
+          e.preventDefault()
+          isSnappingRef.current = true
+          section.scrollIntoView({ behavior: 'smooth', block: 'start' })
+          setTimeout(() => { isSnappingRef.current = false }, 800)
+          return
+        }
+
+        // Scrolling UP: engage when section is partially above viewport
+        if (scrollingUp && rect.top < 0 && rect.bottom > vh * 0.3) {
+          engagedRef.current = true
+          setActiveStep(STEPS.length - 1)
+          activeStepRef.current = STEPS.length - 1
+          e.preventDefault()
+          isSnappingRef.current = true
+          section.scrollIntoView({ behavior: 'smooth', block: 'start' })
+          setTimeout(() => { isSnappingRef.current = false }, 800)
+          return
+        }
+
+        return
+      }
+
+      // ── ENGAGED ──
+
+      // Release DOWN: at last step, let scroll continue
+      if (scrollingDown && step === STEPS.length - 1) {
+        releaseScroll()
+        return
+      }
+
+      // Release UP: at first step, let scroll continue
+      if (scrollingUp && step === 0) {
+        releaseScroll()
+        return
+      }
+
+      // Otherwise block scroll and step
+      e.preventDefault()
+      advanceStep(scrollingDown ? 'down' : 'up')
+    }
+
+    window.addEventListener('wheel', handleWheel, { passive: false })
+    return () => {
+      window.removeEventListener('wheel', handleWheel)
+      if (cooldownTimer.current) clearTimeout(cooldownTimer.current)
+    }
+  }, [])
+
+  // ── Touch support ──
+  useEffect(() => {
+    const section = sectionRef.current
+    if (!section) return
+
+    let touchStartY = 0
+
+    const handleTouchStart = (e: TouchEvent) => {
+      touchStartY = e.touches[0].clientY
+    }
+
+    const handleTouchMove = (e: TouchEvent) => {
+      if (!engagedRef.current) return
+      const step = activeStepRef.current
+      const deltaY = touchStartY - e.touches[0].clientY
+      if (deltaY > 0 && step === STEPS.length - 1) return
+      if (deltaY < 0 && step === 0) return
+      e.preventDefault()
+    }
+
+    const handleTouchEnd = (e: TouchEvent) => {
+      if (isSnappingRef.current) return
+
+      const rect = section.getBoundingClientRect()
+      const vh = window.innerHeight
+      const deltaY = touchStartY - e.changedTouches[0].clientY
+      if (Math.abs(deltaY) < 50) return
+
+      const scrollingDown = deltaY > 0
+      const scrollingUp = deltaY < 0
+
+      if (!engagedRef.current) {
+        if (justReleasedRef.current) return
+        if (scrollingDown && rect.top > 0 && rect.top < vh * 0.7) {
+          engagedRef.current = true
+          setActiveStep(0)
+          activeStepRef.current = 0
+          isSnappingRef.current = true
+          section.scrollIntoView({ behavior: 'smooth', block: 'start' })
+          setTimeout(() => { isSnappingRef.current = false }, 800)
+          return
+        }
+        return
+      }
+
+      const step = activeStepRef.current
+      if (scrollingDown && step === STEPS.length - 1) { releaseScroll(); return }
+      if (scrollingUp && step === 0) { releaseScroll(); return }
+
+      advanceStep(scrollingDown ? 'down' : 'up')
+    }
+
+    section.addEventListener('touchstart', handleTouchStart, { passive: true })
+    section.addEventListener('touchmove', handleTouchMove, { passive: false })
+    section.addEventListener('touchend', handleTouchEnd, { passive: true })
+
+    return () => {
+      section.removeEventListener('touchstart', handleTouchStart)
+      section.removeEventListener('touchmove', handleTouchMove)
+      section.removeEventListener('touchend', handleTouchEnd)
+    }
+  }, [])
 
   const ActiveShowcase = SHOWCASE_COMPONENTS[activeStep]
 
-  const handleLinkClick = (action: string) => {
-    if (action === 'data-engine') onDataEngineClick?.()
-    else if (action === 'agents') onAgentsClick?.()
-    else if (action === 'product') onProductClick?.()
+  // Click a step card to jump directly
+  const handleStepClick = (index: number) => {
+    if (index === activeStep || isTransitioning) return
+    setIsTransitioning(true)
+    setTimeout(() => {
+      setActiveStep(index)
+      activeStepRef.current = index
+      setTimeout(() => setIsTransitioning(false), 80)
+    }, 200)
   }
 
+  // Progress for the vertical bar (based on active step)
+  const stepProgress = activeStep / (STEPS.length - 1)
+
   return (
-    <section className={styles.section} id="how-it-works">
+    <section className={styles.section} id="how-it-works" ref={sectionRef}>
       {/* Header */}
       <div
         ref={headerReveal.ref}
@@ -349,15 +502,10 @@ const HowItWorks = ({ onAgentsClick, onDataEngineClick, onProductClick }: HowItW
         <h2 className={styles.headline}>
           <span className={styles.headlineAccent}>4 Steps.</span> Zero Manual Work.
         </h2>
-
-
       </div>
 
       {/* ===== SHOWCASE — The Main Stage ===== */}
-      <div
-        ref={showcaseReveal.ref}
-        className={`${styles.showcaseArea} ${showcaseReveal.isVisible ? styles.showcaseVisible : ''}`}
-      >
+      <div className={styles.showcaseArea}>
         {/* Showcase stage label */}
         <div className={styles.showcaseStageLabel}>
           <span className={styles.showcaseStageBadge}>{STEPS[activeStep].label}</span>
@@ -380,21 +528,30 @@ const HowItWorks = ({ onAgentsClick, onDataEngineClick, onProductClick }: HowItW
         <div className={styles.showcaseGlow} />
       </div>
 
-      <div className={styles.stepCards}>
-        {STEPS.map((step, index) => (
+      {/* Step cards + progress indicator */}
+      <div className={styles.stepNavigation}>
+        <div className={styles.progressTrack}>
           <div
-            className={`${styles.stepCard} ${index === activeStep ? styles.stepCardActive : ''}`}
-            key={step.number}
-            onClick={() => goToStep(index)}
-            role="button"
-            tabIndex={0}
-          >
-            <span className={styles.stepCardNumber}>{step.number}</span>
-            <span className={styles.stepCardIcon}>{step.icon}</span>
-            <span className={styles.stepCardTitle}>{step.title}</span>
-            <div className={styles.stepCardIndicator} />
-          </div>
-        ))}
+            className={styles.progressFill}
+            style={{ height: `${stepProgress * 100}%` }}
+          />
+        </div>
+        <div className={styles.stepCards}>
+          {STEPS.map((step, index) => (
+            <div
+              className={`${styles.stepCard} ${index === activeStep ? styles.stepCardActive : ''} ${index < activeStep ? styles.stepCardDone : ''}`}
+              key={step.number}
+              onClick={() => handleStepClick(index)}
+              role="button"
+              tabIndex={0}
+            >
+              <span className={styles.stepCardNumber}>{step.number}</span>
+              <span className={styles.stepCardIcon}>{step.icon}</span>
+              <span className={styles.stepCardTitle}>{step.title}</span>
+              <div className={styles.stepCardIndicator} />
+            </div>
+          ))}
+        </div>
       </div>
 
       <div className={styles.ctaWrapper}>

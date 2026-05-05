@@ -28,26 +28,25 @@ const EXPLORE_ITEMS: DropdownItem[] = [
   { id: 'dd-about', icon: '△', label: '/gtmer-about', desc: 'Our mission & team', action: 'view', target: 'about' },
 ]
 
-const SCROLL_ITEMS: DropdownItem[] = [
-  { id: 'dd-how', icon: '→', label: '/gtmer-how-it-works', desc: '4-step pipeline', action: 'scroll', target: 'how-it-works' },
-  { id: 'dd-pipeline', icon: '→', label: '/gtmer-pipeline', desc: 'Live kanban board', action: 'scroll', target: 'pipeline-section' },
-  { id: 'dd-usecases', icon: '→', label: '/gtmer-use-cases', desc: 'Who uses GTMer', action: 'scroll', target: 'use-cases' },
-  { id: 'dd-testimonials', icon: '→', label: '/gtmer-testimonials', desc: 'Proven results', action: 'scroll', target: 'testimonials' },
-  { id: 'dd-faq', icon: '→', label: '/gtmer-faq', desc: 'Common questions', action: 'scroll', target: 'faq' },
-  { id: 'dd-contact', icon: '→', label: '/gtmer-contact', desc: 'Get in touch', action: 'scroll', target: 'contact' },
-]
-
+/* Sections for the center tab switcher */
 const NAV_SECTIONS = [
-  { id: 'hero-section' }, { id: 'numbers-section' }, { id: 'how-it-works' },
-  { id: 'pipeline-section' }, { id: 'use-cases' }, { id: 'testimonials' },
-  { id: 'faq' }, { id: 'contact' },
+  { id: 'hero-section', label: 'gtmer/home' },
+  { id: 'how-it-works', label: 'gtmer/how-it-works' },
+  { id: 'numbers-section', label: 'gtmer/numbers' },
+  { id: 'pipeline-section', label: 'gtmer/pipeline' },
+  { id: 'use-cases', label: 'gtmer/use-cases' },
+  { id: 'testimonials', label: 'gtmer/testimonials' },
+  { id: 'faq', label: 'gtmer/faq' },
+  { id: 'contact', label: 'gtmer/contact' },
 ]
 
 const Navbar = ({ onNavigate, activeView }: NavbarProps) => {
   const [scrolled, setScrolled] = useState(false)
   const [dropdownOpen, setDropdownOpen] = useState(false)
+  const [sectionMenuOpen, setSectionMenuOpen] = useState(false)
   const [activeSection, setActiveSection] = useState('hero-section')
   const dropdownRef = useRef<HTMLDivElement>(null)
+  const sectionRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const handleScroll = () => {
@@ -71,6 +70,9 @@ const Navbar = ({ onNavigate, activeView }: NavbarProps) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
         setDropdownOpen(false)
       }
+      if (sectionRef.current && !sectionRef.current.contains(e.target as Node)) {
+        setSectionMenuOpen(false)
+      }
     }
     document.addEventListener('mousedown', handleClickOutside)
     return () => document.removeEventListener('mousedown', handleClickOutside)
@@ -81,7 +83,6 @@ const Navbar = ({ onNavigate, activeView }: NavbarProps) => {
     if (item.action === 'view') {
       onNavigate(item.target)
     } else {
-      // If we're not on main view, go home first then scroll
       if (activeView !== 'main') {
         onNavigate('main')
         setTimeout(() => {
@@ -90,6 +91,18 @@ const Navbar = ({ onNavigate, activeView }: NavbarProps) => {
       } else {
         document.getElementById(item.target)?.scrollIntoView({ behavior: 'smooth' })
       }
+    }
+  }
+
+  const handleSectionClick = (sectionId: string) => {
+    setSectionMenuOpen(false)
+    if (activeView !== 'main') {
+      onNavigate('main')
+      setTimeout(() => {
+        document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' })
+      }, 100)
+    } else {
+      document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' })
     }
   }
 
@@ -113,6 +126,8 @@ const Navbar = ({ onNavigate, activeView }: NavbarProps) => {
     </div>
   )
 
+  const activeSectionLabel = NAV_SECTIONS.find(s => s.id === activeSection)?.label || 'Home'
+
   return (
     <nav
       className={`${styles.navbar} ${scrolled ? styles.scrolled : ''}`}
@@ -128,52 +143,54 @@ const Navbar = ({ onNavigate, activeView }: NavbarProps) => {
           aria-haspopup="true"
           id="nav-logo-button"
         >
-          <img src="/logo-dark.jpg" alt="GTMer logo" className={styles.logoImage} />
+          <span className={styles.logoMark}>
+            <span className={styles.logoSlash}>/</span>
+            <span className={styles.logoName}>gtmer</span>
+          </span>
           <span className={`${styles.chevron} ${dropdownOpen ? styles.open : ''}`} />
         </button>
 
-        {/* Mega Dropdown */}
+        {/* Mega Dropdown — Platform + Explore only */}
         <div
           className={`${styles.dropdown} ${dropdownOpen ? styles.visible : ''}`}
           role="menu"
           id="nav-dropdown-menu"
         >
           <div className={styles.dropdownInner}>
-            <div className={styles.dropdownCol}>
-              {renderGroup('Platform', PLATFORM_ITEMS)}
-              {renderGroup('Explore', EXPLORE_ITEMS)}
-            </div>
-            <div className={styles.dropdownCol}>
-              {renderGroup('Sections', SCROLL_ITEMS)}
-            </div>
+            {renderGroup('Platform', PLATFORM_ITEMS)}
+            {renderGroup('Explore', EXPLORE_ITEMS)}
           </div>
         </div>
       </div>
 
-      {/* Center: Logo text + dots */}
-      {scrolled && <div className={styles.center}>
-        <button
-          className={styles.logoTextBtn}
-          onClick={() => onNavigate('main')}
-          aria-label="Go home"
-        >
-          <span className={styles.logoSlash}>/</span>gtmer
-        </button>
-        {activeView === 'main' && (
-          <div className={styles.sectionDots}>
+      {/* Center: Section tab switcher */}
+      {scrolled && activeView === 'main' && (
+        <div className={styles.center} ref={sectionRef}>
+          <button
+            className={styles.sectionToggle}
+            onClick={() => setSectionMenuOpen(!sectionMenuOpen)}
+            aria-expanded={sectionMenuOpen}
+          >
+            <span className={styles.sectionLabel}>{activeSectionLabel}</span>
+            <span className={`${styles.sectionChevron} ${sectionMenuOpen ? styles.sectionChevronOpen : ''}`}>⌄</span>
+          </button>
+
+          {/* Section flyout */}
+          <div className={`${styles.sectionFlyout} ${sectionMenuOpen ? styles.sectionFlyoutVisible : ''}`}>
             {NAV_SECTIONS.map(s => (
               <button
                 key={s.id}
-                className={`${styles.sectionDot} ${activeSection === s.id ? styles.sectionDotActive : ''}`}
-                onClick={() => document.getElementById(s.id)?.scrollIntoView({ behavior: 'smooth' })}
-                aria-label={`Go to ${s.id}`}
-              />
+                className={`${styles.sectionItem} ${activeSection === s.id ? styles.sectionItemActive : ''}`}
+                onClick={() => handleSectionClick(s.id)}
+              >
+                {s.label}
+              </button>
             ))}
           </div>
-        )}
-      </div>}
+        </div>
+      )}
 
-      {/* Right: CTA only */}
+      {/* Right: CTA */}
       <div className={styles.navRight}>
         <button
           className={styles.ctaButton}

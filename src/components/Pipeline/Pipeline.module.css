@@ -83,9 +83,9 @@
 
 /* Window chrome */
 .boardWindow {
-  background: rgba(8, 22, 40, 0.85);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: var(--color-glass-bg-elevated);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
   border: 1px solid rgba(77, 168, 218, 0.12);
   border-radius: var(--radius-lg);
   overflow: hidden;

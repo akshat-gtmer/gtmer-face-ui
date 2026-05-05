@@ -1,6 +1,25 @@
-/* ===== Section ===== */
-.section { position: relative; padding: var(--space-3xl) var(--space-xl); overflow: hidden; scroll-snap-align: start; min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; }
-.section::before { content: ''; position: absolute; top: 0; left: 10%; right: 10%; height: 1px; background: linear-gradient(90deg, transparent, rgba(120,190,240,0.15), transparent); }
+/* ===== Section — single viewport, scroll is hijacked by the component ===== */
+.section {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: var(--space-3xl) var(--space-xl);
+  overflow: hidden;
+  scroll-snap-align: start;
+}
+
+.section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 10%;
+  right: 10%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(120,190,240,0.15), transparent);
+}
 
 /* Header */
 .headerBlock { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
@@ -13,10 +32,7 @@
 .subtext { text-align: center; font-size: clamp(0.9rem,1.3vw,1rem); font-weight: 300; color: var(--color-text-secondary); max-width: 520px; margin: 0 auto var(--space-xl); line-height: 1.7; }
 
 /* ===== SHOWCASE AREA ===== */
-.showcaseArea { width: 100%; max-width: 1100px; margin: 0 auto var(--space-lg); position: relative; opacity: 0; transform: translateY(40px); transition: opacity 0.8s ease, transform 0.8s ease; }
-.showcaseArea.showcaseVisible { opacity: 1; transform: translateY(0); }
-
-
+.showcaseArea { width: 100%; max-width: 1100px; margin: 0 auto var(--space-lg); position: relative; }
 
 /* Stage label */
 .showcaseStageLabel { display: flex; align-items: center; gap: var(--space-sm); margin-bottom: var(--space-md); }
@@ -127,11 +143,47 @@
 .successTitle { font-family: var(--font-sans); font-size: 0.75rem; font-weight: 600; color: #166534; }
 .successSub { font-family: var(--font-mono); font-size: 0.55rem; color: #64748b; }
 
-/* ===== STEP CARDS BELOW ===== */
-.stepCards { display: flex; gap: var(--space-sm); max-width: 1100px; margin: 0 auto var(--space-xl); justify-content: center; }
-.stepCard { position: relative; display: flex; align-items: center; gap: var(--space-sm); background: rgba(10,31,53,0.5); backdrop-filter: blur(8px); border: 1px solid rgba(77,168,218,0.1); border-radius: var(--radius-md); padding: 10px 18px; cursor: pointer; transition: all 0.35s ease; overflow: hidden; flex: 1; }
+/* ===== STEP NAVIGATION (cards + progress) ===== */
+.stepNavigation {
+  display: flex;
+  align-items: stretch;
+  gap: var(--space-md);
+  max-width: 1100px;
+  width: 100%;
+  margin: 0 auto var(--space-xl);
+}
+
+/* Vertical progress track */
+.progressTrack {
+  width: 3px;
+  background: rgba(77,168,218,0.12);
+  border-radius: 2px;
+  position: relative;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+.progressFill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: linear-gradient(180deg, var(--color-accent), var(--color-accent-neon));
+  border-radius: 2px;
+  transition: height 0.15s ease-out;
+}
+
+/* Step cards */
+.stepCards {
+  display: flex;
+  gap: var(--space-sm);
+  flex: 1;
+  justify-content: center;
+}
+.stepCard { position: relative; display: flex; align-items: center; gap: var(--space-sm); background: var(--color-glass-bg); backdrop-filter: var(--glass-blur); border: 1px solid rgba(77,168,218,0.1); border-radius: var(--radius-md); padding: 10px 18px; cursor: pointer; transition: all 0.35s ease; overflow: hidden; flex: 1; }
 .stepCard:hover { border-color: rgba(77,168,218,0.2); background: rgba(10,31,53,0.7); }
 .stepCard.stepCardActive { border-color: rgba(77,168,218,0.35); background: rgba(10,31,53,0.8); box-shadow: 0 4px 20px rgba(0,0,0,0.12), 0 0 16px rgba(77,168,218,0.06); }
+.stepCard.stepCardDone { border-color: rgba(77,168,218,0.2); }
+.stepCard.stepCardDone .stepCardNumber { color: var(--color-accent); opacity: 0.6; }
 .stepCardNumber { font-family: var(--font-mono); font-size: 0.6rem; color: var(--color-text-muted); opacity: 0.5; flex-shrink: 0; }
 .stepCardActive .stepCardNumber { color: var(--color-accent); opacity: 0.8; }
 .stepCardIcon { font-size: 0.85rem; opacity: 0.7; flex-shrink: 0; }
@@ -153,6 +205,7 @@
   .stepCards { flex-wrap: wrap; }
   .stepCard { flex: 0 1 calc(50% - 4px); }
   .showcasePanel { padding: 0; }
+  .progressTrack { display: none; }
 }
 @media (max-width: 540px) {
   .stepCard { flex: 0 1 100%; }

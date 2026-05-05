@@ -26,9 +26,12 @@
   --color-border: rgba(77, 168, 218, 0.12);
   --color-border-active: rgba(77, 168, 218, 0.3);
 
-  --color-glass-bg: rgba(10, 31, 53, 0.6);
+  --color-glass-bg: rgba(10, 31, 53, 0.65);
+  --color-glass-bg-elevated: rgba(8, 20, 38, 0.75);
   --color-glass-border: rgba(77, 168, 218, 0.15);
   --color-glass-hover: rgba(77, 168, 218, 0.08);
+  --glass-blur: blur(12px);
+  --glass-blur-strong: blur(16px);
 
   /* Typography */
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;

@@ -190,9 +190,9 @@
 }
 
 .vizWindow {
-  background: rgba(8, 22, 40, 0.85);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: var(--color-glass-bg-elevated);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
   border: 1px solid rgba(77, 168, 218, 0.12);
   border-radius: var(--radius-lg);
   overflow: hidden;
@@ -350,9 +350,9 @@
 
 /* Agent type card */
 .typeCard {
-  background: rgba(10, 31, 53, 0.65);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  background: var(--color-glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
   border: 1px solid rgba(77, 168, 218, 0.1);
   border-radius: var(--radius-md);
   padding: var(--space-xl);
