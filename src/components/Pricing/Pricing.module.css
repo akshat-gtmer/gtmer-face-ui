@@ -30,7 +30,7 @@
 .backSlash { color: var(--color-accent); opacity: 0.7; }
 
 /* Header */
-.header { text-align: center; margin-bottom: var(--space-3xl); }
+.header { text-align: center; margin-bottom: var(--space-2xl); }
 
 .badge {
   display: inline-flex;
@@ -68,6 +68,78 @@
   font-size: clamp(0.9rem, 1.3vw, 1rem);
   font-weight: 300; color: var(--color-text-secondary);
   max-width: 520px; margin: 0 auto; line-height: 1.7;
+}
+
+/* ── Contact Banner ─────────────────────────────── */
+.contactBanner {
+  margin-bottom: var(--space-3xl);
+}
+
+.contactBannerInner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-xl);
+  padding: var(--space-lg) var(--space-xl);
+  background: rgba(77, 168, 218, 0.06);
+  backdrop-filter: var(--glass-blur);
+  border: 1px solid rgba(77, 168, 218, 0.15);
+  border-radius: var(--radius-md);
+  transition: border-color var(--transition-base);
+}
+
+.contactBannerInner:hover {
+  border-color: rgba(77, 168, 218, 0.3);
+}
+
+.contactBannerText {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.contactBannerIcon {
+  font-size: 1.6rem;
+  flex-shrink: 0;
+}
+
+.contactBannerHeadline {
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin-bottom: 2px;
+}
+
+.contactBannerSub {
+  font-size: 0.8rem;
+  font-weight: 300;
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+}
+
+.contactBannerCta {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: 10px 24px;
+  font-family: var(--font-sans);
+  font-size: 0.825rem;
+  font-weight: 500;
+  color: var(--color-bg-deep);
+  background: var(--color-accent);
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all var(--transition-base);
+  text-decoration: none;
+}
+
+.contactBannerCta:hover {
+  background: hsl(200, 60%, 60%);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(77, 168, 218, 0.25);
 }
 
 /* Tiers grid */
@@ -123,23 +195,17 @@
   color: var(--color-accent);
   text-transform: uppercase;
   letter-spacing: 0.12em;
-  margin-bottom: var(--space-md);
+  margin-bottom: var(--space-xs);
 }
 
-.tierPrice { margin-bottom: var(--space-sm); }
-
-.priceValue {
+.tierTagline {
   font-family: var(--font-sans);
-  font-size: 2.2rem;
-  font-weight: 700;
+  font-size: 1.15rem;
+  font-weight: 600;
   color: var(--color-text-primary);
-  letter-spacing: -0.03em;
-}
-
-.pricePeriod {
-  font-size: 0.85rem;
-  font-weight: 300;
-  color: var(--color-text-muted);
+  letter-spacing: -0.02em;
+  margin-bottom: var(--space-sm);
+  line-height: 1.3;
 }
 
 .tierDesc {
@@ -178,6 +244,8 @@
 
 /* CTA */
 .tierCta {
+  display: block;
+  text-align: center;
   padding: 12px 24px;
   font-size: 0.825rem;
   font-weight: 500;
@@ -189,6 +257,7 @@
   transition: all var(--transition-base);
   font-family: var(--font-sans);
   width: 100%;
+  text-decoration: none;
 }
 
 .tierCta:hover {
@@ -216,6 +285,13 @@
 
 @media (max-width: 900px) {
   .tiersGrid { grid-template-columns: 1fr; max-width: 400px; margin: 0 auto var(--space-3xl); }
+  .contactBannerInner {
+    flex-direction: column;
+    text-align: center;
+  }
+  .contactBannerText {
+    flex-direction: column;
+  }
 }
 
 @media (max-width: 540px) {

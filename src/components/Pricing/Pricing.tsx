@@ -6,8 +6,7 @@ import styles from './Pricing.module.css'
 const TIERS = [
   {
     name: 'Starter',
-    price: '$499',
-    period: '/month',
+    tagline: 'Launch your AI-powered outbound',
     desc: 'For early-stage teams starting with AI-powered outbound.',
     highlight: false,
     features: [
@@ -19,12 +18,10 @@ const TIERS = [
       'Email support',
       'Weekly performance reports',
     ],
-    cta: 'Get Started',
   },
   {
     name: 'Growth',
-    price: '$1,499',
-    period: '/month',
+    tagline: 'Scale your autonomous GTM',
     desc: 'For scaling teams that need full autonomous GTM.',
     highlight: true,
     badge: 'Most Popular',
@@ -39,12 +36,10 @@ const TIERS = [
       'Custom ICP configuration',
       'Real-time pipeline dashboard',
     ],
-    cta: 'Start Free Trial',
   },
   {
     name: 'Enterprise',
-    price: 'Custom',
-    period: '',
+    tagline: 'Custom-built for your org',
     desc: 'For organizations needing custom agents and dedicated support.',
     highlight: false,
     features: [
@@ -59,7 +54,6 @@ const TIERS = [
       'SLA guarantees',
       'On-premise deployment option',
     ],
-    cta: 'Contact Sales',
   },
 ]
 
@@ -84,16 +78,34 @@ const Pricing = () => {
       <div className={styles.header}>
         <div className={styles.badge}>
           <span className={styles.badgeDot} />
-          <span>Simple, Transparent Pricing</span>
+          <span>Flexible Plans</span>
         </div>
         <h1 className={styles.headline}>
-          Plans That Scale
-          <span className={styles.headlineAccent}> With You.</span>
+          Built for Your
+          <span className={styles.headlineAccent}> Scale.</span>
         </h1>
         <p className={styles.subtext}>
-          Start small, grow fast. Every plan includes AI-powered prospecting,
-          enrichment, and outreach — no hidden fees.
+          Every team is different. We'll work with you to find the right plan — 
+          tailored to your outreach volume, integrations, and growth goals.
         </p>
+      </div>
+
+      {/* Contact CTA Banner */}
+      <div className={styles.contactBanner}>
+        <div className={styles.contactBannerInner}>
+          <div className={styles.contactBannerText}>
+            <span className={styles.contactBannerIcon}>💬</span>
+            <div>
+              <p className={styles.contactBannerHeadline}>Get a Custom Quote</p>
+              <p className={styles.contactBannerSub}>
+                Talk to our team and we'll craft a plan that fits your pipeline goals and budget.
+              </p>
+            </div>
+          </div>
+          <a href="mailto:akshat@gtmer.ai" className={styles.contactBannerCta}>
+            Contact Sales →
+          </a>
+        </div>
       </div>
 
       {/* Pricing Grid */}
@@ -103,12 +115,9 @@ const Pricing = () => {
             key={tier.name}
             className={`${styles.tierCard} ${tier.highlight ? styles.tierHighlight : ''}`}
           >
-            {tier.badge && <div className={styles.tierBadge}>{tier.badge}</div>}
+            {'badge' in tier && tier.badge && <div className={styles.tierBadge}>{tier.badge}</div>}
             <div className={styles.tierName}>{tier.name}</div>
-            <div className={styles.tierPrice}>
-              <span className={styles.priceValue}>{tier.price}</span>
-              <span className={styles.pricePeriod}>{tier.period}</span>
-            </div>
+            <div className={styles.tierTagline}>{tier.tagline}</div>
             <p className={styles.tierDesc}>{tier.desc}</p>
 
             <ul className={styles.featureList}>
@@ -120,18 +129,22 @@ const Pricing = () => {
               ))}
             </ul>
 
-            <button className={`${styles.tierCta} ${tier.highlight ? styles.tierCtaHighlight : ''}`}>
-              {tier.cta}
-            </button>
+            <a
+              href="mailto:akshat@gtmer.ai"
+              className={`${styles.tierCta} ${tier.highlight ? styles.tierCtaHighlight : ''}`}
+            >
+              Get Pricing
+            </a>
           </div>
         ))}
       </div>
 
       {/* Bottom note */}
       <div className={styles.bottomNote}>
-        <p>All plans include a 14-day free trial. No credit card required.</p>
+        <p>We offer flexible billing — monthly, quarterly, and annual options available.</p>
         <p className={styles.bottomMuted}>
-          Need a custom plan? <a href="mailto:akshat@gtmer.ai" className={styles.bottomLink}>Contact us</a>
+          Questions? Reach us at{' '}
+          <a href="mailto:akshat@gtmer.ai" className={styles.bottomLink}>akshat@gtmer.ai</a>
         </p>
       </div>
     </article>
