@@ -85,6 +85,26 @@ const Agents = () => {
           <li aria-current="page">AI Agents</li>
         </ol>
       </nav>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'WebPage',
+            name: 'GTMer AI Agents — Custom-Built SDR Agents for Your GTM Workflow',
+            description: 'GTMer builds custom AI agents tailored to your exact GTM workflow — prospecting, enrichment, outreach, nurturing, and conversion.',
+            url: 'https://gtmer.ai/agents',
+            isPartOf: { '@type': 'WebSite', name: 'GTMer', url: 'https://gtmer.ai' },
+            breadcrumb: {
+              '@type': 'BreadcrumbList',
+              itemListElement: [
+                { '@type': 'ListItem', position: 1, name: 'GTMer', item: 'https://gtmer.ai/' },
+                { '@type': 'ListItem', position: 2, name: 'AI Agents', item: 'https://gtmer.ai/agents' },
+              ],
+            },
+          }),
+        }}
+      />
 
       {/* Back button */}
       <div className={styles.backBar}>

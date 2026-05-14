@@ -213,7 +213,77 @@
   font-weight: 300;
   color: var(--color-text-secondary);
   line-height: 1.6;
-  margin-bottom: var(--space-xl);
+  margin-bottom: var(--space-lg);
+}
+
+/* Price display */
+.priceBlock {
+  display: flex;
+  align-items: baseline;
+  gap: 2px;
+  margin-bottom: var(--space-sm);
+  padding-top: var(--space-sm);
+}
+
+.priceCurrency {
+  font-family: var(--font-sans);
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: var(--color-accent);
+  align-self: flex-start;
+  margin-top: 4px;
+}
+
+.priceAmount {
+  font-family: var(--font-sans);
+  font-size: 2.8rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+.pricePeriod {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: var(--color-text-muted);
+  margin-left: 4px;
+}
+
+.priceCustom {
+  font-family: var(--font-sans);
+  font-size: 2.4rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+/* Leads volume pill */
+.leadsPill {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: 6px 14px;
+  background: rgba(77, 168, 218, 0.08);
+  border: 1px solid rgba(77, 168, 218, 0.12);
+  border-radius: 100px;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-lg);
+  letter-spacing: 0.02em;
+}
+
+.leadsIcon {
+  font-size: 0.75rem;
+}
+
+.perLead {
+  color: var(--color-text-muted);
+  font-size: 0.6rem;
+  opacity: 0.8;
 }
 
 /* Features */

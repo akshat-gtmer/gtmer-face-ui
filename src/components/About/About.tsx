@@ -40,6 +40,26 @@ const About = () => {
           <li aria-current="page">About</li>
         </ol>
       </nav>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'WebPage',
+            name: 'About GTMer — Our Mission to Automate Go-To-Market Execution',
+            description: 'GTMer was founded in 2024 to make outbound sales fully autonomous. AI agents replace manual prospecting, enrichment, and outreach — so teams focus on closing.',
+            url: 'https://gtmer.ai/about',
+            isPartOf: { '@type': 'WebSite', name: 'GTMer', url: 'https://gtmer.ai' },
+            breadcrumb: {
+              '@type': 'BreadcrumbList',
+              itemListElement: [
+                { '@type': 'ListItem', position: 1, name: 'GTMer', item: 'https://gtmer.ai/' },
+                { '@type': 'ListItem', position: 2, name: 'About', item: 'https://gtmer.ai/about' },
+              ],
+            },
+          }),
+        }}
+      />
       <div className={styles.backBar}>
         <Link to="/" className={styles.backButton}>
           <span className={styles.backArrow}>←</span>

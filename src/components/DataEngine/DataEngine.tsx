@@ -53,6 +53,26 @@ const DataEngine = () => {
           <li aria-current="page">Data Engine</li>
         </ol>
       </nav>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'WebPage',
+            name: 'GTMer Data Engine — Real-Time B2B Intelligence & Lead Enrichment',
+            description: 'GTMer Data Engine enriches prospect data from 100+ B2B sources in real-time — firmographics, technographics, intent signals, verified emails, and phone numbers.',
+            url: 'https://gtmer.ai/data-engine',
+            isPartOf: { '@type': 'WebSite', name: 'GTMer', url: 'https://gtmer.ai' },
+            breadcrumb: {
+              '@type': 'BreadcrumbList',
+              itemListElement: [
+                { '@type': 'ListItem', position: 1, name: 'GTMer', item: 'https://gtmer.ai/' },
+                { '@type': 'ListItem', position: 2, name: 'Data Engine', item: 'https://gtmer.ai/data-engine' },
+              ],
+            },
+          }),
+        }}
+      />
 
       {/* Back button */}
       <div className={styles.backBar}>

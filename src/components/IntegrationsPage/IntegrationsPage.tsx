@@ -73,6 +73,26 @@ const IntegrationsPage = () => {
           <li aria-current="page">Integrations</li>
         </ol>
       </nav>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'WebPage',
+            name: 'GTMer Integrations — 100+ Connected CRM, Data & Communication Tools',
+            description: 'GTMer integrates with Salesforce, HubSpot, LinkedIn, Apollo, ZoomInfo, Clearbit, G2, Bombora, Slack, and 100+ more tools out of the box.',
+            url: 'https://gtmer.ai/integrations',
+            isPartOf: { '@type': 'WebSite', name: 'GTMer', url: 'https://gtmer.ai' },
+            breadcrumb: {
+              '@type': 'BreadcrumbList',
+              itemListElement: [
+                { '@type': 'ListItem', position: 1, name: 'GTMer', item: 'https://gtmer.ai/' },
+                { '@type': 'ListItem', position: 2, name: 'Integrations', item: 'https://gtmer.ai/integrations' },
+              ],
+            },
+          }),
+        }}
+      />
       <div className={styles.backBar}>
         <Link to="/" className={styles.backButton}>
           <span className={styles.backArrow}>←</span>

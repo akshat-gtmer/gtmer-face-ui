@@ -194,13 +194,14 @@ const UseCases = () => {
 
         <h2 className={styles.headline}>
           Who Is GTMer For?
-          <span className={styles.headlineAccent}> Startups. Enterprise. Agencies.</span>
+          <span className={styles.headlineAccent}> AI Sales Automation for Every Team.</span>
         </h2>
 
         <p className={styles.subtext}>
           GTMer adapts to your team size, sales cycle, and market. Whether you're
-          a seed-stage startup building first pipeline or an agency managing outbound
-          for 50 clients — the AI agents configure to your workflow.
+          a seed-stage startup needing AI SDR agents, an enterprise team running personalized
+          outbound at scale, or an agency managing outbound for 50 clients — the AI sales
+          automation configures to your workflow.
         </p>
       </div>
 
@@ -244,15 +245,17 @@ const UseCases = () => {
 
       {/* Bottom CTA */}
       <div className={styles.ctaWrapper}>
-        <button
+        <a
           className={styles.ctaButton}
           id="usecase-cta-demo"
-          onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
-          aria-label="Book a demo to see GTMer for your team"
+          href="https://app.gtmer.ai"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Try GTMer for your team"
         >
-          See How GTMer Fits Your Team
+          Try the Platform
           <span className={styles.ctaArrow}>→</span>
-        </button>
+        </a>
       </div>
     </section>
   )

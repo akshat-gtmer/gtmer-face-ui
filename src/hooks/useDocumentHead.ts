@@ -1,6 +1,8 @@
 import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 
+const BASE_URL = 'https://gtmer.ai'
+
 interface HeadConfig {
   title: string
   description: string
@@ -13,19 +15,19 @@ const VIEW_HEAD: Record<string, HeadConfig> = {
       'GTMer is an AI-powered autonomous SDR platform. AI agents prospect, enrich, and engage your ideal buyers across email, LinkedIn, and calls — booking qualified meetings on autopilot.',
   },
   '/agents': {
-    title: 'GTMer AI Agents — Custom-Built SDR Agents for Your GTM Workflow',
+    title: 'GTMer AI Agents — Custom AI SDR & Sales Automation Agents for GTM',
     description:
-      'GTMer builds custom AI agents tailored to your exact GTM workflow — prospecting, enrichment, outreach, nurturing, and conversion. Six purpose-built agent types or fully custom.',
+      'GTMer builds custom AI sales agents tailored to your exact GTM workflow — prospecting, enrichment, personalized outbound at scale, nurturing, and conversion. Six AI SDR agent types or fully custom.',
   },
   '/data-engine': {
-    title: 'GTMer Data Engine — Real-Time B2B Intelligence & Lead Enrichment',
+    title: 'GTMer Data Engine — Real-Time B2B Intelligence for AI SDR Enrichment',
     description:
-      'GTMer Data Engine enriches prospect data from 100+ B2B sources in real-time — firmographics, technographics, intent signals, verified emails, and phone numbers.',
+      'GTMer Data Engine powers AI SDR sales automation with real-time enrichment from 100+ B2B sources — firmographics, technographics, intent signals, verified emails, and phone numbers.',
   },
   '/product': {
-    title: 'GTMer Product — Autonomous Sales Pipeline Command Center',
+    title: 'GTMer Product — AI SDR Sales Automation Command Center',
     description:
-      'One command center where AI agents source, enrich, engage, and book meetings autonomously. Real-time pipeline tracking, intent scoring, and agent orchestration.',
+      'One AI sales automation command center where AI SDR agents source, enrich, engage, and book meetings autonomously. Real-time pipeline tracking, intent scoring, and personalized outbound at scale.',
   },
   '/pricing': {
     title: 'GTMer Pricing — AI SDR Agent Plans & Tiers',
@@ -50,29 +52,50 @@ const VIEW_HEAD: Record<string, HeadConfig> = {
 }
 
 /**
- * Updates document <title> and <meta name="description"> based on the current route.
- * Ensures each page has a unique, keyword-rich title for SEO.
+ * Updates document <title>, <meta name="description">, canonical URL,
+ * Open Graph, and Twitter Card meta tags based on the current route.
+ * Ensures each page has unique, SEO-critical head tags for proper indexing.
  */
 export function useDocumentHead() {
   const { pathname } = useLocation()
 
   useEffect(() => {
     const config = VIEW_HEAD[pathname] || VIEW_HEAD['/']
+    const canonicalUrl = pathname === '/'
+      ? `${BASE_URL}/`
+      : `${BASE_URL}${pathname}`
 
+    // Title
     document.title = config.title
 
+    // Meta description
     const metaDesc = document.querySelector('meta[name="description"]')
     if (metaDesc) {
       metaDesc.setAttribute('content', config.description)
     }
 
-    // Also update OG tags for social sharing
+    // Canonical URL — critical for preventing duplicate content across routes
+    let canonicalLink = document.querySelector('link[rel="canonical"]') as HTMLLinkElement | null
+    if (canonicalLink) {
+      canonicalLink.setAttribute('href', canonicalUrl)
+    } else {
+      canonicalLink = document.createElement('link')
+      canonicalLink.setAttribute('rel', 'canonical')
+      canonicalLink.setAttribute('href', canonicalUrl)
+      document.head.appendChild(canonicalLink)
+    }
+
+    // Open Graph tags
     const ogTitle = document.querySelector('meta[property="og:title"]')
     if (ogTitle) ogTitle.setAttribute('content', config.title)
 
     const ogDesc = document.querySelector('meta[property="og:description"]')
     if (ogDesc) ogDesc.setAttribute('content', config.description)
 
+    const ogUrl = document.querySelector('meta[property="og:url"]')
+    if (ogUrl) ogUrl.setAttribute('content', canonicalUrl)
+
+    // Twitter Card tags
     const twTitle = document.querySelector('meta[name="twitter:title"]')
     if (twTitle) twTitle.setAttribute('content', config.title)
 

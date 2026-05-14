@@ -50,6 +50,26 @@ const FAQ_ITEMS: FAQItem[] = [
     answer:
       'Absolutely. We offer a free live demo where we run a real prospecting cycle on your ICP. You see real leads, real enrichment, and real AI-generated emails — before you sign anything. Book a demo to get started.',
   },
+  {
+    question: 'What is an AI SDR agent and how is it different from a human SDR?',
+    answer:
+      'An AI SDR (Sales Development Representative) agent is an artificial intelligence system that performs the same tasks as a human SDR — prospecting, lead qualification, email outreach, and meeting booking — but runs autonomously 24/7. Unlike human SDRs, GTMer\'s AI sales agents never take days off, process thousands of leads simultaneously, and write truly personalized messages for every single prospect using real-time data signals. The result is faster pipeline generation at a fraction of the cost of a human SDR team.',
+  },
+  {
+    question: 'How does GTMer compare to hiring SDRs for outbound sales?',
+    answer:
+      'GTMer replaces the manual work of an SDR team with AI-powered sales automation. A single GTMer deployment outperforms 3–5 human SDRs: it prospects from 100+ data sources, enriches every lead with intent signals, writes unique personalized emails per prospect, and follows up without fail. Companies typically see 70% lower customer acquisition costs and 10× faster pipeline generation compared to manual SDR prospecting.',
+  },
+  {
+    question: 'Can GTMer send personalized outbound at scale?',
+    answer:
+      'Yes — personalized outbound at scale is GTMer\'s core capability. Every email and LinkedIn message is generated uniquely per prospect using enriched data: their role, company context, tech stack, funding stage, recent news, and real-time buyer intent signals. This is not template-based personalization — the AI writes each message from scratch, referencing real prospect signals. GTMer clients achieve 18% average reply rates compared to the 1.8% industry average for generic cold outbound.',
+  },
+  {
+    question: 'What is GTM automation and how does GTMer help?',
+    answer:
+      'GTM (go-to-market) automation means automating the entire sales execution workflow — from identifying target companies, to enriching contact data, writing personalized outreach, sending multi-channel campaigns, handling replies, and booking meetings. GTMer is a complete GTM automation platform: you define your ideal customer profile, and AI agents execute the entire pipeline autonomously. It covers everything from lead sourcing to booked demo, replacing fragmented point solutions with a single AI-powered sales automation system.',
+  },
 ]
 
 /* ===== COMPONENT ===== */

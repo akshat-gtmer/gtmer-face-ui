@@ -210,8 +210,9 @@ const Footer = () => {
               <span className={styles.brandSlash}>/</span>gtmer
             </div>
             <p className={styles.brandDesc}>
-              AI-powered go-to-market execution platform. Autonomous SDR agents that
-              prospect, enrich, personalize outreach, and book meetings — at scale.
+              AI-powered sales automation platform for go-to-market execution. Autonomous
+              AI SDR agents that prospect, enrich, send personalized outbound at scale,
+              and book meetings — replacing manual SDR teams entirely.
             </p>
             <div className={styles.systemStatus}>
               <span className={styles.statusDot} />

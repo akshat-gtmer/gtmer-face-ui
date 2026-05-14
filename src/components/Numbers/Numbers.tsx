@@ -175,11 +175,12 @@ const Numbers = () => {
       {/* GEO: Crawlable summary of key performance claims */}
       <div className="sr-only" role="note" aria-label="GTMer performance metrics summary">
         <p>
-          GTMer delivers proven AI outbound results: 10× faster pipeline generation compared to manual SDR prospecting,
-          18% average email reply rate (versus the 1.8% industry average), 70% lower customer acquisition cost within
-          90 days, 100% follow-up coverage with zero missed touchpoints, and 48-hour deployment time from signup to
-          first outreach. GTMer integrates with Salesforce, HubSpot, LinkedIn, Apollo, ZoomInfo, Outreach, G2, Clearbit,
-          Pipedrive, Slack, Notion, and Bombora.
+          GTMer's AI SDR agents and sales automation platform deliver proven results: 10× faster pipeline generation
+          compared to manual SDR prospecting, 18% average reply rate on personalized outbound at scale (versus the
+          1.8% industry average for generic cold email), 70% lower customer acquisition cost within 90 days of
+          AI sales automation, 100% follow-up coverage with zero missed touchpoints, and 48-hour deployment time
+          from signup to first AI-powered outreach. GTMer integrates with Salesforce, HubSpot, LinkedIn, Apollo,
+          ZoomInfo, Outreach, G2, Clearbit, Pipedrive, Slack, Notion, and Bombora.
         </p>
       </div>
 
@@ -223,11 +224,11 @@ const Numbers = () => {
         className={`${styles.numbersBlock} ${numbersReveal.isVisible ? styles.visible : ''}`}
       >
         <h2 className={styles.numbersHeadline}>
-          Proven AI Outbound <span className={styles.numbersAccent}>Results</span>
+          Proven AI SDR & Sales Automation <span className={styles.numbersAccent}>Results</span>
         </h2>
         <p className={styles.numbersSubtext}>
-          Real performance data from GTMer clients. These are verified outcomes
-          from AI-powered outbound campaigns — not projections.
+          Real performance data from GTMer's AI sales agents. These are verified outcomes
+          from autonomous SDR campaigns running personalized outbound at scale — not projections.
         </p>
 
         <div className={styles.statsGrid}>

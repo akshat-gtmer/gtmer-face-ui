@@ -49,6 +49,26 @@ const Security = () => {
           <li aria-current="page">Security</li>
         </ol>
       </nav>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'WebPage',
+            name: 'GTMer Security — Enterprise-Grade Data Protection & SOC 2 Compliance',
+            description: 'GTMer is SOC 2 Type II compliant with AES-256 encryption, tenant isolation, GDPR compliance, SSO/SAML, and role-based access controls.',
+            url: 'https://gtmer.ai/security',
+            isPartOf: { '@type': 'WebSite', name: 'GTMer', url: 'https://gtmer.ai' },
+            breadcrumb: {
+              '@type': 'BreadcrumbList',
+              itemListElement: [
+                { '@type': 'ListItem', position: 1, name: 'GTMer', item: 'https://gtmer.ai/' },
+                { '@type': 'ListItem', position: 2, name: 'Security', item: 'https://gtmer.ai/security' },
+              ],
+            },
+          }),
+        }}
+      />
       <div className={styles.backBar}>
         <Link to="/" className={styles.backButton}>
           <span className={styles.backArrow}>←</span>

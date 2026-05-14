@@ -94,31 +94,25 @@ const Navbar = () => {
     }
   }
 
-  const handleCtaClick = () => {
-    if (!isMainPage) {
-      navigate('/')
-      setTimeout(() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' }), 100)
-    } else {
-      document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })
-    }
-  }
+
 
   const renderGroup = (title: string, items: DropdownItem[]) => (
     <div className={styles.dropdownGroup}>
       <div className={styles.groupTitle}>{title}</div>
       {items.map(item => (
-        <button
+        <Link
           key={item.id}
+          to={item.target}
           className={styles.dropdownItem}
           role="menuitem"
           id={item.id}
-          onClick={() => handleItemClick(item)}
+          onClick={() => setDropdownOpen(false)}
         >
           <div className={styles.itemText}>
             <span className={styles.itemLabel}>{item.label}</span>
             <span className={styles.itemDesc}>{item.desc}</span>
           </div>
-        </button>
+        </Link>
       ))}
     </div>
   )
@@ -189,13 +183,15 @@ const Navbar = () => {
 
       {/* Right: CTA */}
       <div className={styles.navRight}>
-        <button
+        <a
           className={styles.ctaButton}
           id="nav-cta-start"
-          onClick={handleCtaClick}
+          href="https://app.gtmer.ai"
+          target="_blank"
+          rel="noopener noreferrer"
         >
           Start Automating
-        </button>
+        </a>
       </div>
     </nav>
   )

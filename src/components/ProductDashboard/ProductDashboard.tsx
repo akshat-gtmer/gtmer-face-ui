@@ -97,6 +97,26 @@ const ProductDashboard = () => {
           <li aria-current="page">Product</li>
         </ol>
       </nav>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'WebPage',
+            name: 'GTMer Product — Autonomous Sales Pipeline Command Center',
+            description: 'One command center where AI agents source, enrich, engage, and book meetings autonomously. Real-time pipeline tracking, intent scoring, and agent orchestration.',
+            url: 'https://gtmer.ai/product',
+            isPartOf: { '@type': 'WebSite', name: 'GTMer', url: 'https://gtmer.ai' },
+            breadcrumb: {
+              '@type': 'BreadcrumbList',
+              itemListElement: [
+                { '@type': 'ListItem', position: 1, name: 'GTMer', item: 'https://gtmer.ai/' },
+                { '@type': 'ListItem', position: 2, name: 'Product', item: 'https://gtmer.ai/product' },
+              ],
+            },
+          }),
+        }}
+      />
 
       {/* Back button */}
       <div className={styles.backBar}>
@@ -132,16 +152,15 @@ const ProductDashboard = () => {
             conversion tracked in real-time. No manual work. No context switching.
           </p>
 
-          <button
+          <a
             className={styles.ctaButton}
-            onClick={() => {
-              navigate('/')
-              setTimeout(() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' }), 300)
-            }}
+            href="https://app.gtmer.ai"
+            target="_blank"
+            rel="noopener noreferrer"
           >
             Start Automating
             <span className={styles.ctaArrow}>→</span>
-          </button>
+          </a>
 
           <div className={styles.miniStats}>
             <div className={styles.miniStat}>

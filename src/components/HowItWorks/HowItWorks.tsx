@@ -545,12 +545,12 @@ const HowItWorks = () => {
 
         <h2 className={styles.headline}>
           <span className={styles.headlineAccent}>How GTMer Works:</span>{' '}
-          From Data to Booked Meeting
+          AI SDR Sales Automation in 5 Steps
         </h2>
 
         <p className={styles.subtext}>
-          GTMer runs your entire outbound sales pipeline autonomously — prospecting, enrichment,
-          personalized outreach, and meeting booking — without any manual effort from your team.
+          GTMer automates your entire outbound sales pipeline — AI SDR agents handle prospecting,
+          enrichment, personalized outbound at scale, and meeting booking without any manual effort.
         </p>
       </div>
 
