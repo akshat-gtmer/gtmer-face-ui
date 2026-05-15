@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useScrollReveal } from '../../hooks/useScrollReveal'
+import { IconArrowRight } from '../Icons'
 import styles from './FAQ.module.css'
 
 /* ===== DATA ===== */
@@ -186,7 +187,7 @@ const FAQ = () => {
           aria-label="Book a free demo of GTMer"
         >
           Book a Free Demo
-          <span className={styles.ctaArrow}>→</span>
+          <span className={styles.ctaArrow}><IconArrowRight size={14} /></span>
         </button>
       </div>
     </section>

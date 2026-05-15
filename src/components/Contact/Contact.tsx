@@ -1,10 +1,12 @@
+import { type ReactNode } from 'react'
 import { useScrollReveal } from '../../hooks/useScrollReveal'
+import { IconMail, IconArrowRight, IconLink, IconPhone } from '../Icons'
 import styles from './Contact.module.css'
 
 /* ===== DATA ===== */
 
 interface ContactMethod {
-  icon: string
+  icon: ReactNode
   label: string
   value: string
   href: string
@@ -13,21 +15,21 @@ interface ContactMethod {
 
 const CONTACT_METHODS: ContactMethod[] = [
   {
-    icon: '✉',
+    icon: <IconMail size={16} />,
     label: 'Email',
     value: 'akshat@gtmer.ai',
     href: 'mailto:akshat@gtmer.ai',
     sub: 'For demos, partnerships & inquiries',
   },
   {
-    icon: '☎',
+    icon: <IconPhone size={16} />,
     label: 'Phone',
     value: '+91 8989 606 740',
     href: 'tel:+918989606740',
     sub: 'Primary line',
   },
   {
-    icon: '☎',
+    icon: <IconPhone size={16} />,
     label: 'Phone',
     value: '+91 8291 111 188',
     href: 'tel:+918291111188',
@@ -87,7 +89,7 @@ const Contact = () => {
             id="contact-book-demo"
           >
             Book a Demo
-            <span className={styles.bookDemoArrow}>→</span>
+            <span className={styles.bookDemoArrow}><IconArrowRight size={14} /></span>
           </a>
         </div>
 
@@ -123,7 +125,7 @@ const Contact = () => {
                     <div className={styles.contactCardValue}>{method.value}</div>
                     <div className={styles.contactCardSub}>{method.sub}</div>
                   </div>
-                  <span className={styles.contactCardArrow}>→</span>
+                  <span className={styles.contactCardArrow}><IconArrowRight size={14} /></span>
                 </a>
               ))}
             </div>

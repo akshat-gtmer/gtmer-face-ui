@@ -1,5 +1,7 @@
+import { type ReactNode } from 'react'
 import { useNavigate, useLocation, Link } from 'react-router-dom'
 import { useScrollReveal } from '../../hooks/useScrollReveal'
+import { IconMail, IconArrowRight, IconPhone } from '../Icons'
 import styles from './Footer.module.css'
 
 /* ===== FOOTER LINKS ===== */
@@ -35,7 +37,7 @@ const FOOTER_LINKS: Record<string, FooterLink[]> = {
 /* ===== CONTACT METHODS ===== */
 
 interface ContactMethod {
-  icon: string
+  icon: ReactNode
   label: string
   value: string
   href: string
@@ -44,21 +46,21 @@ interface ContactMethod {
 
 const CONTACT_METHODS: ContactMethod[] = [
   {
-    icon: '✉',
+    icon: <IconMail size={16} />,
     label: 'Email',
     value: 'akshat@gtmer.ai',
     href: 'mailto:akshat@gtmer.ai',
     sub: 'For demos, partnerships & inquiries',
   },
   {
-    icon: '☎',
+    icon: <IconPhone size={16} />,
     label: 'Primary Phone',
     value: '+91 8989 606 740',
     href: 'tel:+918989606740',
     sub: 'Mon–Fri · 9 AM – 7 PM IST',
   },
   {
-    icon: '☎',
+    icon: <IconPhone size={16} />,
     label: 'Alternate Phone',
     value: '+91 8291 111 188',
     href: 'tel:+918291111188',
@@ -146,7 +148,7 @@ const Footer = () => {
               aria-label="Book a free demo of GTMer via email"
             >
               Book a Demo — It's Free
-              <span className={styles.bookDemoArrow}>→</span>
+              <span className={styles.bookDemoArrow}><IconArrowRight size={14} /></span>
             </a>
           </div>
 
@@ -183,7 +185,7 @@ const Footer = () => {
                       <div className={styles.contactCardValue}>{method.value}</div>
                       <div className={styles.contactCardSub}>{method.sub}</div>
                     </div>
-                    <span className={styles.contactCardArrow} aria-hidden="true">→</span>
+                    <span className={styles.contactCardArrow} aria-hidden="true"><IconArrowRight size={14} /></span>
                   </a>
                 ))}
               </div>

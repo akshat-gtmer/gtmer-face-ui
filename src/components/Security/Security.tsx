@@ -1,31 +1,32 @@
 import { Link } from 'react-router-dom'
+import { IconLock, IconShield, IconCheckCircle, IconKey, IconClipboard, IconUsers, IconArrowLeft, IconCheck, IconArrowRight } from '../Icons'
 import styles from './Security.module.css'
 
 
 
 const SECURITY_FEATURES = [
   {
-    icon: '🔒', title: 'End-to-End Encryption',
+    icon: <IconLock size={20} />, title: 'End-to-End Encryption',
     desc: 'All data encrypted at rest (AES-256) and in transit (TLS 1.3). Zero plaintext storage of credentials or PII.',
   },
   {
-    icon: '🏢', title: 'Tenant Isolation',
+    icon: <IconUsers size={20} />, title: 'Tenant Isolation',
     desc: 'Every client operates in a fully isolated data environment. No shared databases, no cross-tenant data leakage.',
   },
   {
-    icon: '✅', title: 'SOC 2 Type II',
+    icon: <IconCheckCircle size={20} />, title: 'SOC 2 Type II',
     desc: 'Annual SOC 2 Type II audits covering security, availability, and confidentiality. Reports available on request.',
   },
   {
-    icon: '🔑', title: 'SSO / SAML',
+    icon: <IconKey size={20} />, title: 'SSO / SAML',
     desc: 'Enterprise SSO support via SAML 2.0 and OpenID Connect. Integrate with Okta, Azure AD, Google Workspace.',
   },
   {
-    icon: '📋', title: 'GDPR Compliant',
+    icon: <IconClipboard size={20} />, title: 'GDPR Compliant',
     desc: 'Full GDPR compliance with data processing agreements, right to deletion, and consent management built in.',
   },
   {
-    icon: '🛡', title: 'Access Controls',
+    icon: <IconShield size={20} />, title: 'Access Controls',
     desc: 'Role-based access control (RBAC) with audit logging. Every action is tracked and attributable.',
   },
 ]
@@ -71,7 +72,7 @@ const Security = () => {
       />
       <div className={styles.backBar}>
         <Link to="/" className={styles.backButton}>
-          <span className={styles.backArrow}>←</span>
+          <span className={styles.backArrow}><IconArrowLeft size={14} /></span>
           Back to <span className={styles.backSlash}>/</span>gtmer
         </Link>
       </div>
@@ -109,7 +110,7 @@ const Security = () => {
         <ul className={styles.practicesList}>
           {PRACTICES.map(p => (
             <li key={p} className={styles.practiceItem}>
-              <span className={styles.practiceCheck}>✓</span>
+              <span className={styles.practiceCheck}><IconCheck size={12} /></span>
               {p}
             </li>
           ))}
@@ -122,7 +123,7 @@ const Security = () => {
           Need our SOC 2 report, DPA, or security questionnaire?
         </div>
         <a href="mailto:akshat@gtmer.ai?subject=Security%20Documentation%20Request" className={styles.trustCta}>
-          Request Documentation →
+          Request Documentation <IconArrowRight size={14} />
         </a>
       </div>
     </article>

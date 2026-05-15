@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { IconBarChart, IconBolt, IconMail, IconRefresh, IconTarget, IconCpu, IconBot, IconArrowLeft, IconArrowRight } from '../Icons'
 import styles from './Agents.module.css'
 
 
@@ -21,7 +22,7 @@ const EDGES: [number, number][] = [
 /* ===== AGENT TYPES ===== */
 
 interface AgentType {
-  icon: string
+  icon: React.ReactNode
   iconClass: string
   title: string
   desc: string
@@ -30,42 +31,42 @@ interface AgentType {
 
 const AGENT_TYPES: AgentType[] = [
   {
-    icon: '📊',
+    icon: <IconBarChart size={18} />,
     iconClass: 'iconBlue',
     title: 'Data Agent',
     desc: 'Continuously monitors target markets and collects intelligence specific to your ICP — from niche data sources standard platforms don\'t cover.',
     features: ['Custom data source integration', 'Domain-specific intelligence', 'Real-time account monitoring'],
   },
   {
-    icon: '⚡',
+    icon: <IconBolt size={18} />,
     iconClass: 'iconGreen',
     title: 'Prospecting Agent',
     desc: 'Identifies prospects matching highly specific criteria unique to your market — niche verticals, specialised roles, or complex qualification logic.',
     features: ['Niche market prospecting', 'Multi-stage qualification', 'Partner ecosystem identification'],
   },
   {
-    icon: '✉',
+    icon: <IconMail size={18} />,
     iconClass: 'iconPurple',
     title: 'Outreach Agent',
     desc: 'Generates outreach calibrated to your unique brand voice, specific offer, and target persona — not generic AI copy.',
     features: ['Brand voice calibration', 'Technical persona messaging', 'Multi-product outreach'],
   },
   {
-    icon: '🔄',
+    icon: <IconRefresh size={18} />,
     iconClass: 'iconOrange',
     title: 'Nurture Agent',
     desc: 'Manages complex, long-cycle B2B nurture sequences with content personalised to each prospect\'s stage and behaviour.',
     features: ['Long-cycle B2B nurture', 'Event-triggered sequences', 'Multi-stakeholder coordination'],
   },
   {
-    icon: '🎯',
+    icon: <IconTarget size={18} />,
     iconClass: 'iconPink',
     title: 'Conversion Agent',
     desc: 'Monitors active deals for risk signals and takes targeted action to prevent pipeline from going dark.',
     features: ['Deal health monitoring', 'Re-engagement sequences', 'Stakeholder multi-threading'],
   },
   {
-    icon: '🧩',
+    icon: <IconCpu size={18} />,
     iconClass: 'iconCyan',
     title: 'Custom Agent',
     desc: 'Any GTM function you need automated — if it can be defined, we can build an agent for it.',
@@ -109,7 +110,7 @@ const Agents = () => {
       {/* Back button */}
       <div className={styles.backBar}>
         <Link to="/" className={styles.backButton}>
-          <span className={styles.backArrow}>←</span>
+          <span className={styles.backArrow}><IconArrowLeft size={14} /></span>
           Back to /gtmer
         </Link>
       </div>
@@ -120,7 +121,7 @@ const Agents = () => {
         {/* Text side */}
         <div className={styles.textBlock}>
           <div className={styles.badge}>
-            <span className={styles.badgeIcon}>🤖</span>
+            <span className={styles.badgeIcon}><IconBot size={16} /></span>
             <span className={styles.badgeLabel}>Custom AI Agents</span>
           </div>
 
@@ -137,7 +138,7 @@ const Agents = () => {
 
           <button className={styles.ctaButton}>
             Tell Us Your Use Case
-            <span className={styles.ctaArrow}>→</span>
+            <span className={styles.ctaArrow}><IconArrowRight size={14} /></span>
           </button>
 
           <div className={styles.miniStats}>

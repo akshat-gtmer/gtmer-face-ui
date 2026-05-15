@@ -63,8 +63,13 @@
 }
 
 @keyframes tickerScroll {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
 }
 
 /* Reverse row */
@@ -191,11 +196,25 @@
 }
 
 /* Color variants for metrics */
-.metricGreen { color: #34d399; }
-.metricPurple { color: #a78bfa; }
-.metricCyan { color: var(--color-accent-neon); }
-.metricBlue { color: var(--color-accent); }
-.metricOrange { color: #fb923c; }
+.metricGreen {
+  color: #34d399;
+}
+
+.metricPurple {
+  color: #a78bfa;
+}
+
+.metricCyan {
+  color: var(--color-accent-neon);
+}
+
+.metricBlue {
+  color: var(--color-accent);
+}
+
+.metricOrange {
+  color: #fb923c;
+}
 
 /* Stat title */
 .statTitle {

@@ -1,4 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom'
+import { IconArrowLeft, IconArrowRight, IconCheck } from '../Icons'
 import styles from './ProductDashboard.module.css'
 
 
@@ -121,7 +122,7 @@ const ProductDashboard = () => {
       {/* Back button */}
       <div className={styles.backBar}>
         <Link to="/" className={styles.backButton}>
-          <span className={styles.backArrow}>←</span>
+          <span className={styles.backArrow}><IconArrowLeft size={14} /></span>
           Back to <span className={styles.backSlash}>/</span>gtmer
         </Link>
       </div>
@@ -159,7 +160,7 @@ const ProductDashboard = () => {
             rel="noopener noreferrer"
           >
             Start Automating
-            <span className={styles.ctaArrow}>→</span>
+            <span className={styles.ctaArrow}><IconArrowRight size={14} /></span>
           </a>
 
           <div className={styles.miniStats}>
@@ -271,7 +272,7 @@ const ProductDashboard = () => {
           <ul className={styles.checklist}>
             {CHECKLIST.map(item => (
               <li className={styles.checklistItem} key={item}>
-                <span className={styles.checkIcon}>✓</span>
+                <span className={styles.checkIcon}><IconCheck size={12} /></span>
                 {item}
               </li>
             ))}

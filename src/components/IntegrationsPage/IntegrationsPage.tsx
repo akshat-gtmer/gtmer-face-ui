@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { IconArrowLeft, IconArrowRight } from '../Icons'
 import styles from './IntegrationsPage.module.css'
 
 
@@ -95,7 +96,7 @@ const IntegrationsPage = () => {
       />
       <div className={styles.backBar}>
         <Link to="/" className={styles.backButton}>
-          <span className={styles.backArrow}>←</span>
+          <span className={styles.backArrow}><IconArrowLeft size={14} /></span>
           Back to <span className={styles.backSlash}>/</span>gtmer
         </Link>
       </div>
@@ -142,7 +143,7 @@ const IntegrationsPage = () => {
       <div className={styles.bottomNote}>
         <p>Don't see your tool? We build custom integrations.</p>
         <a href="mailto:akshat@gtmer.ai?subject=Integration%20Request" className={styles.bottomLink}>
-          Request an Integration →
+          Request an Integration <IconArrowRight size={14} />
         </a>
       </div>
     </article>

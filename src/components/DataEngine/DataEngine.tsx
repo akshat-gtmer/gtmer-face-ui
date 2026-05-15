@@ -1,4 +1,6 @@
+import { type ReactNode } from 'react'
 import { Link } from 'react-router-dom'
+import { IconGlobe, IconLink, IconDollar, IconSettings, IconTarget, IconSend, IconArrowLeft, IconArrowRight, IconCheck, IconBarChart } from '../Icons'
 import styles from './DataEngine.module.css'
 
 
@@ -26,19 +28,19 @@ const CHECKLIST_ITEMS = [
 ]
 
 interface SourceCard {
-  icon: string
+  icon: ReactNode
   iconClass: string
   title: string
   sub: string
 }
 
 const DATA_SOURCES: SourceCard[] = [
-  { icon: '🌐', iconClass: 'srcIconBlue',   title: 'Company Websites', sub: 'Live crawls' },
-  { icon: '💼', iconClass: 'srcIconCyan',    title: 'LinkedIn Data',    sub: 'Professional network' },
-  { icon: '💰', iconClass: 'srcIconPurple',  title: 'Funding Databases', sub: 'Crunchbase, PitchBook' },
-  { icon: '⚙️', iconClass: 'srcIconGreen',   title: 'Tech Intelligence', sub: 'Stack & tool detection' },
-  { icon: '🎯', iconClass: 'srcIconOrange',  title: 'Intent Platforms',  sub: 'Bombora, G2' },
-  { icon: '📰', iconClass: 'srcIconPink',    title: 'News & Events',     sub: 'Real-time feeds' },
+  { icon: <IconGlobe size={16} />, iconClass: 'srcIconBlue',   title: 'Company Websites', sub: 'Live crawls' },
+  { icon: <IconLink size={16} />, iconClass: 'srcIconCyan',    title: 'LinkedIn Data',    sub: 'Professional network' },
+  { icon: <IconDollar size={16} />, iconClass: 'srcIconPurple',  title: 'Funding Databases', sub: 'Crunchbase, PitchBook' },
+  { icon: <IconSettings size={16} />, iconClass: 'srcIconGreen',   title: 'Tech Intelligence', sub: 'Stack & tool detection' },
+  { icon: <IconTarget size={16} />, iconClass: 'srcIconOrange',  title: 'Intent Platforms',  sub: 'Bombora, G2' },
+  { icon: <IconSend size={16} />, iconClass: 'srcIconPink',    title: 'News & Events',     sub: 'Real-time feeds' },
 ]
 
 /* ===== COMPONENT ===== */
@@ -77,7 +79,7 @@ const DataEngine = () => {
       {/* Back button */}
       <div className={styles.backBar}>
         <Link to="/" className={styles.backButton}>
-          <span className={styles.backArrow}>←</span>
+          <span className={styles.backArrow}><IconArrowLeft size={14} /></span>
           Back to /gtmer
         </Link>
       </div>
@@ -88,7 +90,7 @@ const DataEngine = () => {
         {/* Text side */}
         <div className={styles.textBlock}>
           <div className={styles.badge}>
-            <span className={styles.badgeIcon}>📊</span>
+            <span className={styles.badgeIcon}><IconBarChart size={16} /></span>
             <div className={styles.badgeTextGroup}>
               <span className={styles.badgeLabel}>AI Data Engine</span>
               <span className={styles.badgeSub}>Module 01</span>
@@ -110,7 +112,7 @@ const DataEngine = () => {
 
           <button className={styles.ctaButton}>
             See It In Action
-            <span className={styles.ctaArrow}>→</span>
+            <span className={styles.ctaArrow}><IconArrowRight size={14} /></span>
           </button>
 
           <div className={styles.miniStats}>
@@ -165,7 +167,7 @@ const DataEngine = () => {
                       <span className={styles.contactSub}>Enriched contact record</span>
                     </div>
                   </div>
-                  <span className={styles.verifiedBadge}>✓ Verified</span>
+                  <span className={styles.verifiedBadge}><IconCheck size={10} /> Verified</span>
                 </div>
 
                 <div className={styles.contactRows}>
@@ -199,7 +201,7 @@ const DataEngine = () => {
           <ul className={styles.checklist}>
             {CHECKLIST_ITEMS.map((item) => (
               <li className={styles.checklistItem} key={item}>
-                <span className={styles.checkIcon}>✓</span>
+                <span className={styles.checkIcon}><IconCheck size={12} /></span>
                 {item}
               </li>
             ))}

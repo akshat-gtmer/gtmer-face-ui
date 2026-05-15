@@ -1,11 +1,12 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, type ReactNode } from 'react'
 import { useScrollReveal } from '../../hooks/useScrollReveal'
+import { IconBolt, IconUsers, IconTarget, IconCheck, IconArrowRight } from '../Icons'
 import styles from './UseCases.module.css'
 
 /* ===== DATA ===== */
 
 interface UseCase {
-  icon: string
+  icon: ReactNode
   tag: string
   title: string
   description: string
@@ -16,7 +17,7 @@ interface UseCase {
 
 const USE_CASES: UseCase[] = [
   {
-    icon: '⚡',
+    icon: <IconBolt size={18} />,
     tag: 'B2B SAAS & STARTUPS',
     title: 'Scale Outbound Without Hiring SDRs',
     description:
@@ -31,7 +32,7 @@ const USE_CASES: UseCase[] = [
     metricLabel: 'faster pipeline generation',
   },
   {
-    icon: '🏢',
+    icon: <IconUsers size={18} />,
     tag: 'ENTERPRISE & MID-MARKET',
     title: 'Multi-Thread Complex Enterprise Deals',
     description:
@@ -46,7 +47,7 @@ const USE_CASES: UseCase[] = [
     metricLabel: 'lower customer acquisition cost',
   },
   {
-    icon: '🎯',
+    icon: <IconTarget size={18} />,
     tag: 'AGENCIES & CONSULTANCIES',
     title: 'White-Label AI Outbound for Clients',
     description:
@@ -91,7 +92,7 @@ const GlimpseQuickLaunch = () => (
         </div>
         <span className={styles.launchProgressLabel}>3 agents ready</span>
       </div>
-      <div className={styles.launchBtn}>Deploy Agent →</div>
+      <div className={styles.launchBtn}>Deploy Agent <IconArrowRight size={12} /></div>
     </div>
   </div>
 )
@@ -228,7 +229,7 @@ const UseCases = () => {
               <ul className={styles.cardBullets}>
                 {uc.bullets.map(b => (
                   <li key={b} className={styles.cardBullet}>
-                    <span className={styles.bulletCheck}>✓</span>
+                    <span className={styles.bulletCheck}><IconCheck size={12} /></span>
                     {b}
                   </li>
                 ))}
@@ -254,7 +255,7 @@ const UseCases = () => {
           aria-label="Try GTMer for your team"
         >
           Try the Platform
-          <span className={styles.ctaArrow}>→</span>
+          <span className={styles.ctaArrow}><IconArrowRight size={14} /></span>
         </a>
       </div>
     </section>

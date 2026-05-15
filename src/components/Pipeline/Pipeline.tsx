@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useScrollReveal } from '../../hooks/useScrollReveal'
+import { IconArrowLeftRight } from '../Icons'
 import styles from './Pipeline.module.css'
 
 /* ===== DATA ===== */
@@ -118,7 +119,7 @@ const Pipeline = () => {
               <div className={styles.windowDot} />
               <div className={styles.windowDot} />
               <span className={styles.windowTitle}>Sales Pipeline</span>
-              <span className={styles.windowHint}>↔ Drag cards between columns</span>
+              <span className={styles.windowHint}><IconArrowLeftRight size={12} /> Drag cards between columns</span>
             </div>
 
             {/* Board */}

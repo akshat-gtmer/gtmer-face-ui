@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { useNavigate, useLocation, Link } from 'react-router-dom'
+import { IconBolt, IconChevronDown } from '../Icons'
 import styles from './Navbar.module.css'
 
 interface DropdownItem {
@@ -12,7 +13,7 @@ interface DropdownItem {
 
 const PLATFORM_ITEMS: DropdownItem[] = [
   { id: 'dd-product', icon: '⊞', label: '/gtmer-product', desc: 'Command center overview', target: '/product' },
-  { id: 'dd-agents', icon: '⚡', label: '/gtmer-agents', desc: 'Custom-built GTM agents', target: '/agents' },
+  { id: 'dd-agents', icon: 'bolt', label: '/gtmer-agents', desc: 'Custom-built GTM agents', target: '/agents' },
   { id: 'dd-data-engine', icon: '◎', label: '/gtmer-data-engine', desc: 'Real-time B2B intelligence', target: '/data-engine' },
 ]
 
@@ -163,7 +164,7 @@ const Navbar = () => {
             aria-expanded={sectionMenuOpen}
           >
             <span className={styles.sectionLabel}>{activeSectionLabel}</span>
-            <span className={`${styles.sectionChevron} ${sectionMenuOpen ? styles.sectionChevronOpen : ''}`}>⌄</span>
+            <span className={`${styles.sectionChevron} ${sectionMenuOpen ? styles.sectionChevronOpen : ''}`}><IconChevronDown size={12} /></span>
           </button>
 
           {/* Section flyout */}

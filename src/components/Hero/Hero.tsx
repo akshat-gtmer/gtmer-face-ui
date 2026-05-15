@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
+import { IconBolt, IconTarget, IconCalendar, IconArrowRight, IconChevronDown } from '../Icons'
 import styles from './Hero.module.css'
 
 const Hero = () => {
@@ -52,17 +53,17 @@ const Hero = () => {
         {/* Trust strip — concrete proof points */}
         <div className={styles.trustStrip} aria-label="Platform capabilities">
           <div className={styles.trustItem}>
-            <span className={styles.trustIcon}>⚡</span>
+            <span className={styles.trustIcon}><IconBolt size={14} /></span>
             <span>Multi-channel outreach</span>
           </div>
           <span className={styles.trustDivider} aria-hidden="true" />
           <div className={styles.trustItem}>
-            <span className={styles.trustIcon}>🎯</span>
+            <span className={styles.trustIcon}><IconTarget size={14} /></span>
             <span>Hyper-personalized at scale</span>
           </div>
           <span className={styles.trustDivider} aria-hidden="true" />
           <div className={styles.trustItem}>
-            <span className={styles.trustIcon}>📅</span>
+            <span className={styles.trustIcon}><IconCalendar size={14} /></span>
             <span>Meetings booked autonomously</span>
           </div>
         </div>
@@ -85,7 +86,7 @@ const Hero = () => {
             onClick={() => document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' })}
             aria-label="See how GTMer AI SDR agents work"
           >
-            See How Agents Work →
+            See How Agents Work <IconArrowRight size={14} />
           </button>
         </div>
       </div>
@@ -104,7 +105,7 @@ const Hero = () => {
           }
         }}
       >
-        <span className={styles.chevronIcon} aria-hidden="true">⌄</span>
+        <span className={styles.chevronIcon} aria-hidden="true"><IconChevronDown size={18} /></span>
       </div>
 
       {/* Live activity metrics — social proof */}

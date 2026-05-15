@@ -36,7 +36,7 @@
   margin-bottom: var(--space-xl);
 }
 
-.badge > span:last-child {
+.badge>span:last-child {
   display: inline-flex;
   align-items: center;
   gap: var(--space-sm);
@@ -70,7 +70,9 @@
   letter-spacing: -0.03em;
 }
 
-.headlineAccent { color: var(--color-accent); }
+.headlineAccent {
+  color: var(--color-accent);
+}
 
 .subtext {
   text-align: center;

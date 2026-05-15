@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { IconArrowLeft, IconArrowRight, IconMessageCircle, IconBolt, IconCheck } from '../Icons'
 import styles from './Pricing.module.css'
 
 
@@ -103,7 +104,7 @@ const Pricing = () => {
       />
       <div className={styles.backBar}>
         <Link to="/" className={styles.backButton}>
-          <span className={styles.backArrow}>←</span>
+          <span className={styles.backArrow}><IconArrowLeft size={14} /></span>
           Back to <span className={styles.backSlash}>/</span>gtmer
         </Link>
       </div>
@@ -128,7 +129,7 @@ const Pricing = () => {
       <div className={styles.contactBanner}>
         <div className={styles.contactBannerInner}>
           <div className={styles.contactBannerText}>
-            <span className={styles.contactBannerIcon}>💬</span>
+            <span className={styles.contactBannerIcon}><IconMessageCircle size={20} /></span>
             <div>
               <p className={styles.contactBannerHeadline}>Need a Custom Quote?</p>
               <p className={styles.contactBannerSub}>
@@ -137,7 +138,7 @@ const Pricing = () => {
             </div>
           </div>
           <a href="mailto:akshat@gtmer.ai" className={styles.contactBannerCta}>
-            Contact Sales →
+            Contact Sales <IconArrowRight size={14} />
           </a>
         </div>
       </div>
@@ -168,7 +169,7 @@ const Pricing = () => {
 
             {/* Leads volume pill */}
             <div className={styles.leadsPill}>
-              <span className={styles.leadsIcon}>⚡</span>
+              <span className={styles.leadsIcon}><IconBolt size={12} /></span>
               <span>{tier.leads} leads</span>
               {tier.perLead && (
                 <span className={styles.perLead}>({tier.perLead}/lead)</span>
@@ -180,7 +181,7 @@ const Pricing = () => {
             <ul className={styles.featureList}>
               {tier.features.map(f => (
                 <li key={f} className={styles.featureItem}>
-                  <span className={styles.featureCheck}>✓</span>
+                  <span className={styles.featureCheck}><IconCheck size={12} /></span>
                   {f}
                 </li>
               ))}

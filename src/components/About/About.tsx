@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { IconArrowLeft, IconArrowRight } from '../Icons'
 import styles from './About.module.css'
 
 
@@ -62,7 +63,7 @@ const About = () => {
       />
       <div className={styles.backBar}>
         <Link to="/" className={styles.backButton}>
-          <span className={styles.backArrow}>←</span>
+          <span className={styles.backArrow}><IconArrowLeft size={14} /></span>
           Back to <span className={styles.backSlash}>/</span>gtmer
         </Link>
       </div>
@@ -137,7 +138,7 @@ const About = () => {
           GTM practitioners who want to shape the future of autonomous sales.
         </p>
         <a href="mailto:akshat@gtmer.ai?subject=Careers%20at%20GTMer" className={styles.ctaButton}>
-          Get In Touch →
+          Get In Touch <IconArrowRight size={14} />
         </a>
       </div>
     </article>

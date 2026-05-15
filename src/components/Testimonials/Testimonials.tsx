@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useScrollReveal } from '../../hooks/useScrollReveal'
+import { IconBarChart, IconTarget, IconUsers } from '../Icons'
 import styles from './Testimonials.module.css'
 
 /* ===== DATA ===== */
@@ -52,7 +53,7 @@ const TESTIMONIALS: Testimonial[] = [
 const GlimpsePipelineBar = () => (
   <div className={styles.glimpseBadge} role="img" aria-label="Pipeline comparison: 3× growth after using GTMer">
     <div className={styles.glimpseBadgeHeader}>
-      <span className={styles.glimpseBadgeIcon}>📊</span>
+      <span className={styles.glimpseBadgeIcon}><IconBarChart size={14} /></span>
       <span className={styles.glimpseBadgeTitle}>Verified Outcome</span>
     </div>
     <div className={styles.pipelineMini}>
@@ -75,7 +76,7 @@ const GlimpsePipelineBar = () => (
 const GlimpseLeadCounter = () => (
   <div className={styles.glimpseBadge} role="img" aria-label="40+ qualified leads generated per month">
     <div className={styles.glimpseBadgeHeader}>
-      <span className={styles.glimpseBadgeIcon}>🎯</span>
+      <span className={styles.glimpseBadgeIcon}><IconTarget size={14} /></span>
       <span className={styles.glimpseBadgeTitle}>Verified Outcome</span>
     </div>
     <div className={styles.counterMini}>
@@ -96,7 +97,7 @@ const GlimpseLeadCounter = () => (
 const GlimpseClientGrid = () => (
   <div className={styles.glimpseBadge} role="img" aria-label="12 agency clients managed by a single operator">
     <div className={styles.glimpseBadgeHeader}>
-      <span className={styles.glimpseBadgeIcon}>🏢</span>
+      <span className={styles.glimpseBadgeIcon}><IconUsers size={14} /></span>
       <span className={styles.glimpseBadgeTitle}>Verified Outcome</span>
     </div>
     <div className={styles.clientGridMini}>
