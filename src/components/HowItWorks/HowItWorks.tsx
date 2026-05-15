@@ -213,7 +213,7 @@ const HowItWorks = () => {
             <span className={styles.accent}>How GTMer Works:</span> AI SDR in 5 Steps
           </h2>
           <p className={styles.sub}>
-            AI SDR agents handle prospecting, enrichment, personalized outbound at scale, and meeting booking — fully autonomous.
+            GTM automation in action: AI SDR agents handle prospecting, enrichment, personalized outbound at scale, and meeting booking — fully autonomous.
           </p>
         </div>
 

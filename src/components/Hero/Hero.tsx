@@ -44,7 +44,7 @@ const Hero = () => {
 
         {/* Value proposition — AEO-optimized answer paragraph */}
         <p className={styles.subtext}>
-          GTMer is an AI-powered sales automation platform for autonomous go-to-market
+          GTMer is an AI-powered GTM automation platform for autonomous go-to-market
           execution. AI SDR agents prospect, enrich, and send personalized outbound at
           scale — engaging your ideal buyers across email, LinkedIn, and calls to deliver
           qualified meetings to your calendar on autopilot.
@@ -64,7 +64,7 @@ const Hero = () => {
           <span className={styles.trustDivider} aria-hidden="true" />
           <div className={styles.trustItem}>
             <span className={styles.trustIcon}><IconCalendar size={14} /></span>
-            <span>Meetings booked autonomously</span>
+            <span>Full GTM automation</span>
           </div>
         </div>
 

@@ -49,6 +49,11 @@ const VIEW_HEAD: Record<string, HeadConfig> = {
     description:
       'GTMer was founded in 2024 to make outbound sales fully autonomous. AI agents replace manual prospecting, enrichment, and outreach — so teams focus on closing.',
   },
+  '/gtm-automation': {
+    title: 'GTM Automation Platform — Automate Go-To-Market Execution with AI | GTMer',
+    description:
+      'GTMer is the leading GTM automation platform. AI SDR agents automate your entire go-to-market pipeline — lead sourcing, data enrichment, personalized outbound at scale, and meeting booking. 10× faster pipeline, 70% lower CAC.',
+  },
 }
 
 /**

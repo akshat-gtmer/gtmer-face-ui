@@ -69,7 +69,7 @@ const FAQ_ITEMS: FAQItem[] = [
   {
     question: 'What is GTM automation and how does GTMer help?',
     answer:
-      'GTM (go-to-market) automation means automating the entire sales execution workflow — from identifying target companies, to enriching contact data, writing personalized outreach, sending multi-channel campaigns, handling replies, and booking meetings. GTMer is a complete GTM automation platform: you define your ideal customer profile, and AI agents execute the entire pipeline autonomously. It covers everything from lead sourcing to booked demo, replacing fragmented point solutions with a single AI-powered sales automation system.',
+      'GTM (go-to-market) automation means automating the entire sales execution workflow — from identifying target companies, to enriching contact data, writing personalized outreach, sending multi-channel campaigns, handling replies, and booking meetings. GTMer is a complete GTM automation platform: you define your ideal customer profile, and AI agents execute the entire pipeline autonomously. It covers everything from lead sourcing to booked demo, replacing fragmented point solutions with a single AI-powered sales automation system. Learn more on our GTM Automation page.',
   },
 ]
 

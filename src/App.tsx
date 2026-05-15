@@ -16,6 +16,7 @@ import Pricing from './components/Pricing/Pricing'
 import Security from './components/Security/Security'
 import IntegrationsPage from './components/IntegrationsPage/IntegrationsPage'
 import About from './components/About/About'
+import GtmAutomation from './components/GtmAutomation/GtmAutomation'
 
 /* Scroll to top on route change — preserves SPA feel */
 const ScrollToTop = () => {
@@ -58,6 +59,7 @@ const App = () => {
           <Route path="/security" element={<Security />} />
           <Route path="/integrations" element={<IntegrationsPage />} />
           <Route path="/about" element={<About />} />
+          <Route path="/gtm-automation" element={<GtmAutomation />} />
         </Routes>
       </main>
     </>

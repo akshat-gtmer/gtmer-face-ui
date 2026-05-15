@@ -27,6 +27,7 @@ const FOOTER_LINKS: Record<string, FooterLink[]> = {
     { label: 'Contact Us', scroll: 'contact' },
   ],
   Resources: [
+    { label: 'GTM Automation', path: '/gtm-automation' },
     { label: 'How It Works', scroll: 'how-it-works' },
     { label: 'Use Cases', scroll: 'use-cases' },
     { label: 'FAQ', scroll: 'faq' },

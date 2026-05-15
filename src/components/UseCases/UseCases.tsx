@@ -199,10 +199,10 @@ const UseCases = () => {
         </h2>
 
         <p className={styles.subtext}>
-          GTMer adapts to your team size, sales cycle, and market. Whether you're
+          GTMer's GTM automation adapts to your team size, sales cycle, and market. Whether you're
           a seed-stage startup needing AI SDR agents, an enterprise team running personalized
-          outbound at scale, or an agency managing outbound for 50 clients — the AI sales
-          automation configures to your workflow.
+          outbound at scale, or an agency managing outbound for 50 clients — the GTM automation
+          platform configures to your workflow.
         </p>
       </div>
 
