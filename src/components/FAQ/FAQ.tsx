@@ -71,6 +71,21 @@ const FAQ_ITEMS: FAQItem[] = [
     answer:
       'GTM (go-to-market) automation means automating the entire sales execution workflow — from identifying target companies, to enriching contact data, writing personalized outreach, sending multi-channel campaigns, handling replies, and booking meetings. GTMer is a complete GTM automation platform: you define your ideal customer profile, and AI agents execute the entire pipeline autonomously. It covers everything from lead sourcing to booked demo, replacing fragmented point solutions with a single AI-powered sales automation system. Learn more on our GTM Automation page.',
   },
+  {
+    question: 'What is AI GTM and how is it different from traditional go-to-market?',
+    answer:
+      'AI GTM (artificial intelligence go-to-market) is the next evolution of sales execution — using AI agents instead of manual teams to run your entire go-to-market strategy. Traditional GTM requires hiring SDRs, training them for months, and coordinating across 5–10 different tools. AI GTM platforms like GTMer consolidate everything into a single autonomous system: AI agents prospect, enrich, personalize outreach, and book meetings 24/7 without human intervention. The result is faster pipeline generation, higher reply rates, and dramatically lower cost per meeting compared to traditional go-to-market approaches.',
+  },
+  {
+    question: 'Can GTMer replace a GTM manager for outbound execution?',
+    answer:
+      'GTMer doesn\'t replace a GTM manager — it supercharges them. A GTM manager defines strategy: target markets, positioning, messaging, and ICP criteria. GTMer handles the execution layer that traditionally requires an entire SDR team. Instead of a GTM manager spending time coordinating prospecting, data entry, email sequencing, and follow-ups across multiple tools, they configure GTMer once and let AI agents execute autonomously. The GTM manager stays in control of strategy and approvals while GTMer handles the manual work at 10× the speed and a fraction of the cost.',
+  },
+  {
+    question: 'How does GTMer help increase outbound sales?',
+    answer:
+      'GTMer helps increase outbound sales in three ways. First, volume: AI agents can research and email thousands of prospects per week, far more than any human SDR team. Second, quality: every email is hyper-personalized using real company context — product launches, funding rounds, job postings — which drives 18% reply rates vs. the 1.8% industry average. Third, consistency: GTMer follows up on every lead, every time, with zero missed touchpoints. Teams typically see 10× more pipeline, 70% lower customer acquisition costs, and their first qualified meetings within 5 business days of deployment.',
+  },
 ]
 
 /* ===== COMPONENT ===== */

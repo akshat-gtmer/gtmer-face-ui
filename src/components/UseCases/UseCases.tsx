@@ -19,29 +19,29 @@ const USE_CASES: UseCase[] = [
   {
     icon: <IconBolt size={18} />,
     tag: 'B2B SAAS & STARTUPS',
-    title: 'Scale Outbound Without Hiring SDRs',
+    title: 'Build Pipeline Fast — Without Hiring',
     description:
-      'Early-stage teams can\'t afford a 5-person SDR team. GTMer\'s AI agents replace your entire top-of-funnel — prospecting, enrichment, personalized outreach, and follow-ups — running 24/7 from day one.',
+      'You can\'t afford a 5-person SDR team. But you can run GTMer. Upload your target list, and the AI workers crawl, research, and write emails for every company. Teams go from zero outbound to qualified pipeline in under a week.',
     bullets: [
-      'Auto-source leads from YC batches, Product Hunt, and LinkedIn',
-      'AI writes hyper-personalized cold emails matched to your ICP',
-      'Multi-step follow-up sequences that adapt to reply signals',
-      'Qualified pipeline built in days, not quarters',
+      'Import companies from YC batches, Product Hunt, or LinkedIn',
+      'AI researches each company and writes unique, context-rich emails',
+      'Fit scoring ensures your reps only talk to companies that match',
+      'First qualified pipeline within 5 business days, not 5 months',
     ],
     metric: '10×',
-    metricLabel: 'faster pipeline generation',
+    metricLabel: 'more pipeline vs. manual SDR',
   },
   {
     icon: <IconUsers size={18} />,
     tag: 'ENTERPRISE & MID-MARKET',
-    title: 'Multi-Thread Complex Enterprise Deals',
+    title: 'Multi-Thread Deals Without Burning Out',
     description:
-      'Enterprise sales cycles are long and involve multiple stakeholders. GTMer agents map buying committees, enrich decision-maker data, and keep every thread warm across months-long deal cycles.',
+      'Enterprise deals involve 4-8 stakeholders and take 6+ months. GTMer maps the buying committee, finds every decision-maker\'s contact, and keeps all threads warm with personalized follow-ups — so nothing goes cold.',
     bullets: [
-      'Auto-map buying committees across departments and titles',
-      'Intent-scored outreach to champions and budget holders',
-      'Automated nurture sequences for 6–12 month deal cycles',
-      'CRM-synced pipeline with real-time deal health scoring',
+      'Research summaries generated for every company in your pipeline',
+      'Multi-threaded outreach to champions, budget holders, and execs',
+      'Each email references the prospect\'s actual business context',
+      'Email analytics show exactly who opened, clicked, and replied',
     ],
     metric: '70%',
     metricLabel: 'lower customer acquisition cost',
@@ -49,14 +49,14 @@ const USE_CASES: UseCase[] = [
   {
     icon: <IconTarget size={18} />,
     tag: 'AGENCIES & CONSULTANCIES',
-    title: 'White-Label AI Outbound for Clients',
+    title: 'Run 50 Client Campaigns From One Dashboard',
     description:
-      'Agencies running outbound for multiple clients get a multi-tenant AI platform. Separate data, separate brand voice, separate pipelines — one operator dashboard to manage them all.',
+      'Running outbound for 10+ clients? GTMer gives you a multi-tenant workspace. Each client gets their own pipeline, brand voice (via Soul Setup), and email analytics. You manage everything from one dashboard.',
     bullets: [
-      'Multi-tenant workspace — isolated data per client',
-      'Custom brand voice and tone calibration per campaign',
-      'Real-time performance dashboards for client reporting',
-      'Scale to 50+ clients without adding sales ops headcount',
+      'Separate projects per client with isolated data and pipelines',
+      'Soul Setup configures brand voice and positioning per client',
+      'Full email analytics dashboards for transparent client reporting',
+      'Scale to 50+ clients without adding ops headcount',
     ],
     metric: '50+',
     metricLabel: 'clients managed per operator',
@@ -195,14 +195,13 @@ const UseCases = () => {
 
         <h2 className={styles.headline}>
           Who Is GTMer For?
-          <span className={styles.headlineAccent}> AI Sales Automation for Every Team.</span>
+          <span className={styles.headlineAccent}> Real Results for Every Team.</span>
         </h2>
 
         <p className={styles.subtext}>
-          GTMer's GTM automation adapts to your team size, sales cycle, and market. Whether you're
-          a seed-stage startup needing AI SDR agents, an enterprise team running personalized
-          outbound at scale, or an agency managing outbound for 50 clients — the GTM automation
-          platform configures to your workflow.
+          Whether you're a startup needing pipeline fast, an enterprise team running complex deals,
+          or an agency managing outbound for 50 clients — here's how teams like yours use GTMer
+          to book more meetings and close more revenue.
         </p>
       </div>
 

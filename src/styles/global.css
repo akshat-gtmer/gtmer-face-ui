@@ -1,43 +1,61 @@
 /* ================================================
    GTMer — Global Design System
-   Blueprint Engineering Aesthetic
+   Zite-Inspired: Warm Light · Product-Forward
+   Clean, Confident, Human-Crafted
    ================================================ */
 
+/* ── Font Imports ── */
+@import url('https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,700,900&f[]=general-sans@200,300,400,500,600,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600&display=swap');
+
 :root {
-  /* Color System */
-  --color-bg-deep: #040d1a;
-  --color-bg-primary: #061525;
-  --color-bg-surface: #0a1f35;
-  --color-bg-elevated: #0d2847;
+  /* ── Backgrounds ── */
+  --color-bg-page: #f7f5f0;
+  --color-bg-card: #ffffff;
+  --color-bg-elevated: #faf9f5;
+  --color-bg-section-alt: #f0ede6;
+  --color-bg-hero-top: #6aafe6;
+  --color-bg-hero-mid: #a8d4f0;
+  --color-bg-hero-bottom: #f0dfc3;
 
-  --color-primary: #0B3C5D;
-  --color-primary-light: #1a5a8a;
-  --color-primary-bright: #2d7bb8;
+  /* ── Brand Colors ── */
+  --color-accent: #d4952a;
+  --color-accent-hover: #bf8520;
+  --color-accent-light: rgba(212, 149, 42, 0.1);
+  --color-accent-glow: rgba(212, 149, 42, 0.15);
 
-  --color-accent: #4da8da;
-  --color-accent-glow: #5bc0f8;
-  --color-accent-neon: #7dd3fc;
+  /* ── Functional Colors ── */
+  --color-success: #22c55e;
+  --color-success-light: rgba(34, 197, 94, 0.1);
+  --color-info: #3b82f6;
+  --color-info-light: rgba(59, 130, 246, 0.08);
+  --color-warning: #f59e0b;
+  --color-danger: #ef4444;
 
-  --color-text-primary: #e8f0f8;
-  --color-text-secondary: #8ba4bd;
-  --color-text-muted: #4a6a8a;
-  --color-text-chalk: #d4e3f0;
+  /* ── Text ── */
+  --color-text-primary: #1a1a1a;
+  --color-text-secondary: #555555;
+  --color-text-muted: #999999;
+  --color-text-inverse: #ffffff;
 
-  --color-border: rgba(77, 168, 218, 0.12);
-  --color-border-active: rgba(77, 168, 218, 0.3);
+  /* ── Borders ── */
+  --color-border: rgba(0, 0, 0, 0.07);
+  --color-border-hover: rgba(0, 0, 0, 0.14);
+  --color-border-active: rgba(212, 149, 42, 0.3);
 
-  --color-glass-bg: rgba(10, 31, 53, 0.65);
-  --color-glass-bg-elevated: rgba(8, 20, 38, 0.75);
-  --color-glass-border: rgba(77, 168, 218, 0.15);
-  --color-glass-hover: rgba(77, 168, 218, 0.08);
-  --glass-blur: blur(12px);
-  --glass-blur-strong: blur(16px);
+  /* ── Glass ── */
+  --color-glass-bg: rgba(255, 255, 255, 0.75);
+  --color-glass-bg-strong: rgba(255, 255, 255, 0.9);
+  --color-glass-border: rgba(0, 0, 0, 0.05);
+  --glass-blur: blur(16px);
+  --glass-blur-strong: blur(24px);
 
-  /* Typography */
-  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  /* ── Typography ── */
+  --font-display: 'Satoshi', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-sans: 'General Sans', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
 
-  /* Spacing */
+  /* ── Spacing ── */
   --space-xs: 4px;
   --space-sm: 8px;
   --space-md: 16px;
@@ -46,24 +64,41 @@
   --space-2xl: 48px;
   --space-3xl: 64px;
   --space-4xl: 96px;
+  --space-5xl: 128px;
 
-  /* Border Radius */
-  --radius-sm: 4px;
-  --radius-md: 6px;
-  --radius-lg: 8px;
+  /* ── Border Radius ── */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-2xl: 32px;
+  --radius-pill: 100px;
 
-  /* Transitions */
+  /* ── Transitions ── */
   --transition-fast: 150ms ease;
   --transition-base: 250ms ease;
   --transition-slow: 400ms ease;
+  --transition-bounce: 500ms cubic-bezier(0.34, 1.56, 0.64, 1);
 
-  /* Z-Index */
+  /* ── Shadows ── */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.06), 0 1px 4px rgba(0, 0, 0, 0.03);
+  --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.08), 0 4px 12px rgba(0, 0, 0, 0.04);
+  --shadow-xl: 0 24px 64px rgba(0, 0, 0, 0.1), 0 8px 24px rgba(0, 0, 0, 0.05);
+  --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.04), 0 0 0 1px rgba(0, 0, 0, 0.03);
+  --shadow-card-hover: 0 8px 24px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.05);
+
+  /* ── Z-Index ── */
   --z-navbar: 1000;
   --z-dropdown: 1100;
   --z-overlay: 900;
+
+  /* ── Layout ── */
+  --max-width: 1200px;
+  --nav-height: 64px;
 }
 
-/* Reset */
+/* ── Reset ── */
 *,
 *::before,
 *::after {
@@ -75,89 +110,19 @@
 html {
   font-size: 16px;
   scroll-behavior: smooth;
-  scroll-snap-type: y proximity;
-  scroll-padding-top: 72px;
+  scroll-padding-top: 80px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: var(--color-bg-page);
 }
 
 body {
   font-family: var(--font-sans);
-  /* Realistic blueprint paper — matching logo tone, faded and worn */
-  background-color: #143a62;
-  background-image:
-    /* Uneven paper tone — worn spots, light variation */
-    radial-gradient(ellipse at 15% 45%, rgba(20, 58, 98, 0.5) 0%, transparent 70%),
-    radial-gradient(ellipse at 75% 25%, rgba(24, 70, 115, 0.4) 0%, transparent 55%),
-    radial-gradient(ellipse at 55% 75%, rgba(16, 48, 85, 0.45) 0%, transparent 60%),
-    radial-gradient(ellipse at 40% 10%, rgba(28, 78, 125, 0.25) 0%, transparent 40%);
+  background-color: var(--color-bg-page);
   color: var(--color-text-primary);
   line-height: 1.6;
   overflow-x: hidden;
   min-height: 100vh;
-}
-
-/* Blueprint Grid — realistic engineering paper lines */
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  background-image:
-    /* Faded major grid lines — like real blueprint paper */
-    linear-gradient(rgba(120, 190, 240, 0.12) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(120, 190, 240, 0.12) 1px, transparent 1px),
-    /* Fine minor grid — engineering paper subdivisions */
-    linear-gradient(rgba(120, 190, 240, 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(120, 190, 240, 0.05) 1px, transparent 1px),
-    /* Paper fiber / grain texture — two tiny noise layers */
-    repeating-linear-gradient(0deg,
-      transparent,
-      transparent 2px,
-      rgba(255, 255, 255, 0.008) 2px,
-      rgba(255, 255, 255, 0.008) 4px),
-    repeating-linear-gradient(90deg,
-      transparent,
-      transparent 3px,
-      rgba(0, 0, 0, 0.04) 3px,
-      rgba(0, 0, 0, 0.04) 5px);
-  background-size:
-    80px 80px,
-    80px 80px,
-    20px 20px,
-    20px 20px,
-    4px 4px,
-    5px 5px;
-  animation: gridDrift 120s linear infinite;
-}
-
-/* Very slow grid drift — mimics paper settling */
-@keyframes gridDrift {
-  0% {
-    background-position: 0 0, 0 0, 0 0, 0 0, 0 0, 0 0;
-  }
-
-  100% {
-    background-position: 80px 80px, 80px 80px, 20px 20px, 20px 20px, 4px 4px, 5px 5px;
-  }
-}
-
-/* Vignette + aged paper edge darkening + faint center glow */
-body::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 0;
-  background:
-    /* Edge vignette — darker worn edges like old blueprint paper */
-    radial-gradient(ellipse at center, transparent 40%, rgba(4, 10, 20, 0.45) 100%),
-    /* Faint warm center glow — light hitting the paper */
-    radial-gradient(ellipse at 50% 35%, rgba(77, 168, 218, 0.04) 0%, transparent 60%),
-    /* Corner wear marks */
-    radial-gradient(circle at 0% 0%, rgba(4, 10, 20, 0.3) 0%, transparent 30%),
-    radial-gradient(circle at 100% 100%, rgba(4, 10, 20, 0.2) 0%, transparent 25%);
 }
 
 #root {
@@ -184,26 +149,26 @@ img {
 
 /* Selection styling */
 ::selection {
-  background: rgba(77, 168, 218, 0.3);
+  background: rgba(212, 149, 42, 0.2);
   color: var(--color-text-primary);
 }
 
-/* Scrollbar */
+/* Scrollbar — subtle */
 ::-webkit-scrollbar {
   width: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--color-bg-deep);
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--color-primary);
+  background: rgba(0, 0, 0, 0.12);
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--color-primary-light);
+  background: rgba(0, 0, 0, 0.2);
 }
 
 /* Screen-reader only — hidden visually but crawlable by search engines and AI */
@@ -217,4 +182,11 @@ img {
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border: 0;
+}
+
+/* Utility: section container */
+.sectionContainer {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 var(--space-xl);
 }

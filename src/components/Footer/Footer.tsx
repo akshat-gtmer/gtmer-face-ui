@@ -16,8 +16,8 @@ interface FooterLink {
 const FOOTER_LINKS: Record<string, FooterLink[]> = {
   Platform: [
     { label: 'Product Overview', path: '/product' },
-    { label: 'AI SDR Agents', path: '/agents' },
-    { label: 'Data Engine', path: '/data-engine' },
+    { label: '5-Worker Pipeline', path: '/product' },
+    { label: 'Competitor Analysis', path: '/product' },
     { label: 'Integrations', path: '/integrations' },
     { label: 'Pricing', path: '/pricing' },
   ],
@@ -29,9 +29,9 @@ const FOOTER_LINKS: Record<string, FooterLink[]> = {
   Resources: [
     { label: 'GTM Automation', path: '/gtm-automation' },
     { label: 'How It Works', scroll: 'how-it-works' },
-    { label: 'Use Cases', scroll: 'use-cases' },
-    { label: 'FAQ', scroll: 'faq' },
-    { label: 'Customer Stories', scroll: 'testimonials' },
+    { label: 'Use Cases', path: '/use-cases' },
+    { label: 'FAQ', path: '/faq' },
+    { label: 'Customer Stories', path: '/testimonials' },
   ],
 }
 
@@ -125,11 +125,12 @@ const Footer = () => {
           >
             <div className={styles.contactLabel}>Get in Touch</div>
             <h2 className={styles.headline}>
-              Ready to Automate Your Outbound?
+              Ready to See GTMer in Action?
             </h2>
             <p className={styles.subtext}>
-              Book a free live demo and see GTMer's AI SDR agents prospect,
-              enrich, and engage your ICP — in real time. No commitment required.
+              We'll run a live prospecting cycle on your actual ICP — you'll see
+              real leads, AI-generated research summaries, and personalized outreach
+              emails before you sign up. Zero commitment.
             </p>
 
             <div className={styles.demoNote}>
@@ -137,8 +138,8 @@ const Footer = () => {
               <div className={styles.demoNoteText}>
                 <strong>Free personalized demo</strong>
                 <br />
-                We'll run a real prospecting cycle on your ICP so you can see
-                actual leads, enrichment, and AI-generated outreach before signing up.
+                We'll import your target companies, run the 5 workers, and show
+                you the actual emails GTMer would send — before you commit to anything.
               </div>
             </div>
 

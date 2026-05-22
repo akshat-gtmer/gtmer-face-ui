@@ -54,6 +54,21 @@ const VIEW_HEAD: Record<string, HeadConfig> = {
     description:
       'GTMer is the leading GTM automation platform. AI SDR agents automate your entire go-to-market pipeline — lead sourcing, data enrichment, personalized outbound at scale, and meeting booking. 10× faster pipeline, 70% lower CAC.',
   },
+  '/use-cases': {
+    title: 'GTMer Use Cases — AI GTM for Startups, Enterprise & Agencies | Increase Outbound Sales',
+    description:
+      'See how B2B SaaS startups, enterprise sales teams, and agencies use GTMer\'s AI GTM platform to increase outbound sales, build pipeline 10× faster, and replace manual SDR teams with autonomous AI agents.',
+  },
+  '/testimonials': {
+    title: 'GTMer Customer Stories — AI SDR Results & Reviews | GTMer',
+    description:
+      'Hear from teams who replaced manual outbound with GTMer\'s AI SDR agents. 3× pipeline growth, 40+ qualified leads/month, 70% lower CAC — verified customer outcomes.',
+  },
+  '/faq': {
+    title: 'GTMer FAQ — AI SDR, AI GTM & GTM Automation Questions Answered',
+    description:
+      'Frequently asked questions about GTMer\'s AI SDR platform, AI GTM capabilities, pricing, integrations, data security, and how to increase outbound sales with autonomous AI agents.',
+  },
 }
 
 /**

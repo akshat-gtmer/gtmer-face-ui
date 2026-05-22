@@ -6,8 +6,8 @@ import styles from './Pricing.module.css'
 const TIERS = [
   {
     name: 'Starter',
-    tagline: 'Launch your AI-powered outbound',
-    desc: 'For early-stage teams starting with AI-powered outbound.',
+    tagline: 'Get your first meetings booked',
+    desc: 'For early-stage teams testing AI-powered outbound.',
     price: '149',
     period: '/mo',
     leads: '800',
@@ -16,18 +16,18 @@ const TIERS = [
     cta: 'Get Started',
     features: [
       '800 leads processed/month',
-      '1 AI Agent (Scout)',
-      '3 email sequences active',
-      'Basic enrichment (10 fields)',
-      'HubSpot or Pipedrive sync',
+      '5 AI Workers (Crawl, Summary, Contact, Draft, Send)',
+      '3 active projects',
+      'Soul Setup — brand voice configuration',
+      'Email analytics (opens, clicks, replies)',
+      'CSV import + HubSpot sync',
       'Email support',
-      'Weekly performance reports',
     ],
   },
   {
     name: 'Growth',
-    tagline: 'Scale your autonomous GTM',
-    desc: 'For scaling teams that need full autonomous GTM.',
+    tagline: '10× your pipeline this quarter',
+    desc: 'For scaling teams ready to replace manual SDR work entirely.',
     price: '399',
     period: '/mo',
     leads: '2,500',
@@ -37,20 +37,20 @@ const TIERS = [
     cta: 'Get Started',
     features: [
       '2,500 leads processed/month',
-      '4 AI Agents (Scout, Enricher, Writer, Sender)',
-      'Unlimited email sequences',
-      'Full enrichment (50+ fields)',
-      'Salesforce, HubSpot, Pipedrive',
-      'Intent signal monitoring',
+      '5 AI Workers — unlimited concurrent projects',
+      'Soul Setup — full brand voice engine',
+      'Competitor Analysis — side-by-side positioning',
+      'Market Intelligence — on-demand research reports',
+      'Website Tracking — see who visits your site',
+      'Full email analytics with top-performing emails',
+      'Salesforce, HubSpot, Pipedrive integrations',
       'Priority support + Slack channel',
-      'Custom ICP configuration',
-      'Real-time pipeline dashboard',
     ],
   },
   {
     name: 'Enterprise',
-    tagline: 'Custom-built for your org',
-    desc: 'For organizations needing custom agents and dedicated support.',
+    tagline: 'Full platform, no limits',
+    desc: 'For organizations that need dedicated support, custom integrations, and unlimited scale.',
     price: 'Custom',
     period: '',
     leads: 'Unlimited',
@@ -58,14 +58,14 @@ const TIERS = [
     highlight: false,
     cta: 'Contact Sales',
     features: [
-      'Unlimited leads',
-      '6+ AI Agents (including custom)',
-      'Custom agent development',
-      'Dedicated data sources',
+      'Unlimited leads and projects',
+      '5 AI Workers + custom workflow configuration',
+      'Everything in Growth, plus:',
+      'AI Chatbot builder for inbound lead capture',
+      'Custom integrations and API access',
       'SOC 2 Type II compliance',
       'SSO / SAML authentication',
       'Dedicated success manager',
-      'Custom integrations',
       'SLA guarantees',
       'On-premise deployment option',
     ],
@@ -120,8 +120,8 @@ const Pricing = () => {
           <span className={styles.headlineAccent}> Scale on Demand.</span>
         </h1>
         <p className={styles.subtext}>
-          Transparent pricing based on the leads you process.
-          No hidden fees. No surprises. Start small, scale as you grow.
+          Transparent pricing based on leads processed.
+          Every plan includes all 5 AI workers. Start free, scale when you're ready.
         </p>
       </div>
 

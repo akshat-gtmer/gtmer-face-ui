@@ -1,4 +1,4 @@
-import { type ReactNode } from 'react'
+import { useState, useRef, type ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 import { IconGlobe, IconLink, IconDollar, IconSettings, IconTarget, IconSend, IconArrowLeft, IconArrowRight, IconCheck, IconBarChart } from '../Icons'
 import styles from './DataEngine.module.css'
@@ -43,9 +43,47 @@ const DATA_SOURCES: SourceCard[] = [
   { icon: <IconSend size={16} />, iconClass: 'srcIconPink',    title: 'News & Events',     sub: 'Real-time feeds' },
 ]
 
+/* Enrichment animation steps */
+const ENRICHMENT_STEPS = [
+  { source: 'LinkedIn', field: 'Title', value: 'VP of Sales', delay: 0 },
+  { source: 'Crunchbase', field: 'Funding', value: 'Series B — $12M', delay: 600 },
+  { source: 'Hunter.io', field: 'Email', value: 'james.h@scaleforce.com', delay: 1200 },
+  { source: 'Bombora', field: 'Intent Score', value: 'High (87/100)', delay: 1800 },
+  { source: 'ZoomInfo', field: 'Tech Stack', value: 'HubSpot, Salesforce', delay: 2400 },
+]
+
 /* ===== COMPONENT ===== */
 
 const DataEngine = () => {
+  const [demoRunning, setDemoRunning] = useState(false)
+  const [visibleSteps, setVisibleSteps] = useState<number[]>([])
+  const [demoComplete, setDemoComplete] = useState(false)
+  const vizRef = useRef<HTMLDivElement>(null)
+
+  const runDemo = () => {
+    if (demoRunning) return
+
+    // Scroll to viz
+    vizRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+
+    setDemoRunning(true)
+    setDemoComplete(false)
+    setVisibleSteps([])
+
+    // Reveal each step one by one
+    ENRICHMENT_STEPS.forEach((step, i) => {
+      setTimeout(() => {
+        setVisibleSteps(prev => [...prev, i])
+        if (i === ENRICHMENT_STEPS.length - 1) {
+          setTimeout(() => {
+            setDemoComplete(true)
+            setDemoRunning(false)
+          }, 800)
+        }
+      }, step.delay + 400) // +400 for scroll time
+    })
+  }
+
   return (
     <article className={styles.page} aria-label="GTMer Data Engine — Real-Time B2B Intelligence">
       {/* Breadcrumb for crawlers */}
@@ -110,8 +148,8 @@ const DataEngine = () => {
             from 100+ sources.
           </p>
 
-          <button className={styles.ctaButton}>
-            See It In Action
+          <button className={styles.ctaButton} onClick={runDemo}>
+            {demoRunning ? 'Enriching...' : demoComplete ? 'Run Again' : 'See It In Action'}
             <span className={styles.ctaArrow}><IconArrowRight size={14} /></span>
           </button>
 
@@ -132,42 +170,76 @@ const DataEngine = () => {
         </div>
 
         {/* Enrichment visualization */}
-        <div className={styles.vizBlock}>
-          <div className={styles.vizWindow}>
+        <div className={styles.vizBlock} ref={vizRef}>
+          <div className={`${styles.vizWindow} ${demoRunning || demoComplete ? styles.vizWindowActive : ''}`}>
             <div className={styles.vizHeader}>
               <div className={styles.vizDot} />
               <div className={styles.vizDot} />
               <div className={styles.vizDot} />
               <span className={styles.vizTitle}>data-engine / enriching</span>
-              <span className={styles.vizStatus}>● LIVE</span>
+              <span className={`${styles.vizStatus} ${demoRunning ? styles.vizStatusPulse : ''}`}>
+                {demoRunning ? '● RUNNING' : demoComplete ? '● COMPLETE' : '● LIVE'}
+              </span>
             </div>
 
             <div className={styles.vizBody}>
               {/* Pulling from sources */}
               <div className={styles.pullLine}>
-                <span className={styles.pullCaret}>&gt;</span> Pulling from 5 sources...
+                <span className={styles.pullCaret}>&gt;</span>
+                {demoRunning
+                  ? 'Pulling from 5 sources...'
+                  : demoComplete
+                    ? 'Enrichment complete — 6 fields populated'
+                    : 'Pulling from 5 sources...'}
               </div>
 
-              {/* Source badges */}
-              <div className={styles.sourceBadges}>
-                <span className={`${styles.sourceBadge} ${styles.srcLinkedIn}`}>LI LinkedIn</span>
-                <span className={`${styles.sourceBadge} ${styles.srcCrunchbase}`}>CB Crunchbase</span>
-                <span className={`${styles.sourceBadge} ${styles.srcBombora}`}>BO Bombora</span>
-                <span className={`${styles.sourceBadge} ${styles.srcZoomInfo}`}>ZI ZoomInfo</span>
-                <span className={`${styles.sourceBadge} ${styles.srcHunter}`}>HU Hunter.io</span>
-              </div>
+              {/* Live enrichment feed — shown during/after demo */}
+              {(demoRunning || demoComplete) && (
+                <div className={styles.enrichFeed}>
+                  {ENRICHMENT_STEPS.map((step, i) => (
+                    <div
+                      key={i}
+                      className={`${styles.enrichStep} ${visibleSteps.includes(i) ? styles.enrichStepVisible : ''}`}
+                    >
+                      <span className={styles.enrichDot} />
+                      <span className={styles.enrichSource}>{step.source}</span>
+                      <span className={styles.enrichArrow}>→</span>
+                      <span className={styles.enrichField}>{step.field}:</span>
+                      <span className={styles.enrichValue}>{step.value}</span>
+                      {visibleSteps.includes(i) && (
+                        <span className={styles.enrichCheck}><IconCheck size={10} /></span>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* Source badges — shown when idle */}
+              {!demoRunning && !demoComplete && (
+                <div className={styles.sourceBadges}>
+                  <span className={`${styles.sourceBadge} ${styles.srcLinkedIn}`}>LI LinkedIn</span>
+                  <span className={`${styles.sourceBadge} ${styles.srcCrunchbase}`}>CB Crunchbase</span>
+                  <span className={`${styles.sourceBadge} ${styles.srcBombora}`}>BO Bombora</span>
+                  <span className={`${styles.sourceBadge} ${styles.srcZoomInfo}`}>ZI ZoomInfo</span>
+                  <span className={`${styles.sourceBadge} ${styles.srcHunter}`}>HU Hunter.io</span>
+                </div>
+              )}
 
               {/* Enriched contact card */}
-              <div className={styles.contactCard}>
+              <div className={`${styles.contactCard} ${demoComplete ? styles.contactCardComplete : ''}`}>
                 <div className={styles.contactHeader}>
                   <div className={styles.contactAvatar}>
                     <div className={styles.avatarCircle}>JH</div>
                     <div className={styles.avatarInfo}>
                       <span className={styles.contactName}>James Hoffman</span>
-                      <span className={styles.contactSub}>Enriched contact record</span>
+                      <span className={styles.contactSub}>
+                        {demoComplete ? 'Fully enriched record' : 'Enriched contact record'}
+                      </span>
                     </div>
                   </div>
-                  <span className={styles.verifiedBadge}><IconCheck size={10} /> Verified</span>
+                  <span className={`${styles.verifiedBadge} ${demoComplete ? styles.verifiedBadgeGlow : ''}`}>
+                    <IconCheck size={10} /> {demoComplete ? 'Verified ✓' : 'Verified'}
+                  </span>
                 </div>
 
                 <div className={styles.contactRows}>
@@ -182,9 +254,17 @@ const DataEngine = () => {
 
               {/* Processing bar */}
               <div className={styles.processingBar}>
-                <div className={styles.processingLabel}>Processing speed</div>
+                <div className={styles.processingLabel}>
+                  {demoRunning ? 'Enriching prospect...' : demoComplete ? 'Enrichment complete' : 'Processing speed'}
+                </div>
                 <div className={styles.progressTrack}>
-                  <div className={styles.progressFill} />
+                  <div
+                    className={styles.progressFill}
+                    style={{
+                      width: demoComplete ? '100%' : demoRunning ? '78%' : '0%',
+                      transition: demoRunning ? 'width 3s ease-in-out' : 'width 0.5s ease',
+                    }}
+                  />
                 </div>
               </div>
             </div>
