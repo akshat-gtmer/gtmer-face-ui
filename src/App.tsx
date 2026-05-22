@@ -1,5 +1,6 @@
 import { Routes, Route, useLocation } from 'react-router-dom'
 import { useEffect } from 'react'
+
 import { useDocumentHead } from './hooks/useDocumentHead'
 import Navbar from './components/Navbar/Navbar'
 import Hero from './components/Hero/Hero'
@@ -18,7 +19,7 @@ import IntegrationsPage from './components/IntegrationsPage/IntegrationsPage'
 import About from './components/About/About'
 import GtmAutomation from './components/GtmAutomation/GtmAutomation'
 
-/* Scroll to top on route change — preserves SPA feel */
+/* Scroll to top on route change */
 const ScrollToTop = () => {
   const { pathname } = useLocation()
   useEffect(() => {
@@ -27,21 +28,26 @@ const ScrollToTop = () => {
   return null
 }
 
-/* Landing page — the main "/" view with all scroll sections */
+/* Landing page — focused: Hero + Numbers + HowItWorks + Footer */
 const LandingPage = () => (
   <>
     <Hero />
     <Numbers />
     <HowItWorks />
-    <UseCases />
-    <Testimonials />
-    <FAQ />
+    <Footer />
+  </>
+)
+
+/* Wrapper for sub-pages that need their own footer */
+const PageWithFooter = ({ children }: { children: React.ReactNode }) => (
+  <>
+    {children}
     <Footer />
   </>
 )
 
 const App = () => {
-  // Dynamic <title> and <meta> per route — SEO/AEO critical
+  // Dynamic <title> and <meta> per route
   useDocumentHead()
 
   return (
@@ -52,14 +58,17 @@ const App = () => {
       <main id="main-content" role="main">
         <Routes>
           <Route path="/" element={<LandingPage />} />
-          <Route path="/agents" element={<Agents />} />
-          <Route path="/data-engine" element={<DataEngine />} />
-          <Route path="/product" element={<ProductDashboard />} />
-          <Route path="/pricing" element={<Pricing />} />
-          <Route path="/security" element={<Security />} />
-          <Route path="/integrations" element={<IntegrationsPage />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/gtm-automation" element={<GtmAutomation />} />
+          <Route path="/product" element={<PageWithFooter><ProductDashboard /></PageWithFooter>} />
+          <Route path="/agents" element={<PageWithFooter><Agents /></PageWithFooter>} />
+          <Route path="/data-engine" element={<PageWithFooter><DataEngine /></PageWithFooter>} />
+          <Route path="/use-cases" element={<PageWithFooter><UseCases /></PageWithFooter>} />
+          <Route path="/pricing" element={<PageWithFooter><Pricing /></PageWithFooter>} />
+          <Route path="/security" element={<PageWithFooter><Security /></PageWithFooter>} />
+          <Route path="/integrations" element={<PageWithFooter><IntegrationsPage /></PageWithFooter>} />
+          <Route path="/about" element={<PageWithFooter><About /></PageWithFooter>} />
+          <Route path="/testimonials" element={<PageWithFooter><Testimonials /></PageWithFooter>} />
+          <Route path="/faq" element={<PageWithFooter><FAQ /></PageWithFooter>} />
+          <Route path="/gtm-automation" element={<PageWithFooter><GtmAutomation /></PageWithFooter>} />
         </Routes>
       </main>
     </>

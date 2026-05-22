@@ -1,0 +1,42 @@
+/* ================================================
+   Page Background — Fixed scroll-driven image layer
+   ================================================ */
+
+.wrapper {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.bgImage {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center bottom;
+  opacity: 0;
+  transition: opacity 1.2s ease-in-out;
+  will-change: opacity;
+}
+
+.bgImageActive {
+  opacity: 1;
+}
+
+/* Persistent scrim — ensures text is always readable */
+.scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    /* Even darkening across the whole page */
+    linear-gradient(
+      to bottom,
+      rgba(12, 10, 9, 0.55) 0%,
+      rgba(12, 10, 9, 0.65) 30%,
+      rgba(12, 10, 9, 0.7) 60%,
+      rgba(12, 10, 9, 0.75) 100%
+    );
+}

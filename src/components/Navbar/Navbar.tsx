@@ -1,124 +1,40 @@
-import { useState, useEffect, useRef } from 'react'
-import { useNavigate, useLocation, Link } from 'react-router-dom'
-import { IconBolt, IconChevronDown } from '../Icons'
+import { useState, useEffect } from 'react'
+import { useLocation, Link } from 'react-router-dom'
 import styles from './Navbar.module.css'
 
-interface DropdownItem {
-  id: string
-  icon: string
-  label: string
-  desc: string
-  target: string
-}
-
-const PLATFORM_ITEMS: DropdownItem[] = [
-  { id: 'dd-product', icon: '⊞', label: '/gtmer-product', desc: 'Command center overview', target: '/product' },
-  { id: 'dd-agents', icon: 'bolt', label: '/gtmer-agents', desc: 'Custom-built GTM agents', target: '/agents' },
-  { id: 'dd-data-engine', icon: '◎', label: '/gtmer-data-engine', desc: 'Real-time B2B intelligence', target: '/data-engine' },
+const NAV_LINKS = [
+  { label: 'Product', path: '/product' },
+  { label: 'Use Cases', path: '/use-cases' },
+  { label: 'Pricing', path: '/pricing' },
+  { label: 'Testimonials', path: '/testimonials' },
+  { label: 'About', path: '/about' },
 ]
 
-const EXPLORE_ITEMS: DropdownItem[] = [
-  { id: 'dd-pricing', icon: '◇', label: '/gtmer-pricing', desc: 'Plans & tiers', target: '/pricing' },
-  { id: 'dd-security', icon: '⬡', label: '/gtmer-security', desc: 'Compliance & data protection', target: '/security' },
-  { id: 'dd-integrations', icon: '⊕', label: '/gtmer-integrations', desc: '100+ connected tools', target: '/integrations' },
-  { id: 'dd-about', icon: '△', label: '/gtmer-about', desc: 'Our mission & team', target: '/about' },
-]
-
-/* Sections for the center tab switcher (only visible on landing page) */
-const NAV_SECTIONS = [
-  { id: 'hero-section', label: 'gtmer/home' },
-  { id: 'how-it-works', label: 'gtmer/how-it-works' },
-  { id: 'numbers-section', label: 'gtmer/numbers' },
-  { id: 'pipeline-section', label: 'gtmer/pipeline' },
-  { id: 'use-cases', label: 'gtmer/use-cases' },
-  { id: 'testimonials', label: 'gtmer/testimonials' },
-  { id: 'faq', label: 'gtmer/faq' },
-  { id: 'contact', label: 'gtmer/contact' },
+const MORE_LINKS = [
+  { label: 'Integrations', path: '/integrations' },
+  { label: 'Security', path: '/security' },
+  { label: 'FAQ', path: '/faq' },
+  { label: 'GTM Automation', path: '/gtm-automation' },
+  { label: 'Data Engine', path: '/data-engine' },
 ]
 
 const Navbar = () => {
-  const navigate = useNavigate()
   const location = useLocation()
-  const isMainPage = location.pathname === '/'
-
   const [scrolled, setScrolled] = useState(false)
-  const [dropdownOpen, setDropdownOpen] = useState(false)
-  const [sectionMenuOpen, setSectionMenuOpen] = useState(false)
-  const [activeSection, setActiveSection] = useState('hero-section')
-  const dropdownRef = useRef<HTMLDivElement>(null)
-  const sectionRef = useRef<HTMLDivElement>(null)
+  const [mobileOpen, setMobileOpen] = useState(false)
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20)
-      if (!isMainPage) return
-      const scrollPos = window.scrollY + 120
-      for (let i = NAV_SECTIONS.length - 1; i >= 0; i--) {
-        const el = document.getElementById(NAV_SECTIONS[i].id)
-        if (el && el.offsetTop <= scrollPos) {
-          setActiveSection(NAV_SECTIONS[i].id)
-          break
-        }
-      }
-    }
+    const handleScroll = () => setScrolled(window.scrollY > 20)
     window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
-  }, [isMainPage])
-
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
-        setDropdownOpen(false)
-      }
-      if (sectionRef.current && !sectionRef.current.contains(e.target as Node)) {
-        setSectionMenuOpen(false)
-      }
-    }
-    document.addEventListener('mousedown', handleClickOutside)
-    return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
 
-  const handleItemClick = (item: DropdownItem) => {
-    setDropdownOpen(false)
-    navigate(item.target)
-  }
+  // Close mobile menu on route change
+  useEffect(() => {
+    setMobileOpen(false)
+  }, [location.pathname])
 
-  const handleSectionClick = (sectionId: string) => {
-    setSectionMenuOpen(false)
-    if (!isMainPage) {
-      navigate('/')
-      setTimeout(() => {
-        document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' })
-      }, 100)
-    } else {
-      document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' })
-    }
-  }
-
-
-
-  const renderGroup = (title: string, items: DropdownItem[]) => (
-    <div className={styles.dropdownGroup}>
-      <div className={styles.groupTitle}>{title}</div>
-      {items.map(item => (
-        <Link
-          key={item.id}
-          to={item.target}
-          className={styles.dropdownItem}
-          role="menuitem"
-          id={item.id}
-          onClick={() => setDropdownOpen(false)}
-        >
-          <div className={styles.itemText}>
-            <span className={styles.itemLabel}>{item.label}</span>
-            <span className={styles.itemDesc}>{item.desc}</span>
-          </div>
-        </Link>
-      ))}
-    </div>
-  )
-
-  const activeSectionLabel = NAV_SECTIONS.find(s => s.id === activeSection)?.label || 'Home'
+  const isMoreActive = MORE_LINKS.some(link => location.pathname === link.path)
 
   return (
     <nav
@@ -126,73 +42,115 @@ const Navbar = () => {
       role="navigation"
       aria-label="Main navigation"
     >
-      {/* Left: Logo + Mega Dropdown */}
-      <div className={styles.navLeft} ref={dropdownRef}>
-        <button
-          className={styles.logoButton}
-          onClick={() => setDropdownOpen(!dropdownOpen)}
-          aria-expanded={dropdownOpen}
-          aria-haspopup="true"
-          id="nav-logo-button"
-        >
-          <span className={styles.logoMark}>
-            <span className={styles.logoSlash}>/</span>
-            <span className={styles.logoName}>gtmer</span>
-          </span>
-          <span className={`${styles.chevron} ${dropdownOpen ? styles.open : ''}`} />
-        </button>
+      <div className={styles.navInner}>
+        {/* Logo */}
+        <Link to="/" className={styles.logo} aria-label="GTMer Home">
+          <span className={styles.logoSlash}>/</span>
+          <span className={styles.logoName}>gtmer</span>
+        </Link>
 
-        {/* Mega Dropdown — Platform + Explore only */}
-        <div
-          className={`${styles.dropdown} ${dropdownOpen ? styles.visible : ''}`}
-          role="menu"
-          id="nav-dropdown-menu"
-        >
-          <div className={styles.dropdownInner}>
-            {renderGroup('Platform', PLATFORM_ITEMS)}
-            {renderGroup('Explore', EXPLORE_ITEMS)}
+        {/* Center: Nav Links (desktop) */}
+        <div className={styles.navLinks}>
+          {NAV_LINKS.map(link => (
+            <Link
+              key={link.path}
+              to={link.path}
+              className={`${styles.navLink} ${location.pathname === link.path ? styles.navLinkActive : ''}`}
+            >
+              {link.label}
+            </Link>
+          ))}
+
+          {/* More dropdown */}
+          <div className={styles.moreWrapper}>
+            <button
+              className={`${styles.navLink} ${styles.moreButton} ${isMoreActive ? styles.moreButtonActive : ''}`}
+              aria-haspopup="true"
+            >
+              More
+              <span className={styles.moreChevron}>▾</span>
+            </button>
+            <div className={styles.moreDropdown}>
+              {MORE_LINKS.map(link => (
+                <Link
+                  key={link.path}
+                  to={link.path}
+                  className={`${styles.moreLink} ${location.pathname === link.path ? styles.moreLinkActive : ''}`}
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </div>
           </div>
         </div>
+
+        {/* Right: CTAs */}
+        <div className={styles.navRight}>
+          <a
+            href="https://app.gtmer.ai"
+            className={styles.signInLink}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Sign in
+          </a>
+          <a
+            className={styles.ctaButton}
+            id="nav-cta-start"
+            href="https://app.gtmer.ai"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Start Free
+          </a>
+        </div>
+
+        {/* Mobile hamburger */}
+        <button
+          className={`${styles.mobileToggle} ${mobileOpen ? styles.mobileToggleOpen : ''}`}
+          onClick={() => setMobileOpen(!mobileOpen)}
+          aria-label="Toggle mobile menu"
+          aria-expanded={mobileOpen}
+        >
+          <span />
+          <span />
+          <span />
+        </button>
       </div>
 
-      {/* Center: Section tab switcher (only on main landing page) */}
-      {scrolled && isMainPage && (
-        <div className={styles.center} ref={sectionRef}>
-          <button
-            className={styles.sectionToggle}
-            onClick={() => setSectionMenuOpen(!sectionMenuOpen)}
-            aria-expanded={sectionMenuOpen}
+      {/* Mobile menu */}
+      <div className={`${styles.mobileMenu} ${mobileOpen ? styles.mobileMenuOpen : ''}`}>
+        {NAV_LINKS.map(link => (
+          <Link
+            key={link.path}
+            to={link.path}
+            className={styles.mobileLink}
+            onClick={() => setMobileOpen(false)}
           >
-            <span className={styles.sectionLabel}>{activeSectionLabel}</span>
-            <span className={`${styles.sectionChevron} ${sectionMenuOpen ? styles.sectionChevronOpen : ''}`}><IconChevronDown size={12} /></span>
-          </button>
-
-          {/* Section flyout */}
-          <div className={`${styles.sectionFlyout} ${sectionMenuOpen ? styles.sectionFlyoutVisible : ''}`}>
-            {NAV_SECTIONS.map(s => (
-              <button
-                key={s.id}
-                className={`${styles.sectionItem} ${activeSection === s.id ? styles.sectionItemActive : ''}`}
-                onClick={() => handleSectionClick(s.id)}
-              >
-                {s.label}
-              </button>
-            ))}
-          </div>
+            {link.label}
+          </Link>
+        ))}
+        <div className={styles.mobileDivider} />
+        {MORE_LINKS.map(link => (
+          <Link
+            key={link.path}
+            to={link.path}
+            className={styles.mobileLink}
+            onClick={() => setMobileOpen(false)}
+          >
+            {link.label}
+          </Link>
+        ))}
+        <div className={styles.mobileCta}>
+          <a
+            href="https://app.gtmer.ai"
+            className={styles.ctaButton}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Start Free
+          </a>
         </div>
-      )}
-
-      {/* Right: CTA */}
-      <div className={styles.navRight}>
-        <a
-          className={styles.ctaButton}
-          id="nav-cta-start"
-          href="https://app.gtmer.ai"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Start Automating
-        </a>
       </div>
     </nav>
   )
