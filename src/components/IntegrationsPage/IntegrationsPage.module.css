@@ -53,4 +53,9 @@
 .bottomLink:hover { color: var(--color-accent-neon); }
 
 @media (max-width: 900px) { .integrationGrid { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 540px) { .integrationGrid { grid-template-columns: 1fr; } .page { padding: var(--space-3xl) var(--space-md); } }
+@media (max-width: 540px) {
+  .integrationGrid { grid-template-columns: 1fr; }
+  .page { padding: var(--space-3xl) var(--space-md); }
+  .integrationCard { padding: var(--space-md); }
+  .bottomNote { padding: var(--space-lg) var(--space-md); font-size: 0.78rem; }
+}

@@ -544,4 +544,36 @@
   .section {
     padding: var(--space-3xl) var(--space-md);
   }
+
+  .card {
+    padding: var(--space-lg);
+  }
+
+  .cardTitle {
+    font-size: 1.05rem;
+  }
+
+  .cardDesc {
+    font-size: 0.78rem;
+  }
+
+  .glimpse {
+    padding: 8px 10px;
+  }
+
+  .ctaButton {
+    width: 100%;
+    justify-content: center;
+    padding: 12px 24px;
+  }
+
+  .clientTableHead,
+  .clientTableRow {
+    grid-template-columns: 1.5fr 1fr 1fr;
+  }
+
+  .clientTableHead span:last-child,
+  .clientTableRow span:last-child {
+    display: none;
+  }
 }

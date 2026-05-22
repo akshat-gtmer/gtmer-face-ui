@@ -254,5 +254,15 @@
 .footerText { font-family: var(--font-mono); font-size: 0.55rem; color: var(--color-text-muted); letter-spacing: 0.03em; }
 
 /* ===== RESPONSIVE ===== */
-@media (max-width: 900px) { .layout { grid-template-columns: 1fr; } .textBlock { text-align: center; padding-top: 0; } .demoNote { text-align: left; } }
-@media (max-width: 540px) { .section { padding: var(--space-3xl) var(--space-md); } }
+@media (max-width: 900px) {
+  .layout { grid-template-columns: 1fr; }
+  .textBlock { text-align: center; padding-top: 0; }
+  .demoNote { text-align: left; }
+  .bookDemoBtn { width: 100%; justify-content: center; }
+}
+@media (max-width: 540px) {
+  .section { padding: var(--space-3xl) var(--space-md); }
+  .contactCard { padding: 10px 12px; gap: var(--space-sm); }
+  .contactCardIcon { width: 32px; height: 32px; font-size: 0.9rem; }
+  .contactCardValue { font-size: 0.82rem; }
+}

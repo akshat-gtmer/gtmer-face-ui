@@ -190,3 +190,29 @@ img {
   margin: 0 auto;
   padding: 0 var(--space-xl);
 }
+
+/* ── Mobile Responsive Overrides ── */
+@media (max-width: 768px) {
+  :root {
+    --space-3xl: 48px;
+    --space-4xl: 64px;
+    --space-5xl: 80px;
+    --nav-height: 56px;
+  }
+
+  html {
+    scroll-padding-top: 64px;
+  }
+
+  .sectionContainer {
+    padding: 0 var(--space-md);
+  }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --space-3xl: 40px;
+    --space-4xl: 56px;
+    --space-5xl: 64px;
+  }
+}

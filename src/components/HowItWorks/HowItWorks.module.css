@@ -515,3 +515,54 @@
 
   .emailActions { flex-wrap: wrap; }
 }
+
+@media (max-width: 480px) {
+  .section {
+    padding: var(--space-3xl) 0;
+  }
+
+  .inner {
+    padding: 0 var(--space-md);
+  }
+
+  .panelContent {
+    padding: var(--space-md);
+  }
+
+  .row {
+    grid-template-columns: 24px 1fr;
+    padding: 8px var(--space-sm);
+  }
+
+  .rowScore { display: none; }
+
+  .emailMeta {
+    flex-wrap: wrap;
+    gap: 4px;
+    font-size: 0.75rem;
+  }
+
+  .emailBody {
+    padding: var(--space-sm);
+    font-size: 0.82rem;
+  }
+
+  .emailActions {
+    padding: var(--space-sm);
+    gap: 6px;
+  }
+
+  .workerRow {
+    padding: 8px var(--space-sm);
+    gap: var(--space-sm);
+  }
+
+  .ctaBtn {
+    padding: 12px 24px;
+    font-size: 0.88rem;
+  }
+
+  .stepColumn {
+    padding: var(--space-lg);
+  }
+}

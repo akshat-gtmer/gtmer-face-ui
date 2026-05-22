@@ -150,5 +150,32 @@
 .capabilitySub { font-size: 0.82rem; font-weight: 300; color: var(--color-text-secondary); line-height: 1.55; margin-bottom: var(--space-sm); }
 .capabilityResult { font-family: var(--font-mono); font-size: 0.7rem; font-weight: 500; color: var(--color-accent); margin-top: auto; padding-top: var(--space-sm); border-top: 1px solid rgba(120,113,108,0.08); }
 
-@media (max-width: 900px) { .heroSection { grid-template-columns: 1fr; padding: 0 var(--space-md) var(--space-3xl); } .bottomSection { padding: 0 var(--space-md) var(--space-3xl); } .miniStats { gap: var(--space-lg); } .vizMetrics { grid-template-columns: repeat(2, 1fr); } .capabilitiesGrid { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 540px) { .capabilitiesGrid { grid-template-columns: 1fr; } .miniStats { flex-wrap: wrap; gap: var(--space-md); } }
+@media (max-width: 900px) {
+  .heroSection { grid-template-columns: 1fr; padding: 0 var(--space-md) var(--space-3xl); }
+  .bottomSection { padding: 0 var(--space-md) var(--space-3xl); }
+  .miniStats { gap: var(--space-lg); }
+  .vizMetrics { grid-template-columns: repeat(2, 1fr); }
+  .capabilitiesGrid { grid-template-columns: repeat(2, 1fr); }
+  .backBar { padding: 0 var(--space-md); }
+  .textBlock { text-align: center; }
+  .subtext { max-width: 100%; }
+}
+@media (max-width: 540px) {
+  .capabilitiesGrid { grid-template-columns: 1fr; }
+  .miniStats { flex-wrap: wrap; gap: var(--space-md); }
+  .vizMetrics { grid-template-columns: 1fr 1fr; }
+  .vizMetricItem { padding: 8px 10px; }
+  .vizMetricValue { font-size: 0.78rem; }
+  .vizMetricLabel { font-size: 0.45rem; }
+  .vizPipelineLabel { font-size: 0.5rem; }
+  .vizPipelineCount { font-size: 0.5rem; }
+  .vizTableHead { font-size: 0.4rem; }
+  .vizTableRow { padding: 4px 0; }
+  .vizLeadName { font-size: 0.55rem; }
+  .vizAvatar { width: 16px; height: 16px; font-size: 0.35rem; }
+  .vizCompany { font-size: 0.48rem; }
+  .vizIntent { font-size: 0.48rem; }
+  .vizStage { font-size: 0.4rem; }
+  .vizFeedLine { font-size: 0.48rem; }
+  .ctaButton { width: 100%; justify-content: center; }
+}

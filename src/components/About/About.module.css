@@ -45,4 +45,11 @@
 .ctaButton:hover { background: rgba(30,90,160,0.88); transform: translateY(-2px); box-shadow: 0 8px 30px rgba(30,90,160,0.25), inset 0 1px 0 rgba(255,255,255,0.12); }
 
 @media (max-width: 900px) { .valuesGrid { grid-template-columns: 1fr; } }
-@media (max-width: 540px) { .page { padding: var(--space-3xl) var(--space-md); } }
+@media (max-width: 540px) {
+  .page { padding: var(--space-3xl) var(--space-md); }
+  .missionCard { padding: var(--space-xl) var(--space-md); }
+  .ctaSection { padding: var(--space-xl) var(--space-md); }
+  .ctaButton { width: 100%; justify-content: center; }
+  .timelineItem { padding-left: var(--space-md); }
+  .header { margin-bottom: var(--space-2xl); }
+}

@@ -78,5 +78,18 @@
 }
 .addItem:hover { border-color: rgba(217,119,6,0.2); color: var(--color-text-secondary); background: rgba(217,119,6,0.04); }
 
-@media (max-width: 900px) { .layout { grid-template-columns: 1fr; } .textBlock { text-align: center; padding-top: 0; } .board { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 540px) { .board { grid-template-columns: 1fr; } .section { padding: var(--space-3xl) var(--space-md); } }
+@media (max-width: 900px) {
+  .layout { grid-template-columns: 1fr; }
+  .textBlock { text-align: center; padding-top: 0; }
+  .board { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 540px) {
+  .board { grid-template-columns: 1fr; }
+  .section { padding: var(--space-3xl) var(--space-md); }
+  .card { padding: 8px 10px; }
+  .cardName { font-size: 0.72rem; }
+  .cardCompany { font-size: 0.55rem; }
+  .cardMeta { font-size: 0.55rem; }
+  .columnTitle { font-size: 0.68rem; }
+  .windowHeader { padding: 8px 12px; }
+}

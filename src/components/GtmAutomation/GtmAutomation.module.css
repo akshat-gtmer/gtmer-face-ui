@@ -278,9 +278,16 @@
   .comparisonTable { font-size: 0.78rem; }
   .comparisonTable th,
   .comparisonTable td { padding: var(--space-sm) var(--space-md); }
+  .definitionCard { padding: var(--space-xl) var(--space-md); }
 }
 @media (max-width: 540px) {
   .page { padding: var(--space-3xl) var(--space-md); }
   .stepsGrid { grid-template-columns: 1fr; }
   .metricsStrip { grid-template-columns: 1fr; }
+  .comparisonTable { font-size: 0.72rem; display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .comparisonTable th,
+  .comparisonTable td { padding: var(--space-xs) var(--space-sm); white-space: nowrap; }
+  .ctaButton { width: 100%; justify-content: center; }
+  .ctaSection { padding: var(--space-xl) var(--space-md); }
+  .definitionCard { padding: var(--space-lg) var(--space-md); }
 }

@@ -137,9 +137,18 @@
   .heroSection { grid-template-columns: 1fr; padding: 0 var(--space-md) var(--space-3xl); }
   .typesGrid { grid-template-columns: repeat(2, 1fr); }
   .miniStats { gap: var(--space-lg); }
+  .networkCanvas { height: 220px; }
+  .backBar { padding: 0 var(--space-md); }
 }
 @media (max-width: 540px) {
   .typesGrid { grid-template-columns: 1fr; }
   .agentTypesSection { padding: var(--space-xl) var(--space-md) var(--space-3xl); }
   .miniStats { flex-wrap: wrap; gap: var(--space-md); }
+  .networkCanvas { height: 180px; }
+  .nodeCircle { width: 30px; height: 30px; font-size: 0.55rem; }
+  .nodeLabel { font-size: 0.5rem; }
+  .vizWindow { border-radius: var(--radius-md); }
+  .textBlock { text-align: center; }
+  .subtext { max-width: 100%; }
+  .ctaButton { width: 100%; justify-content: center; }
 }

@@ -227,5 +227,24 @@
 .sourceCardTitle { font-family: var(--font-sans); font-size: 0.9rem; font-weight: 600; color: var(--color-text-primary); margin-bottom: 2px; }
 .sourceCardSub { font-family: var(--font-mono); font-size: 0.6rem; color: var(--color-text-muted); }
 
-@media (max-width: 900px) { .heroSection, .bottomSection { grid-template-columns: 1fr; padding: 0 var(--space-md) var(--space-3xl); } .miniStats { gap: var(--space-lg); } }
-@media (max-width: 540px) { .sourcesGrid { grid-template-columns: 1fr; } .miniStats { flex-wrap: wrap; gap: var(--space-md); } }
+@media (max-width: 900px) {
+  .heroSection, .bottomSection { grid-template-columns: 1fr; padding: 0 var(--space-md) var(--space-3xl); }
+  .miniStats { gap: var(--space-lg); }
+  .backBar { padding: 0 var(--space-md); }
+  .textBlock { text-align: center; }
+  .subtext { max-width: 100%; }
+}
+@media (max-width: 540px) {
+  .sourcesGrid { grid-template-columns: 1fr; }
+  .miniStats { flex-wrap: wrap; gap: var(--space-md); }
+  .enrichStep { font-size: 0.56rem; gap: 6px; }
+  .enrichSource { min-width: 50px; font-size: 0.56rem; }
+  .enrichField, .enrichValue { font-size: 0.56rem; }
+  .sourceBadges { gap: 4px; }
+  .sourceBadge { font-size: 0.55rem; padding: 3px 8px; }
+  .vizBody { padding: var(--space-md); }
+  .contactRow { flex-direction: column; align-items: flex-start; gap: 2px; }
+  .contactRowValue { text-align: left; }
+  .ctaButton { width: 100%; justify-content: center; }
+  .pullLine { font-size: 0.62rem; }
+}

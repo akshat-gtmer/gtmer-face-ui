@@ -670,3 +670,77 @@
 
   .cloud { display: none; }
 }
+
+@media (max-width: 480px) {
+  .heroInner {
+    padding: var(--space-xl) var(--space-sm) 0;
+  }
+
+  .headlineTop {
+    white-space: normal;
+  }
+
+  .badge {
+    font-size: 0.7rem;
+    padding: 5px 12px;
+  }
+
+  .subtext {
+    font-size: 0.9rem;
+  }
+
+  .dashboardBody {
+    padding: 10px 12px 14px;
+  }
+
+  .pipelineStrip {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 4px;
+  }
+
+  .workerBlock:nth-child(3) {
+    display: none;
+  }
+
+  .tableHeader,
+  .tableRow {
+    grid-template-columns: 1.2fr 1.6fr;
+    padding: 8px 10px;
+  }
+
+  .tableHeader span:nth-child(3),
+  .tableRow span:nth-child(3) {
+    display: none;
+  }
+
+  .leadName {
+    font-size: 0.72rem;
+    gap: 6px;
+  }
+
+  .leadAvatar {
+    width: 20px;
+    height: 20px;
+    font-size: 0.55rem;
+  }
+
+  .leadSubject {
+    font-size: 0.68rem;
+  }
+
+  .windowBar {
+    padding: 8px 12px;
+  }
+
+  .windowTitle {
+    font-size: 0.6rem;
+  }
+
+  .windowLive {
+    font-size: 0.55rem;
+  }
+
+  .productShowcase::after {
+    height: 100px;
+  }
+}

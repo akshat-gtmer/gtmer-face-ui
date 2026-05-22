@@ -401,4 +401,20 @@
   .section {
     padding: var(--space-3xl) var(--space-md);
   }
+
+  .card {
+    padding: var(--space-lg);
+  }
+
+  .metricValue {
+    font-size: 1.2rem;
+  }
+
+  .quoteText {
+    font-size: 0.82rem;
+  }
+
+  .glimpseBadge {
+    padding: 8px 10px;
+  }
 }

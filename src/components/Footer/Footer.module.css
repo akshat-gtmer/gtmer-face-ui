@@ -414,3 +414,29 @@
     text-align: center;
   }
 }
+
+@media (max-width: 480px) {
+  .inner {
+    padding: 0 var(--space-md);
+  }
+
+  .topSection {
+    grid-template-columns: 1fr;
+    gap: var(--space-lg);
+  }
+
+  .footer {
+    padding: var(--space-3xl) 0 0;
+  }
+
+  .bookDemoBtn {
+    width: 100%;
+    justify-content: center;
+    padding: 12px 24px;
+  }
+
+  .legalLinks {
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+}
