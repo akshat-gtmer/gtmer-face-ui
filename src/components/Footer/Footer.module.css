@@ -104,19 +104,38 @@
   font-size: 0.95rem;
   font-weight: 600;
   color: var(--color-text-inverse);
-  background: var(--color-text-primary);
+  background: linear-gradient(180deg, #2e2e2e 0%, #1a1a1a 100%);
+  border-top: 1px solid rgba(80, 80, 80, 0.4);
+  border-left: 1px solid rgba(60, 60, 60, 0.3);
+  border-right: 1px solid rgba(10, 10, 10, 0.3);
+  border-bottom: 1px solid rgba(5, 5, 5, 0.4);
   border-radius: var(--radius-md);
   transition: all var(--transition-base);
   font-family: var(--font-sans);
   cursor: pointer;
   text-decoration: none;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  box-shadow:
+    0 2px 6px rgba(0, 0, 0, 0.2),
+    0 4px 12px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
 }
 
 .bookDemoBtn:hover {
-  background: #333;
+  background: linear-gradient(180deg, #3a3a3a 0%, #222 100%);
   transform: translateY(-2px);
-  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.18);
+  box-shadow:
+    0 4px 12px rgba(0, 0, 0, 0.25),
+    0 8px 24px rgba(0, 0, 0, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.15);
+}
+
+.bookDemoBtn:active {
+  transform: translateY(1px);
+  background: linear-gradient(180deg, #151515 0%, #222 100%);
+  box-shadow: var(--shadow-button-pressed);
 }
 
 .bookDemoArrow {
@@ -161,11 +180,15 @@
   height: 10px;
   border-radius: 50%;
   background: #ddd;
+  box-shadow:
+    inset 0 1px 2px rgba(255, 255, 255, 0.5),
+    inset 0 -1px 1px rgba(0, 0, 0, 0.1),
+    0 1px 2px rgba(0, 0, 0, 0.08);
 }
 
-.windowDot:first-child { background: #ff6058; }
-.windowDot:nth-child(2) { background: #ffbd2e; }
-.windowDot:nth-child(3) { background: #27ca40; }
+.windowDot:first-child { background: linear-gradient(180deg, #ff7b73 0%, #ff4f44 100%); }
+.windowDot:nth-child(2) { background: linear-gradient(180deg, #ffd04e 0%, #ffb81e 100%); }
+.windowDot:nth-child(3) { background: linear-gradient(180deg, #4dd856 0%, #1fbf32 100%); }
 
 .windowTitle {
   font-family: var(--font-mono);
@@ -206,13 +229,17 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--color-bg-card);
-  border: 1px solid var(--color-border);
+  background: linear-gradient(180deg, var(--color-bg-card) 0%, var(--color-bg-elevated) 100%);
+  border-top: 1px solid rgba(255, 255, 255, 0.7);
+  border-left: 1px solid rgba(0, 0, 0, 0.04);
+  border-right: 1px solid rgba(0, 0, 0, 0.04);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
   border-radius: var(--radius-sm);
   color: var(--color-text-secondary);
   font-family: var(--font-mono);
   font-size: 0.75rem;
   font-weight: 700;
+  box-shadow: var(--shadow-knob);
 }
 
 .contactCardBody {

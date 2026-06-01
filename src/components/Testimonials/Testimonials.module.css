@@ -45,14 +45,18 @@
   align-items: center;
   gap: var(--space-sm);
   padding: var(--space-xs) var(--space-md);
-  background: rgba(217, 119, 6, 0.06);
-  border: 1px solid rgba(217, 119, 6, 0.12);
+  background: linear-gradient(180deg, rgba(217, 119, 6, 0.08) 0%, rgba(217, 119, 6, 0.04) 100%);
+  border-top: 1px solid rgba(255, 255, 255, 0.5);
+  border-left: 1px solid rgba(217, 119, 6, 0.1);
+  border-right: 1px solid rgba(217, 119, 6, 0.12);
+  border-bottom: 1px solid rgba(217, 119, 6, 0.15);
   border-radius: 100px;
   font-family: var(--font-mono);
   font-size: 0.65rem;
   color: var(--color-accent);
   letter-spacing: 0.08em;
   text-transform: uppercase;
+  box-shadow: var(--shadow-emboss);
 }
 
 .badgeDot {
@@ -99,10 +103,13 @@
 
 .card {
   position: relative;
-  background: rgba(220, 235, 250, 0.3);
+  background: linear-gradient(180deg, rgba(230, 240, 252, 0.4) 0%, rgba(210, 228, 248, 0.25) 100%);
   backdrop-filter: blur(16px) saturate(1.3);
   -webkit-backdrop-filter: blur(16px) saturate(1.3);
-  border: 1px solid rgba(100, 160, 230, 0.12);
+  border-top: 1px solid rgba(255, 255, 255, 0.7);
+  border-left: 1px solid rgba(100, 160, 230, 0.1);
+  border-right: 1px solid rgba(100, 160, 230, 0.12);
+  border-bottom: 1px solid rgba(60, 120, 200, 0.15);
   border-radius: var(--radius-lg);
   padding: var(--space-xl) var(--space-lg);
   transition: all 0.5s ease;
@@ -110,7 +117,7 @@
   transform: translateY(28px);
   display: flex;
   flex-direction: column;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  box-shadow: var(--shadow-emboss);
 }
 
 .card.cardVisible {
@@ -221,12 +228,15 @@
 /* ===== GLIMPSE BADGE — Verified Outcome ===== */
 
 .glimpseBadge {
-  background: #fafaf9;
-  border: 1px solid #e7e5e4;
+  background: linear-gradient(180deg, #fcfcfb 0%, #f5f4f0 100%);
+  border-top: 1px solid rgba(255, 255, 255, 0.7);
+  border-left: 1px solid #eae8e4;
+  border-right: 1px solid #e2e0dc;
+  border-bottom: 1px solid #ddd;
   border-radius: 8px;
   padding: 10px 12px;
   margin-bottom: var(--space-md);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06), 0 0 1px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-deboss);
 }
 
 .glimpseBadgeHeader {
