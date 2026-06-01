@@ -37,6 +37,7 @@
   overflow: hidden;
   mask-image: linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%);
   -webkit-mask-image: linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%);
+  padding: 5px;
 }
 
 .tickerInner {
@@ -47,8 +48,13 @@
 }
 
 @keyframes tickerScroll {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
 }
 
 .tickerBadge {

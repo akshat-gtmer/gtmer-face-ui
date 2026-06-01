@@ -150,7 +150,7 @@ const HowItWorks = () => {
               className={`${styles.stepColumn} ${i === active ? styles.stepActive : ''}`}
               onClick={() => setActive(i)}
             >
-              <div className={styles.stepNumber}>{step.number}</div>
+              <div className={styles.stepNumber}>{step.number} </div>
               <div className={styles.stepIcon}>{step.icon}</div>
               <h3 className={styles.stepTitle}>{step.title}</h3>
               <p className={styles.stepDesc}>{step.description}</p>
