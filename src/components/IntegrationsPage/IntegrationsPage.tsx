@@ -142,7 +142,7 @@ const IntegrationsPage = () => {
 
       <div className={styles.bottomNote}>
         <p>Don't see your tool? We build custom integrations.</p>
-        <a href="mailto:akshat@gtmer.ai?subject=Integration%20Request" className={styles.bottomLink}>
+        <a href="mailto:admin@gtmer.online?subject=Integration%20Request" className={styles.bottomLink}>
           Request an Integration <IconArrowRight size={14} />
         </a>
       </div>

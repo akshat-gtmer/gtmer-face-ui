@@ -137,7 +137,7 @@ const Pricing = () => {
               </p>
             </div>
           </div>
-          <a href="mailto:akshat@gtmer.ai" className={styles.contactBannerCta}>
+          <a href="mailto:admin@gtmer.online" className={styles.contactBannerCta}>
             Contact Sales <IconArrowRight size={14} />
           </a>
         </div>
@@ -188,7 +188,7 @@ const Pricing = () => {
             </ul>
 
             <a
-              href={tier.cta === 'Contact Sales' ? 'mailto:akshat@gtmer.ai' : 'https://app.gtmer.ai'}
+              href={tier.cta === 'Contact Sales' ? 'mailto:admin@gtmer.online' : 'https://app.gtmer.ai'}
               target={tier.cta === 'Contact Sales' ? undefined : '_blank'}
               rel={tier.cta === 'Contact Sales' ? undefined : 'noopener noreferrer'}
               className={`${styles.tierCta} ${tier.highlight ? styles.tierCtaHighlight : ''}`}
@@ -204,7 +204,7 @@ const Pricing = () => {
         <p>We offer flexible billing — monthly, quarterly, and annual options available.</p>
         <p className={styles.bottomMuted}>
           Questions? Reach us at{' '}
-          <a href="mailto:akshat@gtmer.ai" className={styles.bottomLink}>akshat@gtmer.ai</a>
+          <a href="mailto:admin@gtmer.online" className={styles.bottomLink}>admin@gtmer.online</a>
         </p>
       </div>
     </article>

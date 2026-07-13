@@ -122,7 +122,7 @@ const Security = () => {
         <div className={styles.trustText}>
           Need our SOC 2 report, DPA, or security questionnaire?
         </div>
-        <a href="mailto:akshat@gtmer.ai?subject=Security%20Documentation%20Request" className={styles.trustCta}>
+        <a href="mailto:admin@gtmer.online?subject=Security%20Documentation%20Request" className={styles.trustCta}>
           Request Documentation <IconArrowRight size={14} />
         </a>
       </div>

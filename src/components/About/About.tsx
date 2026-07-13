@@ -137,7 +137,7 @@ const About = () => {
           We're always looking for exceptional engineers, data scientists, and
           GTM practitioners who want to shape the future of autonomous sales.
         </p>
-        <a href="mailto:akshat@gtmer.ai?subject=Careers%20at%20GTMer" className={styles.ctaButton}>
+        <a href="mailto:admin@gtmer.online?subject=Careers%20at%20GTMer" className={styles.ctaButton}>
           Get In Touch <IconArrowRight size={14} />
         </a>
       </div>

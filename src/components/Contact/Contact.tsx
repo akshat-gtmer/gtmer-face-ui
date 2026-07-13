@@ -17,23 +17,9 @@ const CONTACT_METHODS: ContactMethod[] = [
   {
     icon: <IconMail size={16} />,
     label: 'Email',
-    value: 'akshat@gtmer.ai',
-    href: 'mailto:akshat@gtmer.ai',
+    value: 'admin@gtmer.online',
+    href: 'mailto:admin@gtmer.online',
     sub: 'For demos, partnerships & inquiries',
-  },
-  {
-    icon: <IconPhone size={16} />,
-    label: 'Phone',
-    value: '+91 8989 606 740',
-    href: 'tel:+918989606740',
-    sub: 'Primary line',
-  },
-  {
-    icon: <IconPhone size={16} />,
-    label: 'Phone',
-    value: '+91 8291 111 188',
-    href: 'tel:+918291111188',
-    sub: 'Alternate line',
   },
   {
     icon: '◆',
@@ -84,7 +70,9 @@ const Contact = () => {
           </div>
 
           <a
-            href="mailto:akshat@gtmer.ai?subject=Demo%20Request%20-%20GTMer&body=Hi%2C%20I%27d%20like%20to%20book%20a%20demo%20of%20GTMer."
+            href="https://calendly.com/admin-gtmer/30min"
+            target="_blank"
+            rel="noopener noreferrer"
             className={styles.bookDemoBtn}
             id="contact-book-demo"
           >

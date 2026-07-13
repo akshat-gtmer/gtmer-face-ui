@@ -49,23 +49,9 @@ const CONTACT_METHODS: ContactMethod[] = [
   {
     icon: <IconMail size={16} />,
     label: 'Email',
-    value: 'akshat@gtmer.ai',
-    href: 'mailto:akshat@gtmer.ai',
+    value: 'admin@gtmer.online',
+    href: 'mailto:admin@gtmer.online',
     sub: 'For demos, partnerships & inquiries',
-  },
-  {
-    icon: <IconPhone size={16} />,
-    label: 'Primary Phone',
-    value: '+91 8989 606 740',
-    href: 'tel:+918989606740',
-    sub: 'Mon–Fri · 9 AM – 7 PM IST',
-  },
-  {
-    icon: <IconPhone size={16} />,
-    label: 'Alternate Phone',
-    value: '+91 8291 111 188',
-    href: 'tel:+918291111188',
-    sub: 'Mon–Fri · 9 AM – 7 PM IST',
   },
   {
     icon: 'in',
@@ -111,7 +97,7 @@ const Footer = () => {
     >
       <meta itemProp="name" content="GTMer AI" />
       <meta itemProp="url" content="https://gtmer.ai" />
-      <meta itemProp="email" content="akshat@gtmer.ai" />
+      <meta itemProp="email" content="admin@gtmer.online" />
       <meta itemProp="telephone" content="+91-8989-606-740" />
       <link itemProp="sameAs" href="https://www.linkedin.com/company/gtmer-ai" />
       <div className={styles.inner}>
@@ -144,10 +130,12 @@ const Footer = () => {
             </div>
 
             <a
-              href="mailto:akshat@gtmer.ai?subject=Demo%20Request%20-%20GTMer&body=Hi%2C%20I%27d%20like%20to%20book%20a%20demo%20of%20GTMer."
+              href="https://calendly.com/admin-gtmer/30min"
+              target="_blank"
+              rel="noopener noreferrer"
               className={styles.bookDemoBtn}
               id="contact-book-demo"
-              aria-label="Book a free demo of GTMer via email"
+              aria-label="Book a free demo of GTMer via Calendly"
             >
               Book a Demo — It's Free
               <span className={styles.bookDemoArrow}><IconArrowRight size={14} /></span>
