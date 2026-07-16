@@ -1,6 +1,13 @@
 import { Routes, Route, useLocation } from 'react-router-dom'
 import { useEffect } from 'react'
 
+/* Extend Window to include GTM dataLayer — avoids TypeScript errors */
+declare global {
+  interface Window {
+    dataLayer: Record<string, unknown>[]
+  }
+}
+
 import { useDocumentHead } from './hooks/useDocumentHead'
 import Navbar from './components/Navbar/Navbar'
 import Hero from './components/Hero/Hero'
@@ -19,12 +26,27 @@ import IntegrationsPage from './components/IntegrationsPage/IntegrationsPage'
 import About from './components/About/About'
 import GtmAutomation from './components/GtmAutomation/GtmAutomation'
 
-/* Scroll to top on route change */
+/* Scroll to top + push page_view event to GTM dataLayer on route change */
 const ScrollToTop = () => {
   const { pathname } = useLocation()
+
   useEffect(() => {
+    // Scroll to top
     window.scrollTo({ top: 0, behavior: 'smooth' })
+
+    // Push page_view event to GTM dataLayer
+    // document.title is already set correctly by useDocumentHead before this fires
+    if (typeof window !== 'undefined') {
+      window.dataLayer = window.dataLayer || []
+      window.dataLayer.push({
+        event: 'page_view',
+        page_path: pathname,
+        page_title: document.title,
+        page_location: window.location.href,
+      })
+    }
   }, [pathname])
+
   return null
 }
 
