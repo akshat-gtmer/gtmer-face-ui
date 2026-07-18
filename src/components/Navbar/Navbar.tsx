@@ -89,8 +89,6 @@ const Navbar = () => {
           <a
             href="https://app.gtmer.ai"
             className={styles.signInLink}
-            target="_blank"
-            rel="noopener noreferrer"
           >
             Sign in
           </a>
