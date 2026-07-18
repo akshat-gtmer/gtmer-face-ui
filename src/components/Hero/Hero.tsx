@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import styles from './Hero.module.css'
 
 const Hero = () => {
@@ -37,15 +38,13 @@ const Hero = () => {
           </p>
 
           <div className={styles.ctaGroup}>
-            <a
+            <Link
               className={styles.ctaPrimary}
               id="hero-cta-start"
-              href="https://app.gtmer.ai"
-              target="_blank"
-              rel="noopener noreferrer"
+              to="/signup"
             >
               Start Free
-            </a>
+            </Link>
             <button
               className={styles.ctaSecondary}
               id="hero-cta-demo"

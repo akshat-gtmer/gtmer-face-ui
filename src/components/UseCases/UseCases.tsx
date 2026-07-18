@@ -1,4 +1,5 @@
 import { useState, useEffect, type ReactNode } from 'react'
+import { Link } from 'react-router-dom'
 import { useScrollReveal } from '../../hooks/useScrollReveal'
 import { IconBolt, IconUsers, IconTarget, IconCheck, IconArrowRight } from '../Icons'
 import styles from './UseCases.module.css'
@@ -245,17 +246,13 @@ const UseCases = () => {
 
       {/* Bottom CTA */}
       <div className={styles.ctaWrapper}>
-        <a
+        <Link
           className={styles.ctaButton}
-          id="usecase-cta-demo"
-          href="https://app.gtmer.ai"
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="Try GTMer for your team"
+          id="usecases-cta-start"
+          to="/signup"
         >
-          Try the Platform
-          <span className={styles.ctaArrow}><IconArrowRight size={14} /></span>
-        </a>
+          Start Automating <IconArrowRight size={14} />
+        </Link>
       </div>
     </section>
   )

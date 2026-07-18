@@ -69,6 +69,11 @@ const VIEW_HEAD: Record<string, HeadConfig> = {
     description:
       'Frequently asked questions about GTMer\'s AI SDR platform, AI GTM capabilities, pricing, integrations, data security, and how to increase outbound sales with autonomous AI agents.',
   },
+  '/signup': {
+    title: 'Register Your Account — GTMer AI SDR & Sales Automation Platform',
+    description:
+      'Sign up for GTMer to deploy your autonomous AI SDR agents. Discover prospects, enrich with intent signals, and automate your outbound sales pipeline.',
+  },
 }
 
 /**

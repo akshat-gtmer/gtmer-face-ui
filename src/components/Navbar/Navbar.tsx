@@ -94,15 +94,13 @@ const Navbar = () => {
           >
             Sign in
           </a>
-          <a
+          <Link
             className={styles.ctaButton}
             id="nav-cta-start"
-            href="https://app.gtmer.ai"
-            target="_blank"
-            rel="noopener noreferrer"
+            to="/signup"
           >
             Start Free
-          </a>
+          </Link>
         </div>
 
         {/* Mobile hamburger */}
@@ -142,14 +140,13 @@ const Navbar = () => {
           </Link>
         ))}
         <div className={styles.mobileCta}>
-          <a
-            href="https://app.gtmer.ai"
+          <Link
+            to="/signup"
             className={styles.ctaButton}
-            target="_blank"
-            rel="noopener noreferrer"
+            onClick={() => setMobileOpen(false)}
           >
             Start Free
-          </a>
+          </Link>
         </div>
       </div>
     </nav>

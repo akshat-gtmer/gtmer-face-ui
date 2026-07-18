@@ -185,15 +185,13 @@ const ProductDashboard = () => {
             Approve the drafts. GTMer sends them with full tracking. That's it.
           </p>
 
-          <a
+          <Link
             className={styles.ctaButton}
-            href="https://app.gtmer.ai"
-            target="_blank"
-            rel="noopener noreferrer"
+            to="/signup"
           >
             Start Free — No Card Required
             <span className={styles.ctaArrow}><IconArrowRight size={14} /></span>
-          </a>
+          </Link>
 
           <div className={styles.miniStats}>
             <div className={styles.miniStat}>

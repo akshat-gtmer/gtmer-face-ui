@@ -187,14 +187,21 @@ const Pricing = () => {
               ))}
             </ul>
 
-            <a
-              href={tier.cta === 'Contact Sales' ? 'mailto:admin@gtmer.online' : 'https://app.gtmer.ai'}
-              target={tier.cta === 'Contact Sales' ? undefined : '_blank'}
-              rel={tier.cta === 'Contact Sales' ? undefined : 'noopener noreferrer'}
-              className={`${styles.tierCta} ${tier.highlight ? styles.tierCtaHighlight : ''}`}
-            >
-              {tier.cta}
-            </a>
+            {tier.cta === 'Contact Sales' ? (
+              <a
+                href="mailto:admin@gtmer.online"
+                className={`${styles.tierCta} ${tier.highlight ? styles.tierCtaHighlight : ''}`}
+              >
+                {tier.cta}
+              </a>
+            ) : (
+              <Link
+                to="/signup"
+                className={`${styles.tierCta} ${tier.highlight ? styles.tierCtaHighlight : ''}`}
+              >
+                {tier.cta}
+              </Link>
+            )}
           </div>
         ))}
       </div>

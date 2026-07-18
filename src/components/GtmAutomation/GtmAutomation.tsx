@@ -354,16 +354,14 @@ const GtmAutomation = () => {
           Deploy AI SDR agents in 48 hours. See real leads, real enrichment, and
           real personalized outreach — before you commit.
         </p>
-        <a
-          href="https://app.gtmer.ai"
-          target="_blank"
-          rel="noopener noreferrer"
+        <Link
+          to="/signup"
           className={styles.ctaButton}
           id="gtm-automation-cta"
           aria-label="Start using GTMer's GTM automation platform"
         >
           Start Automating — It's Free <IconArrowRight size={14} />
-        </a>
+        </Link>
       </div>
 
       {/* GEO Entity Block — crawlable by AI engines, visually hidden */}
