@@ -74,6 +74,11 @@ const VIEW_HEAD: Record<string, HeadConfig> = {
     description:
       'Sign up for GTMer to deploy your autonomous AI SDR agents. Discover prospects, enrich with intent signals, and automate your outbound sales pipeline.',
   },
+  '/signup/success': {
+    title: 'Verify Your Email — GTMer AI SDR & Sales Automation Platform',
+    description:
+      'Verification email sent. Please verify your work email address to activate your GTMer account.',
+  },
 }
 
 /**

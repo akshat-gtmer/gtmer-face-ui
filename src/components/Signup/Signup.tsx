@@ -1,9 +1,14 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { IconArrowRight, IconMail, IconLock, IconUsers, IconGlobe, IconCheck } from '../Icons'
 import styles from './Signup.module.css'
 
 const Signup = () => {
+  const navigate = useNavigate()
+  const location = useLocation()
+  const isSuccess = location.pathname === '/signup/success'
+  const successEmail = location.state?.email || ''
+
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
@@ -12,7 +17,6 @@ const Signup = () => {
   })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const [success, setSuccess] = useState(false)
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -52,8 +56,8 @@ const Signup = () => {
         throw new Error(data.detail || 'Signup failed. Please try again.')
       }
 
-      // Success
-      setSuccess(true)
+      // Success - navigate to success route with email in state
+      navigate('/signup/success', { state: { email: formData.email.trim() } })
 
       // GTM Conversion tracking push
       if (typeof window !== 'undefined') {
@@ -89,7 +93,7 @@ const Signup = () => {
           </div>
 
           <div className={styles.windowBody}>
-            {!success ? (
+            {!isSuccess ? (
               <>
                 <div className={styles.headerText}>
                   <h1 className={styles.title}>Create Your Account</h1>
@@ -202,7 +206,7 @@ const Signup = () => {
                 </div>
                 <h2 className={styles.successTitle}>Verify Your Email</h2>
                 <p className={styles.successDesc}>
-                  We have sent a verification link to <strong>{formData.email}</strong>. 
+                  We have sent a verification link to <strong>{successEmail || formData.email}</strong>. 
                   Please click the link in the email to activate your account and log in.
                 </p>
                 <div className={styles.successActions}>

@@ -93,6 +93,7 @@ const App = () => {
            <Route path="/faq" element={<PageWithFooter><FAQ /></PageWithFooter>} />
           <Route path="/gtm-automation" element={<PageWithFooter><GtmAutomation /></PageWithFooter>} />
           <Route path="/signup" element={<PageWithFooter><Signup /></PageWithFooter>} />
+          <Route path="/signup/success" element={<PageWithFooter><Signup /></PageWithFooter>} />
         </Routes>
       </main>
     </>
