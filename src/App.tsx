@@ -26,6 +26,7 @@ import IntegrationsPage from './components/IntegrationsPage/IntegrationsPage'
 import About from './components/About/About'
 import GtmAutomation from './components/GtmAutomation/GtmAutomation'
 import Signup from './components/Signup/Signup'
+import Scraper from './components/Scraper/Scraper'
 
 /* Scroll to top + push page_view event to GTM dataLayer on route change */
 const ScrollToTop = () => {
@@ -94,6 +95,7 @@ const App = () => {
           <Route path="/gtm-automation" element={<PageWithFooter><GtmAutomation /></PageWithFooter>} />
           <Route path="/signup" element={<PageWithFooter><Signup /></PageWithFooter>} />
           <Route path="/signup/success" element={<PageWithFooter><Signup /></PageWithFooter>} />
+          <Route path="/scraper" element={<PageWithFooter><Scraper /></PageWithFooter>} />
         </Routes>
       </main>
     </>

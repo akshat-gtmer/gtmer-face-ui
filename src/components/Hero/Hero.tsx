@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { IconBolt, IconArrowRight } from '../Icons'
 import styles from './Hero.module.css'
 
 const Hero = () => {
@@ -60,7 +61,17 @@ const Hero = () => {
           </div>
         </div>
 
-        {/* Illustrated Product Card */}
+        {/* Workflow Explanation (placed directly above the Product Showcase Card) */}
+        <div className={styles.workflowExplanation}>
+          <span className={styles.workflowTag}>
+            From target website URL to booked meetings — <span className={styles.movingGradientAccent}>in 1-click.</span>
+          </span>
+          <p className={styles.workflowText}>
+            Most outbound tools make you write static templates. GTMer's AI workers crawl each company website, extract deep context, find decision-makers, and write unique personalized emails on autopilot.
+          </p>
+        </div>
+
+        {/* Illustrated Product Card (Intact) */}
         <div className={styles.productShowcase}>
           <div className={styles.productCard}>
             {/* Window chrome */}
@@ -127,6 +138,18 @@ const Hero = () => {
               </div>
             </div>
           </div>
+        </div>
+
+        {/* Scrape Button (placed directly below the image card) */}
+        <div className={styles.scrapeWebsiteContainer}>
+          <Link
+            to="/scraper"
+            className={styles.scrapeWebsiteBtn}
+          >
+            <IconBolt size={18} />
+            Scrape a Website
+            <IconArrowRight size={16} />
+          </Link>
         </div>
       </div>
 

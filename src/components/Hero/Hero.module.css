@@ -377,6 +377,143 @@
   background: var(--color-success);
 }
 
+/* Workflow Explanation (No card background, compact text) */
+.workflowExplanation {
+  text-align: center;
+  margin-top: 1.25rem;
+  margin-bottom: 1.25rem;
+  max-width: 680px;
+  width: 100%;
+  padding: 0;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  animation: fadeInUp 0.7s ease 0.45s forwards;
+  opacity: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.workflowBadge {
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: #bf8520;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 2px;
+}
+
+.workflowTag {
+  font-family: var(--font-display, 'Inter', sans-serif);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #0f172a;
+  letter-spacing: -0.015em;
+  display: block;
+  line-height: 1.35;
+}
+
+.movingGradientAccent {
+  background: linear-gradient(120deg, #d4952a 0%, #0284c7 35%, #bf8520 70%, #0369a1 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shinyMovingText 3.5s linear infinite;
+  display: inline-block;
+  font-weight: 800;
+}
+
+@keyframes shinyMovingText {
+  0% { background-position: 0% center; }
+  50% { background-position: 100% center; }
+  100% { background-position: 0% center; }
+}
+
+.workflowText {
+  font-family: var(--font-sans, 'Inter', sans-serif);
+  font-size: 0.85rem;
+  font-weight: 400;
+  color: #475569;
+  line-height: 1.55;
+  max-width: 580px;
+  margin: 0 auto;
+}
+
+/* Process Description Text (under CTAs and trust signal) */
+.processDescription {
+  margin-top: 1.25rem;
+  padding: 10px 18px;
+  background: rgba(10, 31, 53, 0.45);
+  border: 1px solid rgba(77, 168, 218, 0.2);
+  border-radius: var(--radius-md, 8px);
+  font-family: var(--font-sans);
+  font-size: 0.88rem;
+  color: #0f2942;
+  font-weight: 500;
+  line-height: 1.5;
+  max-width: 680px;
+  text-align: center;
+  backdrop-filter: blur(8px);
+  animation: fadeInUp 0.7s ease 0.55s forwards;
+  opacity: 0;
+}
+
+.processDescriptionHighlight {
+  color: #0284c7;
+  font-weight: 700;
+}
+
+/* Scrape a Website Button (placed directly below the product card image) */
+.scrapeWebsiteContainer {
+  margin-top: 1.75rem;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  z-index: 5;
+  animation: fadeInUp 0.8s ease 0.65s forwards;
+  opacity: 0;
+}
+
+.scrapeWebsiteBtn {
+  height: 50px;
+  padding: 0 2rem;
+  background: linear-gradient(180deg, #e0a832 0%, #bf8520 100%);
+  color: #ffffff;
+  border-top: 1px solid rgba(255, 200, 80, 0.5);
+  border-left: 1px solid rgba(212, 149, 42, 0.4);
+  border-right: 1px solid rgba(160, 112, 25, 0.4);
+  border-bottom: 1px solid rgba(140, 95, 15, 0.5);
+  border-radius: var(--radius-md, 8px);
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  box-shadow: 0 2px 6px rgba(212, 149, 42, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+  letter-spacing: 0.02em;
+}
+
+.scrapeWebsiteBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(212, 149, 42, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  background: linear-gradient(180deg, #e8b440 0%, #c89028 100%);
+}
+
+.scrapeWebsiteBtn:active {
+  transform: translateY(1px);
+}
+
 /* ===== Product Showcase ===== */
 .productShowcase {
   width: 100%;

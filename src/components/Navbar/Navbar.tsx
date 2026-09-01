@@ -4,6 +4,7 @@ import styles from './Navbar.module.css'
 
 const NAV_LINKS = [
   { label: 'Product', path: '/product' },
+  { label: 'Scraper', path: '/scraper' },
   { label: 'Use Cases', path: '/use-cases' },
   { label: 'Pricing', path: '/pricing' },
   { label: 'Testimonials', path: '/testimonials' },
@@ -87,7 +88,7 @@ const Navbar = () => {
         {/* Right: CTAs */}
         <div className={styles.navRight}>
           <a
-            href="https://app.gtmer.ai"
+            href="https://app.gtmer.ai/login"
             className={styles.signInLink}
           >
             Sign in

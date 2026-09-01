@@ -1,9 +1,10 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
+import { getScrapedLeadPayload } from '../../utils/cookieUtils'
 import { IconArrowRight, IconMail, IconLock, IconUsers, IconGlobe, IconCheck } from '../Icons'
 import styles from './Signup.module.css'
 
-const Signup = () => {
+export const Signup = () => {
   const navigate = useNavigate()
   const location = useLocation()
   const isSuccess = location.pathname === '/signup/success'
@@ -17,6 +18,19 @@ const Signup = () => {
   })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [scrapedDomain, setScrapedDomain] = useState<string | null>(null)
+
+  useEffect(() => {
+    // Read scraped lead payload from cookies / local storage or URL query param
+    const searchParams = new URLSearchParams(location.search)
+    const domainFromUrl = searchParams.get('domain')
+    const leadPayload = getScrapedLeadPayload()
+
+    const domainToUse = domainFromUrl || leadPayload?.domain || null
+    if (domainToUse) {
+      setScrapedDomain(domainToUse)
+    }
+  }, [location])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -36,6 +50,8 @@ const Signup = () => {
     setLoading(true)
     setError(null)
 
+    const leadPayload = getScrapedLeadPayload()
+
     try {
       const response = await fetch('https://app.gtmer.ai/api/v1/auth/signup', {
         method: 'POST',
@@ -47,32 +63,34 @@ const Signup = () => {
           full_name: formData.fullName.trim(),
           email: formData.email.trim(),
           password: formData.password,
+          scraped_lead: leadPayload || (scrapedDomain ? { domain: scrapedDomain } : null),
         }),
       })
 
-      const data = await response.json()
-
       if (!response.ok) {
-        throw new Error(data.detail || 'Signup failed. Please try again.')
+        const errorData = await response.json().catch(() => ({}))
+        throw new Error(errorData.detail || errorData.message || 'Signup failed. Please try again.')
       }
 
-      // Success - navigate to success route with email in state
+      // Success -> navigate to success screen
       navigate('/signup/success', { state: { email: formData.email.trim() } })
-
-      // GTM Conversion tracking push
-      if (typeof window !== 'undefined') {
-        window.dataLayer = window.dataLayer || []
-        window.dataLayer.push({
-          event: 'signup_complete',
-          method: 'email',
-        })
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message)
+      } else {
+        setError('An unexpected error occurred. Please check your connection.')
       }
-    } catch (err: any) {
-      setError(err.message || 'Something went wrong. Please check your internet connection.')
     } finally {
       setLoading(false)
     }
   }
+
+  const leadPayload = getScrapedLeadPayload()
+  const activeDomain = scrapedDomain || leadPayload?.domain || null
+
+  const portalRedirectUrl = activeDomain
+    ? `https://app.gtmer.ai/login?domain=${encodeURIComponent(activeDomain)}&companyName=${encodeURIComponent(leadPayload?.companyName || '')}&industry=${encodeURIComponent(leadPayload?.primaryIndustry || '')}&action=import_scraped_lead&redirect=/dashboard`
+    : 'https://app.gtmer.ai/login?redirect=/dashboard'
 
   return (
     <section className={styles.section}>
@@ -82,72 +100,41 @@ const Signup = () => {
           ← Back to /gtmer
         </Link>
 
+        {/* Window Container */}
         <div className={styles.signupWindow}>
-          {/* Window Chrome Header */}
+          {/* Header Bar */}
           <div className={styles.windowHeader}>
             <div className={styles.windowDot} />
             <div className={styles.windowDot} />
             <div className={styles.windowDot} />
-            <span className={styles.windowTitle}>gtmer / register-account</span>
-            <span className={styles.windowStatus}>● secure</span>
+            <span className={styles.windowTitle}>gtmer / account-registration</span>
           </div>
 
           <div className={styles.windowBody}>
             {!isSuccess ? (
               <>
                 <div className={styles.headerText}>
-                  <h1 className={styles.title}>Create Your Account</h1>
+                  <h1 className={styles.title}>Start Automating Outbound</h1>
                   <p className={styles.subtitle}>
-                    Start deploying autonomous AI SDR agents to automate your outbound GTM pipeline.
+                    Create your GTMer workspace to deploy autonomous AI agents, automate prospect research, and generate hyper-personalized sales campaigns.
                   </p>
+                  {scrapedDomain && (
+                    <div style={{ marginTop: '10px', background: '#fffbeb', border: '1px solid #fde68a', borderRadius: '6px', padding: '8px 12px', fontSize: '0.82rem', color: '#92400e' }}>
+                      ⚡ <strong>Scraped Lead Attached:</strong> Registering will automatically import <strong>{scrapedDomain}</strong> as your first target prospect account!
+                    </div>
+                  )}
                 </div>
 
-                {error && <div className={styles.errorAlert}>{error}</div>}
+                {error && (
+                  <div className={styles.errorBox} role="alert">
+                    <span>⚠️ {error}</span>
+                  </div>
+                )}
 
                 <form onSubmit={handleSubmit} className={styles.form}>
-                  <div className={styles.inputGroup}>
-                    <label htmlFor="fullName" className={styles.inputLabel}>
-                      Full Name
-                    </label>
-                    <div className={styles.inputWrapper}>
-                      <IconUsers className={styles.inputIcon} size={16} />
-                      <input
-                        type="text"
-                        id="fullName"
-                        name="fullName"
-                        value={formData.fullName}
-                        onChange={handleChange}
-                        placeholder="John Doe"
-                        className={styles.input}
-                        required
-                        disabled={loading}
-                      />
-                    </div>
-                  </div>
-
-                  <div className={styles.inputGroup}>
-                    <label htmlFor="email" className={styles.inputLabel}>
-                      Work Email
-                    </label>
-                    <div className={styles.inputWrapper}>
-                      <IconMail className={styles.inputIcon} size={16} />
-                      <input
-                        type="email"
-                        id="email"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleChange}
-                        placeholder="john@company.com"
-                        className={styles.input}
-                        required
-                        disabled={loading}
-                      />
-                    </div>
-                  </div>
-
-                  <div className={styles.inputGroup}>
-                    <label htmlFor="orgName" className={styles.inputLabel}>
-                      Organization Name
+                  <div className={styles.formGroup}>
+                    <label htmlFor="orgName" className={styles.label}>
+                      Organization / Company Name
                     </label>
                     <div className={styles.inputWrapper}>
                       <IconGlobe className={styles.inputIcon} size={16} />
@@ -165,8 +152,48 @@ const Signup = () => {
                     </div>
                   </div>
 
-                  <div className={styles.inputGroup}>
-                    <label htmlFor="password" className={styles.inputLabel}>
+                  <div className={styles.formGroup}>
+                    <label htmlFor="fullName" className={styles.label}>
+                      Full Name
+                    </label>
+                    <div className={styles.inputWrapper}>
+                      <IconUsers className={styles.inputIcon} size={16} />
+                      <input
+                        type="text"
+                        id="fullName"
+                        name="fullName"
+                        value={formData.fullName}
+                        onChange={handleChange}
+                        placeholder="Alex Morgan"
+                        className={styles.input}
+                        required
+                        disabled={loading}
+                      />
+                    </div>
+                  </div>
+
+                  <div className={styles.formGroup}>
+                    <label htmlFor="email" className={styles.label}>
+                      Work Email Address
+                    </label>
+                    <div className={styles.inputWrapper}>
+                      <IconMail className={styles.inputIcon} size={16} />
+                      <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        value={formData.email}
+                        onChange={handleChange}
+                        placeholder="alex@acme.com"
+                        className={styles.input}
+                        required
+                        disabled={loading}
+                      />
+                    </div>
+                  </div>
+
+                  <div className={styles.formGroup}>
+                    <label htmlFor="password" className={styles.label}>
                       Password
                     </label>
                     <div className={styles.inputWrapper}>
@@ -194,7 +221,7 @@ const Signup = () => {
 
                 <p className={styles.footerNote}>
                   Already have an account?{' '}
-                  <a href="https://app.gtmer.ai" className={styles.loginLink}>
+                  <a href={portalRedirectUrl} className={styles.loginLink}>
                     Sign in here
                   </a>
                 </p>
@@ -210,7 +237,7 @@ const Signup = () => {
                   Please click the link in the email to activate your account and log in.
                 </p>
                 <div className={styles.successActions}>
-                  <a href="https://app.gtmer.ai" className={styles.successBtn}>
+                  <a href={portalRedirectUrl} className={styles.successBtn}>
                     Go to Portal Dashboard
                   </a>
                 </div>

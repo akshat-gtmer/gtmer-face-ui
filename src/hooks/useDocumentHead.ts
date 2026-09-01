@@ -79,6 +79,11 @@ const VIEW_HEAD: Record<string, HeadConfig> = {
     description:
       'Verification email sent. Please verify your work email address to activate your GTMer account.',
   },
+  '/scraper': {
+    title: 'Autonomous Web Scraper & Site Intelligence — GTMer',
+    description:
+      'Crawl any target company domain to extract decision-maker context, page structures, technology stack signatures, and buying intent signals in seconds.',
+  },
 }
 
 /**
