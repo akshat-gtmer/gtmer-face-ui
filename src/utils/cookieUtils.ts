@@ -6,6 +6,7 @@
 
 const COOKIE_NAME = 'gtmer_scraped_company'
 const LEAD_PAYLOAD_COOKIE = 'gtmer_lead_payload'
+const SESSION_ID_COOKIE = 'gtmer_scrape_session_id'
 
 export interface ScrapedCompanyCookie {
   domain: string
@@ -13,6 +14,7 @@ export interface ScrapedCompanyCookie {
 }
 
 export interface FullLeadPayload {
+  sessionId?: string
   domain: string
   companyName: string
   primaryIndustry: string
@@ -49,6 +51,25 @@ export const setCookie = (name: string, value: string, days = 30): void => {
     expires = '; expires=' + date.toUTCString()
   }
   document.cookie = `${name}=${encodeURIComponent(value)}${expires}; path=/; SameSite=Lax`
+}
+
+/**
+ * Gets or creates a unique session ID for tracking anonymous scrape sessions
+ */
+export const getOrCreateScrapeSessionId = (): string => {
+  if (typeof window !== 'undefined') {
+    const localId = localStorage.getItem(SESSION_ID_COOKIE)
+    if (localId) return localId
+  }
+  const cookieId = getCookie(SESSION_ID_COOKIE)
+  if (cookieId) return cookieId
+
+  const newId = `session_sec_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`
+  setCookie(SESSION_ID_COOKIE, newId, 30)
+  if (typeof window !== 'undefined') {
+    try { localStorage.setItem(SESSION_ID_COOKIE, newId) } catch { /* pass */ }
+  }
+  return newId
 }
 
 /**

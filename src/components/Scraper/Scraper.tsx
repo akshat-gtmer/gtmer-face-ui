@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { executeWebScrape, type ScraperResult, type ScrapedPageDetail } from '../../services/scraperEngine'
-import { checkDemoLimitBlocked, setScrapedCompanyCookie, setScrapedLeadPayload } from '../../utils/cookieUtils'
+import { checkDemoLimitBlocked, setScrapedCompanyCookie, setScrapedLeadPayload, getOrCreateScrapeSessionId } from '../../utils/cookieUtils'
 import { IconArrowRight, IconBolt } from '../Icons'
 import styles from './Scraper.module.css'
 
@@ -13,8 +13,6 @@ export const Scraper = () => {
   const [results, setResults] = useState<ScraperResult | null>(null)
   const [selectedPageIndex, setSelectedPageIndex] = useState(0)
   const [blockedInfo, setBlockedInfo] = useState<{ blocked: boolean; existingDomain?: string } | null>(null)
-  const [showEmailCard, setShowEmailCard] = useState(false)
-  const [copiedState, setCopiedState] = useState(false)
 
   const handleScrape = async (targetUrl?: string) => {
     const urlToScrape = targetUrl || urlInput
@@ -28,7 +26,6 @@ export const Scraper = () => {
     }
 
     setBlockedInfo(null)
-    setShowEmailCard(false)
     setLoading(true)
     setActiveStage(1)
     setConsoleLog('Connecting to web crawler service...')
@@ -40,8 +37,10 @@ export const Scraper = () => {
       })
 
       // Rule 1: Set session cookie & save full structured lead payload upon scrape completion
+      const sessionId = getOrCreateScrapeSessionId()
       setScrapedCompanyCookie(data.domain)
       setScrapedLeadPayload({
+        sessionId,
         domain: data.domain,
         companyName: data.companyName,
         primaryIndustry: data.primaryIndustry,
@@ -50,6 +49,18 @@ export const Scraper = () => {
         primaryHeadline: data.pages[0]?.h1[0] || data.tagline,
         scrapedAt: new Date().toISOString(),
       })
+
+      // Post to backend session endpoint
+      fetch('https://dev.gtmer.ai/api/v1/scraper/sessions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          session_id: sessionId,
+          domain: data.domain,
+          company_name: data.companyName,
+          scraped_payload: data,
+        }),
+      }).catch(() => { /* silent fallback */ })
 
       setResults(data)
       setSelectedPageIndex(0)
@@ -61,32 +72,6 @@ export const Scraper = () => {
   }
 
   const selectedPage: ScrapedPageDetail | null = results && results.pages[selectedPageIndex] ? results.pages[selectedPageIndex] : null
-
-  // Generate Email Content
-  const primaryPage = results?.pages[0]
-  const headlineExcerpt = primaryPage?.h1[0] || 'your core business capabilities'
-  const emailSubject = `Quick question on ${results?.companyName || 'your'}'s outbound pipeline`
-  const emailBody = `Hi [Decision-Maker Name],
-
-I was checking out ${results?.domain || 'your website'} and noticed your focus on "${headlineExcerpt}".
-
-With ${results?.companyName || 'your team'} expanding operations in ${results?.primaryIndustry || 'B2B Software'}, GTMer's autonomous AI SDR workers can help your team discover qualified decision-makers, extract deep site context, and send hyper-personalized email campaigns on autopilot.
-
-Would you be open to a quick 5-min demo this Thursday to see how GTMer delivers 18% reply rates?
-
-Best regards,
-GTMer AI SDR Agent`
-
-  const handleCopyEmail = () => {
-    navigator.clipboard.writeText(`Subject: ${emailSubject}\n\n${emailBody}`)
-    setCopiedState(true)
-    setTimeout(() => setCopiedState(false), 2500)
-  }
-
-  // Construct full lead transfer link for login/portal redirect
-  const leadLoginUrl = results
-    ? `https://app.gtmer.ai/login?domain=${encodeURIComponent(results.domain)}&companyName=${encodeURIComponent(results.companyName)}&industry=${encodeURIComponent(results.primaryIndustry)}&action=import_scraped_lead&redirect=/dashboard`
-    : 'https://app.gtmer.ai/login?redirect=/dashboard'
 
   return (
     <section className={styles.section}>
@@ -151,7 +136,7 @@ GTMer AI SDR Agent`
                   To scrape unlimited company websites and export enriched prospect profiles, please sign in to your GTMer account.
                 </div>
                 <a
-                  href={`https://app.gtmer.ai/login?domain=${encodeURIComponent(blockedInfo.existingDomain || '')}&action=import_scraped_lead&redirect=/leads`}
+                  href={`https://dev.gtmer.ai/login?session_id=${getOrCreateScrapeSessionId()}&domain=${encodeURIComponent(blockedInfo.existingDomain || '')}&action=claim_lead&redirect=/dashboard`}
                   className={styles.alertBtn}
                 >
                   Sign In to Scrape Unlimited Companies
@@ -167,7 +152,7 @@ GTMer AI SDR Agent`
                 { step: '2', label: 'Summary', val: results ? 'Extracted' : 'Ready' },
                 { step: '3', label: 'Pages', val: results ? `${results.pages.length} pages` : '0 discovered' },
                 { step: '4', label: 'Signals', val: results ? `${results.techStack.length} signals` : '0 signals' },
-                { step: '5', label: 'Outreach', val: results ? 'Campaign Ready' : 'Ready' },
+                { step: '5', label: 'Intelligence', val: results ? 'Complete' : 'Ready' },
               ].map((st, i) => {
                 const stageNum = i + 1
                 const isDone = activeStage > stageNum || (results && !loading)
@@ -223,16 +208,21 @@ GTMer AI SDR Agent`
                   {/* Left Column: Scraped Pages List */}
                   <div className={styles.pageListContainer}>
                     <div className={styles.pageListHeader}>Scraped Pages ({results.pages.length})</div>
-                    {results.pages.map((pg, idx) => (
-                      <div
-                        key={pg.path}
-                        className={`${styles.pageRow} ${selectedPageIndex === idx ? styles.pageRowActive : ''}`}
-                        onClick={() => setSelectedPageIndex(idx)}
-                      >
-                        <span className={styles.pagePath}>📄 {pg.path}</span>
-                        <span className={styles.pageBadge}>{pg.status}</span>
-                      </div>
-                    ))}
+                    {results.pages.map((pg, idx) => {
+                      let displayPath = pg.path
+                      try { displayPath = decodeURIComponent(pg.path) } catch { /* pass */ }
+                      return (
+                        <div
+                          key={pg.path}
+                          className={`${styles.pageRow} ${selectedPageIndex === idx ? styles.pageRowActive : ''}`}
+                          onClick={() => setSelectedPageIndex(idx)}
+                          title={displayPath}
+                        >
+                          <span className={styles.pagePath}>📄 {displayPath}</span>
+                          <span className={styles.pageBadge}>{pg.status}</span>
+                        </div>
+                      )
+                    })}
                   </div>
 
                   {/* Right Column: Detailed Business Explanation Breakdown */}
@@ -243,9 +233,9 @@ GTMer AI SDR Agent`
                         <div className={styles.detailUrl}>{selectedPage.url}</div>
                       </div>
 
-                      {/* 1. Executive Page Summary */}
+                      {/* 1. Page Meta Description & Summary */}
                       <div className={styles.sectionBlock}>
-                        <div className={styles.sectionTitle}>Executive Page Summary</div>
+                        <div className={styles.sectionTitle}>Page Summary</div>
                         <div className={styles.sectionValue}>
                           {selectedPage.executiveSummary || selectedPage.metaDescription}
                         </div>
@@ -254,43 +244,36 @@ GTMer AI SDR Agent`
                       {/* 2. Target Buyer Persona / Audience */}
                       {selectedPage.targetAudience && (
                         <div className={styles.sectionBlock}>
-                          <div className={styles.sectionTitle}>Target Buyer Persona & Audience</div>
+                          <div className={styles.sectionTitle}>Target Persona & Audience</div>
                           <div className={styles.sectionValue} style={{ color: '#0369a1', fontWeight: 500 }}>
                             🎯 {selectedPage.targetAudience}
                           </div>
                         </div>
                       )}
 
-                      {/* 3. Core Value Propositions & Headlines */}
+                      {/* 3. Key Value Propositions & Section Highlights */}
                       <div className={styles.sectionBlock}>
-                        <div className={styles.sectionTitle}>Key Value Propositions & Main Headlines</div>
-                        <div className={styles.headersList}>
-                          {selectedPage.h1.map((headline, i) => (
-                            <div key={i} className={styles.headerItem}>
-                              <span style={{ color: '#64748b' }}>•</span>
-                              <span><strong>Primary Value Proposition:</strong> "{headline}"</span>
-                            </div>
-                          ))}
-                          {selectedPage.h2.map((feature, i) => (
-                            <div key={i} className={styles.headerItem} style={{ opacity: 0.9 }}>
-                              <span style={{ color: '#64748b' }}>•</span>
-                              <span><strong>Key Feature Highlight:</strong> "{feature}"</span>
-                            </div>
-                          ))}
-                        </div>
+                        <div className={styles.sectionTitle}>Key Value Propositions & Core Focus</div>
+                        
+                        {selectedPage.h1.length > 0 && (
+                          <div style={{ background: '#f0f9ff', borderLeft: '3px solid #0284c7', padding: '10px 14px', borderRadius: '4px', marginBottom: '10px', color: '#0369a1', fontWeight: 600, fontSize: '0.88rem' }}>
+                            💡 Main Core Headline: "{selectedPage.h1[0]}"
+                          </div>
+                        )}
+
+                        {selectedPage.h2.length > 0 && (
+                          <div className={styles.headersList} style={{ gap: '6px' }}>
+                            {selectedPage.h2.map((feature, i) => (
+                              <div key={i} className={styles.headerItem} style={{ background: '#ffffff', border: '1px solid #e2e8f0', padding: '7px 12px', borderRadius: '4px', fontSize: '0.83rem', color: '#334155', display: 'flex', alignItems: 'center' }}>
+                                <span style={{ color: '#0284c7', fontWeight: 700, marginRight: '8px' }}>✦</span>
+                                <span>{feature}</span>
+                              </div>
+                            ))}
+                          </div>
+                        )}
                       </div>
 
-                      {/* 4. Sales Outreach Hook Suggestion */}
-                      {selectedPage.outboundPitchHook && (
-                        <div className={styles.sectionBlock} style={{ background: '#fef3c7', padding: '10px 12px', borderRadius: '6px', border: '1px solid #fde68a' }}>
-                          <div className={styles.sectionTitle} style={{ color: '#92400e' }}>💡 Suggested AI Outreach Email Angle</div>
-                          <div className={styles.sectionValue} style={{ color: '#78350f', fontSize: '0.83rem', fontStyle: 'italic' }}>
-                            "{selectedPage.outboundPitchHook}"
-                          </div>
-                        </div>
-                      )}
-
-                      {/* 5. Growth Signals & Technology Capabilities */}
+                      {/* 4. Growth Signals & Technology Capabilities */}
                       <div className={styles.sectionBlock}>
                         <div className={styles.sectionTitle}>Growth Signals & Technology Capabilities</div>
                         <div className={styles.tagGroup}>
@@ -310,59 +293,17 @@ GTMer AI SDR Agent`
                   )}
                 </div>
 
-                {/* Bottom Primary Action Button */}
+                {/* Bottom Primary Action Button (Redirects to Login portal with session_id & scraped domain payload) */}
                 <div className={styles.bottomCtaSection}>
-                  <button
-                    onClick={() => setShowEmailCard(true)}
+                  <a
+                    href={`https://dev.gtmer.ai/login?session_id=${getOrCreateScrapeSessionId()}&domain=${encodeURIComponent(results.domain)}&companyName=${encodeURIComponent(results.companyName)}&industry=${encodeURIComponent(results.primaryIndustry)}&action=claim_lead&redirect=/dashboard`}
                     className={styles.generateEmailBtn}
                   >
                     <IconBolt size={18} />
                     Generate a Personalized Email
                     <IconArrowRight size={16} />
-                  </button>
+                  </a>
                 </div>
-
-                {/* Interactive AI Personalized Email Draft Card (Renders directly inside page) */}
-                {showEmailCard && (
-                  <div className={styles.emailDraftCard}>
-                    <div className={styles.emailDraftHeader}>
-                      <div className={styles.emailDraftTitle}>
-                        <IconBolt size={20} style={{ color: '#d4952a' }} />
-                        Generated AI Sales Outreach Email Draft
-                      </div>
-                      <span className={styles.pageBadge}>Ready to Send</span>
-                    </div>
-
-                    <div className={styles.emailMetaRow}>
-                      <div className={styles.emailMetaItem}>
-                        <strong>Target Domain:</strong> {results.domain}
-                      </div>
-                      <div className={styles.emailMetaItem}>
-                        <strong>To Prospect:</strong> Decision-Maker (VP / Founder) @ {results.domain}
-                      </div>
-                      <div className={styles.emailMetaItem}>
-                        <strong>Subject Line:</strong> {emailSubject}
-                      </div>
-                    </div>
-
-                    <div className={styles.emailBodyText}>
-                      {emailBody}
-                    </div>
-
-                    <div className={styles.emailActionRow}>
-                      <button onClick={handleCopyEmail} className={styles.copyBtn}>
-                        {copiedState ? '✓ Copied to Clipboard!' : '📋 Copy Email Draft'}
-                      </button>
-                      <a
-                        href={leadLoginUrl}
-                        className={styles.launchBtn}
-                      >
-                        🚀 Launch Automated Outreach Campaign
-                        <IconArrowRight size={14} />
-                      </a>
-                    </div>
-                  </div>
-                )}
               </>
             )}
           </div>
