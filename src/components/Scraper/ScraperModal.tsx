@@ -36,10 +36,12 @@ export const ScraperModal: React.FC<ScraperModalProps> = ({ isOpen, onClose, ini
     const urlToScrape = targetUrl || urlInput
     if (!urlToScrape.trim()) return
 
-    // Rule 2 Check: Limit 1 company scrape per session
+    // Limit check: 1 company scrape per anonymous demo session. On scanning a 2nd website, redirect directly to login page!
     const limitCheck = checkDemoLimitBlocked(urlToScrape)
     if (limitCheck.blocked) {
-      setBlockedInfo(limitCheck)
+      const sessionId = getOrCreateScrapeSessionId()
+      const targetDomain = limitCheck.existingDomain || urlToScrape
+      window.location.href = `https://dev.gtmer.ai/login?session_id=${encodeURIComponent(sessionId)}&target_domain=${encodeURIComponent(targetDomain)}&action=claim_lead&redirect=/dashboard`
       return
     }
 
