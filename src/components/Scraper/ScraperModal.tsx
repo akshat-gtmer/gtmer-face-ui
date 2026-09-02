@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { executeWebScrape, type ScraperResult, type ScrapedPageDetail } from '../../services/scraperEngine'
-import { checkDemoLimitBlocked, setScrapedCompanyCookie } from '../../utils/cookieUtils'
+import { checkDemoLimitBlocked, setScrapedCompanyCookie, setScrapedLeadPayload, getOrCreateScrapeSessionId } from '../../utils/cookieUtils'
 import { IconArrowRight, IconBolt } from '../Icons'
 import styles from './ScraperModal.module.css'
 
@@ -54,8 +54,31 @@ export const ScraperModal: React.FC<ScraperModalProps> = ({ isOpen, onClose, ini
         setActiveStage(stage)
       })
 
-      // Rule 1: Set cookie upon scrape completion
+      // Rule 1: Set cookie & session payload upon scrape completion
+      const sessionId = getOrCreateScrapeSessionId()
       setScrapedCompanyCookie(data.domain)
+      setScrapedLeadPayload({
+        sessionId,
+        domain: data.domain,
+        companyName: data.companyName,
+        primaryIndustry: data.primaryIndustry,
+        techStack: data.techStack,
+        totalPagesScraped: data.totalPagesScraped,
+        primaryHeadline: data.pages[0]?.h1[0] || data.tagline,
+        scrapedAt: new Date().toISOString(),
+      })
+
+      // Send payload to backend session ingest endpoint
+      fetch('https://dev.gtmer.ai/api/v1/scraper/sessions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          session_id: sessionId,
+          domain: data.domain,
+          company_name: data.companyName,
+          scraped_payload: data,
+        }),
+      }).catch(() => { /* silent fallback */ })
 
       setResults(data)
       setSelectedPageIndex(0)
@@ -143,7 +166,7 @@ export const ScraperModal: React.FC<ScraperModalProps> = ({ isOpen, onClose, ini
                 You have already scraped <strong>{blockedInfo.existingDomain}</strong> during this demo session.
                 To scrape unlimited company websites and export enriched prospect profiles, please sign in to your GTMer account.
               </div>
-              <a href="https://app.gtmer.ai/login" className={styles.alertBtn}>
+              <a href="https://dev.gtmer.ai/login" className={styles.alertBtn}>
                 Sign In to Scrape Unlimited Companies
                 <IconArrowRight size={14} />
               </a>
@@ -213,16 +236,21 @@ export const ScraperModal: React.FC<ScraperModalProps> = ({ isOpen, onClose, ini
                 {/* Left: Scraped Pages List */}
                 <div className={styles.pageListContainer}>
                   <div className={styles.pageListHeader}>Scraped Pages ({results.pages.length})</div>
-                  {results.pages.map((pg, idx) => (
-                    <div
-                      key={pg.path}
-                      className={`${styles.pageRow} ${selectedPageIndex === idx ? styles.pageRowActive : ''}`}
-                      onClick={() => setSelectedPageIndex(idx)}
-                    >
-                      <span className={styles.pagePath}>🗂️ {pg.path}</span>
-                      <span className={styles.pageBadge}>{pg.status}</span>
-                    </div>
-                  ))}
+                  {results.pages.map((pg, idx) => {
+                    let displayPath = pg.path
+                    try { displayPath = decodeURIComponent(pg.path) } catch { /* pass */ }
+                    return (
+                      <div
+                        key={pg.path}
+                        className={`${styles.pageRow} ${selectedPageIndex === idx ? styles.pageRowActive : ''}`}
+                        onClick={() => setSelectedPageIndex(idx)}
+                        title={displayPath}
+                      >
+                        <span className={styles.pagePath}>🗂️ {displayPath}</span>
+                        <span className={styles.pageBadge}>{pg.status}</span>
+                      </div>
+                    )
+                  })}
                 </div>
 
                 {/* Right: Selected Page Details */}
@@ -239,15 +267,24 @@ export const ScraperModal: React.FC<ScraperModalProps> = ({ isOpen, onClose, ini
                     </div>
 
                     <div className={styles.sectionBlock}>
-                      <div className={styles.sectionTitle}>Extracted Headings (H1 & H2)</div>
-                      <div className={styles.headersList}>
-                        {selectedPage.h1.map((h, i) => (
-                          <div key={i} className={styles.headerItem}>H1: "{h}"</div>
-                        ))}
-                        {selectedPage.h2.map((h, i) => (
-                          <div key={i} className={styles.headerItem} style={{ opacity: 0.85 }}>H2: "{h}"</div>
-                        ))}
-                      </div>
+                      <div className={styles.sectionTitle}>Key Value Propositions & Core Focus</div>
+                      
+                      {selectedPage.h1.length > 0 && (
+                        <div style={{ background: 'rgba(77, 168, 218, 0.12)', borderLeft: '3px solid #7dd3fc', padding: '10px 14px', borderRadius: '4px', marginBottom: '10px', color: '#e8f0f8', fontWeight: 600, fontSize: '0.88rem' }}>
+                          💡 Main Core Headline: "{selectedPage.h1[0]}"
+                        </div>
+                      )}
+
+                      {selectedPage.h2.length > 0 && (
+                        <div className={styles.headersList} style={{ gap: '6px' }}>
+                          {selectedPage.h2.map((feature, i) => (
+                            <div key={i} className={styles.headerItem} style={{ background: 'rgba(6, 21, 38, 0.6)', border: '1px solid rgba(77, 168, 218, 0.2)', padding: '7px 12px', borderRadius: '4px', fontSize: '0.83rem', color: '#e8f0f8', display: 'flex', alignItems: 'center' }}>
+                              <span style={{ color: '#7dd3fc', fontWeight: 700, marginRight: '8px' }}>✦</span>
+                              <span>{feature}</span>
+                            </div>
+                          ))}
+                        </div>
+                      )}
                     </div>
 
                     <div className={styles.sectionBlock}>
@@ -268,7 +305,7 @@ export const ScraperModal: React.FC<ScraperModalProps> = ({ isOpen, onClose, ini
               {/* Bottom Action CTA Button */}
               <div className={styles.bottomCtaSection}>
                 <a
-                  href={`https://app.gtmer.ai/login?action=generate_email&target_domain=${results.domain}`}
+                  href={`https://dev.gtmer.ai/login?session_id=${getOrCreateScrapeSessionId()}&target_domain=${encodeURIComponent(results.domain)}&action=claim_lead`}
                   className={styles.generateEmailBtn}
                 >
                   <IconBolt size={18} />

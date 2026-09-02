@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
-import { getScrapedLeadPayload } from '../../utils/cookieUtils'
+import { getScrapedLeadPayload, getOrCreateScrapeSessionId } from '../../utils/cookieUtils'
 import { IconArrowRight, IconMail, IconLock, IconUsers, IconGlobe, IconCheck } from '../Icons'
 import styles from './Signup.module.css'
 
@@ -40,7 +40,7 @@ export const Signup = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    
+
     // Basic validations
     if (!formData.fullName.trim()) return setError('Full name is required.')
     if (!formData.email.trim()) return setError('Email address is required.')
@@ -53,7 +53,7 @@ export const Signup = () => {
     const leadPayload = getScrapedLeadPayload()
 
     try {
-      const response = await fetch('https://app.gtmer.ai/api/v1/auth/signup', {
+      const response = await fetch('https://dev.gtmer.ai/api/v1/auth/signup', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -87,10 +87,11 @@ export const Signup = () => {
 
   const leadPayload = getScrapedLeadPayload()
   const activeDomain = scrapedDomain || leadPayload?.domain || null
+  const sessionId = leadPayload?.sessionId || getOrCreateScrapeSessionId()
 
   const portalRedirectUrl = activeDomain
-    ? `https://app.gtmer.ai/login?domain=${encodeURIComponent(activeDomain)}&companyName=${encodeURIComponent(leadPayload?.companyName || '')}&industry=${encodeURIComponent(leadPayload?.primaryIndustry || '')}&action=import_scraped_lead&redirect=/dashboard`
-    : 'https://app.gtmer.ai/login?redirect=/dashboard'
+    ? `https://dev.gtmer.ai/login?session_id=${encodeURIComponent(sessionId)}&domain=${encodeURIComponent(activeDomain)}&companyName=${encodeURIComponent(leadPayload?.companyName || '')}&industry=${encodeURIComponent(leadPayload?.primaryIndustry || '')}&action=claim_lead&redirect=/dashboard`
+    : `https://dev.gtmer.ai/login?session_id=${encodeURIComponent(sessionId)}&redirect=/dashboard`
 
   return (
     <section className={styles.section}>
@@ -233,7 +234,7 @@ export const Signup = () => {
                 </div>
                 <h2 className={styles.successTitle}>Verify Your Email</h2>
                 <p className={styles.successDesc}>
-                  We have sent a verification link to <strong>{successEmail || formData.email}</strong>. 
+                  We have sent a verification link to <strong>{successEmail || formData.email}</strong>.
                   Please click the link in the email to activate your account and log in.
                 </p>
                 <div className={styles.successActions}>
