@@ -17,6 +17,8 @@ export const ScraperModal: React.FC<ScraperModalProps> = ({ isOpen, onClose, ini
   const [activeStage, setActiveStage] = useState(0)
   const [results, setResults] = useState<ScraperResult | null>(null)
   const [selectedPageIndex, setSelectedPageIndex] = useState(0)
+  const [blockedInfo, setBlockedInfo] = useState<{ blocked: boolean; existingDomain?: string } | null>(null)
+
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden'
@@ -34,14 +36,16 @@ export const ScraperModal: React.FC<ScraperModalProps> = ({ isOpen, onClose, ini
     const urlToScrape = targetUrl || urlInput
     if (!urlToScrape.trim()) return
 
-    // Rule 2 Check: Limit 1 company scrape per session
+    // Limit check: 1 company scrape per anonymous demo session. On scanning a 2nd website, redirect directly to login page!
     const limitCheck = checkDemoLimitBlocked(urlToScrape)
     if (limitCheck.blocked) {
       const sessionId = getOrCreateScrapeSessionId()
-      window.location.href = `https://dev.gtmer.ai/login?session_id=${encodeURIComponent(sessionId)}&target_domain=${encodeURIComponent(urlToScrape)}&action=claim_lead&redirect=/dashboard`
+      const targetDomain = limitCheck.existingDomain || urlToScrape
+      window.location.href = `https://dev.gtmer.ai/login?session_id=${encodeURIComponent(sessionId)}&target_domain=${encodeURIComponent(targetDomain)}&action=claim_lead&redirect=/dashboard`
       return
     }
 
+    setBlockedInfo(null)
     setLoading(true)
     setActiveStage(1)
     setConsoleLog('Connecting to crawler endpoint...')
@@ -153,6 +157,23 @@ export const ScraperModal: React.FC<ScraperModalProps> = ({ isOpen, onClose, ini
               ))}
             </div>
           </div>
+
+          {/* Rule 2 Limit Warning Alert */}
+          {blockedInfo && blockedInfo.blocked && (
+            <div className={styles.limitAlert}>
+              <div className={styles.alertHeader}>
+                ⚠️ Free Demo Limit Reached (1 Company Scrape per Session)
+              </div>
+              <div className={styles.alertText}>
+                You have already scraped <strong>{blockedInfo.existingDomain}</strong> during this demo session.
+                To scrape unlimited company websites and export enriched prospect profiles, please sign in to your GTMer account.
+              </div>
+              <a href="https://dev.gtmer.ai/login" className={styles.alertBtn}>
+                Sign In to Scrape Unlimited Companies
+                <IconArrowRight size={14} />
+              </a>
+            </div>
+          )}
 
           {/* 5-Stage Pipeline Bar */}
           <div className={styles.pipelineStrip}>
