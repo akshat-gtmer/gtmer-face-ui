@@ -12,20 +12,19 @@ export const Scraper = () => {
   const [activeStage, setActiveStage] = useState(0)
   const [results, setResults] = useState<ScraperResult | null>(null)
   const [selectedPageIndex, setSelectedPageIndex] = useState(0)
-  const [blockedInfo, setBlockedInfo] = useState<{ blocked: boolean; existingDomain?: string } | null>(null)
 
   const handleScrape = async (targetUrl?: string) => {
     const urlToScrape = targetUrl || urlInput
     if (!urlToScrape.trim()) return
 
-    // Rule 2 Check: Limit 1 company scrape per session (triggers only on 2nd DIFFERENT company scan)
+    // Rule 2 Check: Limit 1 company scrape per session — directly redirect to login page for 2nd company scan
     const limitCheck = checkDemoLimitBlocked(urlToScrape)
     if (limitCheck.blocked) {
-      setBlockedInfo(limitCheck)
+      const sessionId = getOrCreateScrapeSessionId()
+      window.location.href = `https://dev.gtmer.ai/login?session_id=${encodeURIComponent(sessionId)}&target_domain=${encodeURIComponent(urlToScrape)}&action=claim_lead&redirect=/dashboard`
       return
     }
 
-    setBlockedInfo(null)
     setLoading(true)
     setActiveStage(1)
     setConsoleLog('Connecting to web crawler service...')
@@ -107,10 +106,7 @@ export const Scraper = () => {
                   type="text"
                   className={styles.urlInput}
                   value={urlInput}
-                  onChange={e => {
-                    setUrlInput(e.target.value)
-                    setBlockedInfo(null)
-                  }}
+                  onChange={e => setUrlInput(e.target.value)}
                   placeholder="Enter company website URL (e.g. https://yourcompany.com)"
                   disabled={loading}
                 />
@@ -124,26 +120,6 @@ export const Scraper = () => {
                 </button>
               </div>
             </div>
-
-            {/* Rule 2 Limit Warning Alert */}
-            {blockedInfo && blockedInfo.blocked && (
-              <div className={styles.limitAlert}>
-                <div className={styles.alertHeader}>
-                  ⚠️ Free Demo Limit Reached (1 Company Scrape per Session)
-                </div>
-                <div className={styles.alertText}>
-                  You have already scraped <strong>{blockedInfo.existingDomain}</strong> during this demo session.
-                  To scrape unlimited company websites and export enriched prospect profiles, please sign in to your GTMer account.
-                </div>
-                <a
-                  href={`https://dev.gtmer.ai/login?session_id=${getOrCreateScrapeSessionId()}&domain=${encodeURIComponent(blockedInfo.existingDomain || '')}&action=claim_lead&redirect=/dashboard`}
-                  className={styles.alertBtn}
-                >
-                  Sign In to Scrape Unlimited Companies
-                  <IconArrowRight size={14} />
-                </a>
-              </div>
-            )}
 
             {/* 5-Stage Pipeline Bar */}
             <div className={styles.pipelineStrip}>
