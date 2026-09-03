@@ -1,0 +1,786 @@
+.emailCenterWrapper {
+  width: 100%;
+  min-height: 100vh;
+  background-color: #f6f5f0;
+  color: #1e293b;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Window Chrome Header Bar - White Background */
+.windowChromeHeader {
+  height: 42px;
+  background-color: #ffffff;
+  border-bottom: 1px solid #e2e8f0;
+  padding: 0 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  user-select: none;
+}
+
+.windowDots {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.windowDotRed {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #ff5f56;
+}
+
+.windowDotYellow {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #ffbd2e;
+}
+
+.windowDotGreen {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #27c93f;
+}
+
+.windowChromeTitle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono, monospace), monospace;
+  font-size: 0.78rem;
+  color: #0f172a;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.windowChromeStatus {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.statusLiveDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: #10b981;
+  box-shadow: 0 0 8px #10b981;
+}
+
+.statusText {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #64748b;
+  font-family: var(--font-mono, monospace), monospace;
+}
+
+.closeBtn {
+  background: transparent;
+  border: none;
+  color: #64748b;
+  font-size: 1.1rem;
+  line-height: 1;
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-left: 8px;
+  transition: all 0.15s ease;
+}
+
+.closeBtn:hover {
+  background-color: rgba(239, 68, 68, 0.15);
+  color: #ef4444;
+}
+
+/* Internal Sub-header Navigation Bar (Soft Sky Blue Header from Screenshot) */
+.topNavbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 24px;
+  background-color: #cbe2f7;
+  border-bottom: 1px solid #b2d4f3;
+}
+
+.navLeft {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brandSlash {
+  font-weight: 800;
+  font-size: 1.05rem;
+  color: #0f172a;
+  letter-spacing: -0.02em;
+}
+
+.navTitle {
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: #1e3a8a;
+}
+
+.navRight {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.navToolBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  background-color: rgba(255, 255, 255, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  border-radius: 6px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #1e293b;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.navToolBtn:hover {
+  background-color: #ffffff;
+  color: #0f172a;
+}
+
+/* Layout: Sidebars + Expanded Main Workspace */
+.appBodyLayout {
+  display: flex;
+  flex: 1;
+  width: 100%;
+  background-color: #f6f5f0;
+  min-height: calc(100vh - 84px);
+}
+
+/* 1. Main Primary Vertical Sidebar (Warm Light Beige Tint from Screenshot) */
+.primarySidebar {
+  width: 175px;
+  background-color: #f5f4ef;
+  border-right: 1px solid #e5e3dc;
+  display: flex;
+  flex-direction: column;
+  padding: 18px 14px;
+  flex-shrink: 0;
+}
+
+.sidebarLogo {
+  font-weight: 800;
+  font-size: 1.15rem;
+  color: #0f172a;
+  margin-bottom: 26px;
+  padding-left: 8px;
+}
+
+.primaryNav {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  height: 100%;
+}
+
+.navItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #525252;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.navItem:hover {
+  background-color: #eae8e1;
+  color: #0f172a;
+}
+
+.navItemActive {
+  background-color: #ffffff;
+  color: #0f172a;
+  font-weight: 800;
+  border-left: 3px solid #d97706;
+  border-radius: 0 6px 6px 0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.navItemBottom {
+  margin-top: auto;
+}
+
+/* 2. Secondary Sub-Sidebar (OUTREACH Menu from Screenshot) */
+.secondarySidebar {
+  width: 185px;
+  background-color: #f7f6f1;
+  border-right: 1px solid #e5e3dc;
+  padding: 20px 14px;
+  flex-shrink: 0;
+}
+
+.subSidebarHeader {
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: #949088;
+  margin-bottom: 16px;
+  padding-left: 6px;
+}
+
+.subCategoryGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.subCategoryTitle {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #262626;
+  padding-left: 6px;
+  margin-bottom: 4px;
+}
+
+.subMenuList {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.subMenuItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  font-size: 0.83rem;
+  font-weight: 500;
+  color: #525252;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.subMenuItem:hover {
+  background-color: #eae8e1;
+  color: #0f172a;
+}
+
+.subMenuItemActive {
+  background-color: #ffffff;
+  color: #c2410c;
+  font-weight: 700;
+  border: 1px solid #e2dfd7;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+/* 3. Main Workspace Area (Crisp White Background from Screenshot) */
+.contentContainer {
+  flex: 1;
+  padding: 24px 36px;
+  width: 100%;
+  max-width: 1380px;
+  margin: 0 auto;
+  background-color: #ffffff;
+  box-sizing: border-box;
+  overflow-y: auto;
+  border-left: 1px solid #e5e3dc;
+  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.02);
+}
+
+/* Page Title Header */
+.pageTitleHeader {
+  margin-bottom: 20px;
+}
+
+.titleRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.mainTitle {
+  font-size: 1.55rem;
+  font-weight: 800;
+  color: #111827;
+  margin: 0;
+}
+
+.backBtn {
+  background: #ffffff;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  padding: 6px 14px;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: #4b5563;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.backBtn:hover {
+  background: #f9fafb;
+  color: #111827;
+  border-color: #9ca3af;
+}
+
+.subtitleText {
+  font-size: 0.85rem;
+  color: #6b7280;
+  margin-top: 4px;
+}
+
+/* 7 Top Metric Cards */
+.metricsGrid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.metricCard {
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 16px 14px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.metricLabel {
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  color: #6b7280;
+  text-transform: uppercase;
+}
+
+.metricVal {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: #111827;
+  margin-top: 8px;
+  line-height: 1.1;
+}
+
+/* Two Column Layout */
+.mainGrid {
+  display: grid;
+  grid-template-columns: 360px 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+/* Left Column */
+.leftColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.filterPillsRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+.filterPill {
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #6b7280;
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.filterPillActive {
+  background-color: #fff7ed;
+  border-color: #fdba74;
+  color: #c2410c;
+  font-weight: 700;
+}
+
+/* Batch Toolbar */
+.batchToolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Approve All CTA Button (Exact Orange/Amber from Screenshot) */
+.approveAllBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background-color: #d97706;
+  color: #ffffff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(217, 119, 6, 0.3);
+  transition: background-color 0.15s ease;
+}
+
+.approveAllBtn:hover {
+  background-color: #b45309;
+}
+
+.autoApproveBtn {
+  background-color: #f3f4f6;
+  border: 1px solid #e5e7eb;
+  color: #374151;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.searchBoxWrapper {
+  position: relative;
+  width: 100%;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #9ca3af;
+}
+
+.searchInput {
+  width: 100%;
+  padding: 9px 12px 9px 36px;
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  font-size: 0.83rem;
+  color: #111827;
+  box-sizing: border-box;
+}
+
+.searchInput:focus {
+  outline: none;
+  border-color: #d97706;
+}
+
+/* Lead List Card */
+.leadList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.leadCard {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px;
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  cursor: pointer;
+  position: relative;
+  transition: border-color 0.15s ease;
+}
+
+.leadCardSelected {
+  border-color: #f59e0b;
+  box-shadow: 0 0 0 1px #f59e0b;
+  background-color: #fffbf5;
+}
+
+.leadAvatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background-color: #e0f2fe;
+  color: #0284c7;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.95rem;
+  flex-shrink: 0;
+}
+
+.leadMeta {
+  flex: 1;
+  min-width: 0;
+}
+
+.leadNameRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.leadName {
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: #111827;
+}
+
+.timeTag {
+  font-size: 0.75rem;
+  color: #9ca3af;
+}
+
+.leadSnippet {
+  font-size: 0.8rem;
+  color: #6b7280;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.toApproveBadge {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  background-color: #fff7ed;
+  color: #c2410c;
+  border: 1px solid #ffedd5;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+
+/* Right Column: Draft Editor Card */
+.rightColumn {
+  flex: 1;
+}
+
+.draftCard {
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 26px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.draftHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #f3f4f6;
+  margin-bottom: 20px;
+}
+
+.prospectTitle {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #111827;
+  margin: 0 0 4px 0;
+}
+
+.prospectSubText {
+  font-size: 0.83rem;
+  color: #6b7280;
+}
+
+.metaBadgeRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.userTag {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #374151;
+  background: #f3f4f6;
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+
+.draftBadge {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #c2410c;
+  background: #fff7ed;
+  border: 1px solid #ffedd5;
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+
+.timestampTag {
+  font-size: 0.75rem;
+  color: #9ca3af;
+}
+
+/* Light Warm Beige / Cream Email Body Container matching screenshot */
+.emailBodyContainer {
+  background-color: #fffdfa;
+  border: 1px solid #f3ebd8;
+  border-radius: 8px;
+  padding: 26px;
+  margin-bottom: 20px;
+}
+
+.subjectFieldGroup {
+  margin-bottom: 18px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.fieldLabel {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #78350f;
+}
+
+.subjectInput {
+  flex: 1;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #111827;
+  background: transparent;
+  border: none;
+  border-bottom: 1px dashed #d97706;
+  padding: 4px 6px;
+  outline: none;
+  font-family: inherit;
+}
+
+.subjectInput:focus {
+  border-bottom-style: solid;
+  border-bottom-color: #d97706;
+}
+
+.bodyFieldGroup {
+  width: 100%;
+}
+
+.emailBodyTextarea {
+  width: 100%;
+  background: transparent;
+  border: 1px transparent;
+  outline: none;
+  font-size: 0.98rem;
+  line-height: 1.65;
+  color: #374151;
+  font-family: inherit;
+  resize: vertical;
+  min-height: 280px;
+  box-sizing: border-box;
+}
+
+.emailBodyTextarea:focus {
+  border-color: rgba(217, 119, 6, 0.3);
+  background-color: #ffffff;
+  border-radius: 6px;
+  padding: 14px;
+}
+
+/* Bottom Footer Toolbar */
+.draftFooterToolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 16px;
+  border-top: 1px solid #f3f4f6;
+}
+
+.footerStatus {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  color: #166534;
+  font-weight: 500;
+}
+
+.savedDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #22c55e;
+}
+
+.footerActions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Edit Button - Blue text matching screenshot */
+.editToggleBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background-color: #eff6ff;
+  border: 1px solid #bfdbfe;
+  color: #2563eb;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.editToggleBtn:hover {
+  background-color: #dbeafe;
+  border-color: #93c5fd;
+}
+
+/* Send / Approve Button - Exact Orange/Amber CTA from screenshot */
+.sendCtaBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #d97706;
+  color: #ffffff;
+  border: none;
+  padding: 9px 22px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(217, 119, 6, 0.3);
+  transition: all 0.15s ease;
+}
+
+.sendCtaBtn:hover {
+  background-color: #b45309;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(217, 119, 6, 0.4);
+}
+
+@media (max-width: 1200px) {
+  .primarySidebar,
+  .secondarySidebar {
+    display: none;
+  }
+  .metricsGrid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .mainGrid {
+    grid-template-columns: 1fr;
+  }
+}

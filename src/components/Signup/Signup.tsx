@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
-import { getScrapedLeadPayload, getOrCreateScrapeSessionId } from '../../utils/cookieUtils'
+import { getScrapedLeadPayload, getOrCreateScrapeSessionId, getLocalDrafts, clearScrapeSession, type SavedEmailDraft } from '../../utils/cookieUtils'
 import { IconArrowRight, IconMail, IconLock, IconUsers, IconGlobe, IconCheck } from '../Icons'
 import styles from './Signup.module.css'
 
@@ -19,17 +19,44 @@ export const Signup = () => {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [scrapedDomain, setScrapedDomain] = useState<string | null>(null)
+  const [attachedDraft, setAttachedDraft] = useState<SavedEmailDraft | null>(null)
 
   useEffect(() => {
-    // Read scraped lead payload from cookies / local storage or URL query param
+    // Read scraped lead payload & URL search parameters
     const searchParams = new URLSearchParams(location.search)
     const domainFromUrl = searchParams.get('domain')
+    const subjectFromUrl = searchParams.get('subject')
+    const bodyFromUrl = searchParams.get('emailBody')
     const leadPayload = getScrapedLeadPayload()
+    const drafts = getLocalDrafts()
 
-    const domainToUse = domainFromUrl || leadPayload?.domain || null
+    const domainToUse = domainFromUrl || leadPayload?.domain || (drafts[0]?.name) || null
     if (domainToUse) {
       setScrapedDomain(domainToUse)
     }
+
+    if (subjectFromUrl && bodyFromUrl) {
+      setAttachedDraft({
+        email: `contact@${domainToUse || 'lead.com'}`,
+        name: domainToUse || 'Lead',
+        subject: subjectFromUrl,
+        body: bodyFromUrl,
+        status: 'draft',
+        created_at: new Date().toISOString(),
+      })
+    } else if (drafts.length > 0) {
+      setAttachedDraft(drafts[0])
+    }
+
+    const handleSync = () => {
+      const updatedDrafts = getLocalDrafts()
+      if (updatedDrafts.length > 0) {
+        setAttachedDraft(updatedDrafts[0])
+      }
+    }
+
+    window.addEventListener('gtmr_draft_created', handleSync)
+    return () => window.removeEventListener('gtmr_draft_created', handleSync)
   }, [location])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -64,6 +91,7 @@ export const Signup = () => {
           email: formData.email.trim(),
           password: formData.password,
           scraped_lead: leadPayload || (scrapedDomain ? { domain: scrapedDomain } : null),
+          saved_drafts: getLocalDrafts(),
         }),
       })
 
@@ -71,6 +99,9 @@ export const Signup = () => {
         const errorData = await response.json().catch(() => ({}))
         throw new Error(errorData.detail || errorData.message || 'Signup failed. Please try again.')
       }
+
+      // Clear scrape session payload once successfully submitted
+      clearScrapeSession()
 
       // Success -> navigate to success screen
       navigate('/signup/success', { state: { email: formData.email.trim() } })
@@ -119,9 +150,9 @@ export const Signup = () => {
                   <p className={styles.subtitle}>
                     Create your GTMer workspace to deploy autonomous AI agents, automate prospect research, and generate hyper-personalized sales campaigns.
                   </p>
-                  {scrapedDomain && (
-                    <div style={{ marginTop: '10px', background: '#fffbeb', border: '1px solid #fde68a', borderRadius: '6px', padding: '8px 12px', fontSize: '0.82rem', color: '#92400e' }}>
-                      ⚡ <strong>Scraped Lead Attached:</strong> Registering will automatically import <strong>{scrapedDomain}</strong> as your first target prospect account!
+                  {(scrapedDomain || attachedDraft) && (
+                    <div style={{ marginTop: '10px', background: '#fffbeb', border: '1px solid #fde68a', borderRadius: '6px', padding: '10px 14px', fontSize: '0.82rem', color: '#92400e' }}>
+                      ⚡ <strong>Scraped Lead & Customized Email Draft Attached:</strong> Registering will automatically import <strong>{scrapedDomain || attachedDraft?.name}</strong> with your customized email subject: <em>"{attachedDraft?.subject || leadPayload?.generatedSubject || `Partnership Idea for ${scrapedDomain}`}"</em>!
                     </div>
                   )}
                 </div>

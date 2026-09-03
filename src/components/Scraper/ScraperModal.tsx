@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { executeWebScrape, type ScraperResult, type ScrapedPageDetail } from '../../services/scraperEngine'
 import { checkDemoLimitBlocked, setScrapedCompanyCookie, setScrapedLeadPayload, getOrCreateScrapeSessionId } from '../../utils/cookieUtils'
 import { IconArrowRight, IconBolt } from '../Icons'
+import EmailCenterView from './EmailCenterView'
 import styles from './ScraperModal.module.css'
 
 interface ScraperModalProps {
@@ -18,6 +19,7 @@ export const ScraperModal: React.FC<ScraperModalProps> = ({ isOpen, onClose, ini
   const [results, setResults] = useState<ScraperResult | null>(null)
   const [selectedPageIndex, setSelectedPageIndex] = useState(0)
   const [blockedInfo, setBlockedInfo] = useState<{ blocked: boolean; existingDomain?: string } | null>(null)
+  const [viewMode, setViewMode] = useState<'scraper' | 'email_center'>('scraper')
 
   useEffect(() => {
     if (isOpen) {
@@ -118,7 +120,11 @@ export const ScraperModal: React.FC<ScraperModalProps> = ({ isOpen, onClose, ini
 
         {/* Modal Body */}
         <div className={styles.modalBody}>
-          {/* Search Controls */}
+          {viewMode === 'email_center' && results ? (
+            <EmailCenterView results={results} onBack={() => setViewMode('scraper')} />
+          ) : (
+            <>
+              {/* Search Controls */}
           <div className={styles.searchPanel}>
             <div className={styles.inputGroup}>
               <input
@@ -306,16 +312,21 @@ export const ScraperModal: React.FC<ScraperModalProps> = ({ isOpen, onClose, ini
 
               {/* Bottom Action CTA Button */}
               <div className={styles.bottomCtaSection}>
-                <a
-                  href={`https://dev.gtmer.ai/login?session_id=${getOrCreateScrapeSessionId()}&target_domain=${encodeURIComponent(results.domain)}&action=claim_lead`}
+                <button
+                  onClick={() => {
+                    setViewMode('email_center')
+                    window.scrollTo({ top: 0, behavior: 'smooth' })
+                  }}
                   className={styles.generateEmailBtn}
                 >
                   <IconBolt size={18} />
                   Generate a Personalized Email
                   <IconArrowRight size={16} />
-                </a>
+                </button>
               </div>
             </>
+          )}
+          </>
           )}
         </div>
       </div>
