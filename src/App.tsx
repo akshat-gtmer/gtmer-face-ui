@@ -28,16 +28,21 @@ import GtmAutomation from './components/GtmAutomation/GtmAutomation'
 import Signup from './components/Signup/Signup'
 import Scraper from './components/Scraper/Scraper'
 
+import { getOrCreateVisitorId, captureAttributionData } from './utils/cookieUtils'
+
 /* Scroll to top + push page_view event to GTM dataLayer on route change */
 const ScrollToTop = () => {
   const { pathname } = useLocation()
 
   useEffect(() => {
+    // Initialize Anonymous Visitor ID & UTM Attribution Cookies on first load
+    getOrCreateVisitorId()
+    captureAttributionData()
+
     // Scroll to top
     window.scrollTo({ top: 0, behavior: 'smooth' })
 
     // Push page_view event to GTM dataLayer
-    // document.title is already set correctly by useDocumentHead before this fires
     if (typeof window !== 'undefined') {
       window.dataLayer = window.dataLayer || []
       window.dataLayer.push({
@@ -45,6 +50,7 @@ const ScrollToTop = () => {
         page_path: pathname,
         page_title: document.title,
         page_location: window.location.href,
+        visitor_id: getOrCreateVisitorId(),
       })
     }
   }, [pathname])
@@ -91,7 +97,7 @@ const App = () => {
           <Route path="/integrations" element={<PageWithFooter><IntegrationsPage /></PageWithFooter>} />
           <Route path="/about" element={<PageWithFooter><About /></PageWithFooter>} />
           <Route path="/testimonials" element={<PageWithFooter><Testimonials /></PageWithFooter>} />
-           <Route path="/faq" element={<PageWithFooter><FAQ /></PageWithFooter>} />
+          <Route path="/faq" element={<PageWithFooter><FAQ /></PageWithFooter>} />
           <Route path="/gtm-automation" element={<PageWithFooter><GtmAutomation /></PageWithFooter>} />
           <Route path="/signup" element={<PageWithFooter><Signup /></PageWithFooter>} />
           <Route path="/signup/success" element={<PageWithFooter><Signup /></PageWithFooter>} />
