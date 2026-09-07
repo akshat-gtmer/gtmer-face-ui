@@ -27,20 +27,26 @@ import About from './components/About/About'
 import GtmAutomation from './components/GtmAutomation/GtmAutomation'
 import Signup from './components/Signup/Signup'
 import Scraper from './components/Scraper/Scraper'
+import GooglePromptPopup from './components/GooglePromptPopup/GooglePromptPopup'
+import AdminLeads from './components/AdminLeads/AdminLeads'
+import TelemetryTracker from './components/TelemetryTracker/TelemetryTracker'
 
-import { getOrCreateVisitorId, captureAttributionData } from './utils/cookieUtils'
+import { getOrCreateVisitorId, captureAttributionData, getUrlQueryParameters } from './utils/cookieUtils'
+
 
 /* Scroll to top + push page_view event to GTM dataLayer on route change */
 const ScrollToTop = () => {
   const { pathname } = useLocation()
 
   useEffect(() => {
-    // Initialize Anonymous Visitor ID & UTM Attribution Cookies on first load
+    // Initialize Visitor ID, UTM Attribution Cookies, and Tokenized Magic Link parameters on load
     getOrCreateVisitorId()
     captureAttributionData()
+    getUrlQueryParameters()
 
     // Scroll to top
     window.scrollTo({ top: 0, behavior: 'smooth' })
+
 
     // Push page_view event to GTM dataLayer
     if (typeof window !== 'undefined') {
@@ -81,9 +87,10 @@ const App = () => {
   useDocumentHead()
 
   return (
-    <>
+    <TelemetryTracker>
       <ScrollToTop />
       <Navbar />
+      <GooglePromptPopup />
 
       <main id="main-content" role="main">
         <Routes>
@@ -102,10 +109,15 @@ const App = () => {
           <Route path="/signup" element={<PageWithFooter><Signup /></PageWithFooter>} />
           <Route path="/signup/success" element={<PageWithFooter><Signup /></PageWithFooter>} />
           <Route path="/scraper" element={<PageWithFooter><Scraper /></PageWithFooter>} />
+          <Route path="/admin/leads" element={<PageWithFooter><AdminLeads /></PageWithFooter>} />
+          <Route path="*" element={<LandingPage />} />
         </Routes>
       </main>
-    </>
+    </TelemetryTracker>
   )
 }
 
+
 export default App
+
+
