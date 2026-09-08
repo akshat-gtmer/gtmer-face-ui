@@ -1,3 +1,4 @@
+import React from 'react'
 import { Routes, Route, useLocation } from 'react-router-dom'
 import { useEffect } from 'react'
 
@@ -27,22 +28,27 @@ import About from './components/About/About'
 import GtmAutomation from './components/GtmAutomation/GtmAutomation'
 import Signup from './components/Signup/Signup'
 import Scraper from './components/Scraper/Scraper'
+import VisitorIntelligence from './components/Admin/VisitorIntelligence'
+import CookieBanner from './components/CookieBanner/CookieBanner'
+import AuthCallback from './components/Auth/AuthCallback'
+import GoogleOneTapPopup from './components/GoogleOneTap/GoogleOneTapPopup'
 
 import { getOrCreateVisitorId, captureAttributionData } from './utils/cookieUtils'
+import { initTelemetry } from './utils/telemetry'
 
 /* Scroll to top + push page_view event to GTM dataLayer on route change */
 const ScrollToTop = () => {
   const { pathname } = useLocation()
 
   useEffect(() => {
-    // Initialize Anonymous Visitor ID & UTM Attribution Cookies on first load
+    /* Initialize Anonymous Visitor ID & UTM Attribution Cookies on first load */
     getOrCreateVisitorId()
     captureAttributionData()
 
-    // Scroll to top
+    /* Scroll to top */
     window.scrollTo({ top: 0, behavior: 'smooth' })
 
-    // Push page_view event to GTM dataLayer
+    /* Push page_view event to GTM dataLayer */
     if (typeof window !== 'undefined') {
       window.dataLayer = window.dataLayer || []
       window.dataLayer.push({
@@ -77,6 +83,11 @@ const PageWithFooter = ({ children }: { children: React.ReactNode }) => (
 )
 
 const App = () => {
+  // Initialize telemetry once on app mount
+  React.useEffect(() => {
+    initTelemetry()
+  }, [])
+
   // Dynamic <title> and <meta> per route
   useDocumentHead()
 
@@ -101,8 +112,12 @@ const App = () => {
           <Route path="/gtm-automation" element={<PageWithFooter><GtmAutomation /></PageWithFooter>} />
           <Route path="/signup" element={<PageWithFooter><Signup /></PageWithFooter>} />
           <Route path="/signup/success" element={<PageWithFooter><Signup /></PageWithFooter>} />
+                    <Route path="/auth/callback" element={<AuthCallback />} />
           <Route path="/scraper" element={<PageWithFooter><Scraper /></PageWithFooter>} />
+          <Route path="/admin/visitor-intelligence" element={<PageWithFooter><VisitorIntelligence /></PageWithFooter>} />
         </Routes>
+                <GoogleOneTapPopup />
+        <CookieBanner />
       </main>
     </>
   )
