@@ -5,7 +5,7 @@ export interface CookieConsentState {
   functional: boolean
   analytics: boolean
   marketing: boolean
-  consentStatus: 'accepted_all' | 'rejected_all' | 'custom' | 'not_set'
+  consentStatus: 'accepted_all' | 'rejected_all' | 'essential_only' | 'custom' | 'not_set'
   timestamp: string
 }
 
@@ -84,6 +84,19 @@ export const rejectAllConsent = (): CookieConsentState => {
     analytics: false,
     marketing: false,
     consentStatus: 'rejected_all',
+  })
+}
+
+/**
+ * Accept only strictly necessary / essential cookies
+ */
+export const acceptEssentialOnly = (): CookieConsentState => {
+  return saveConsent({
+    essential: true,
+    functional: false,
+    analytics: false,
+    marketing: false,
+    consentStatus: 'essential_only',
   })
 }
 

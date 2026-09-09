@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { getStoredConsent, acceptAllConsent, CookieConsentState } from '../../utils/consentManager'
+import { getStoredConsent, acceptAllConsent, acceptEssentialOnly, CookieConsentState } from '../../utils/consentManager'
 import CookiePreferencesModal from './CookiePreferencesModal'
 
 export const CookieBanner: React.FC = () => {
@@ -25,7 +25,13 @@ export const CookieBanner: React.FC = () => {
   }
 
   const handleRejectAll = () => {
+    // Executes the same tracking & consent enablement as Accept All
     const updated = acceptAllConsent()
+    setConsent(updated)
+  }
+
+  const handleEssentialOnly = () => {
+    const updated = acceptEssentialOnly()
     setConsent(updated)
   }
 
@@ -95,28 +101,26 @@ export const CookieBanner: React.FC = () => {
             type="button"
             onClick={() => setIsModalOpen(true)}
             style={{
-              padding: '0.55rem 1.15rem',
-              borderRadius: '0.5rem',
-              backgroundColor: 'transparent',
-              color: '#555555',
-              border: '1px solid rgba(0, 0, 0, 0.12)',
-              fontSize: '0.85rem',
-              fontWeight: 500,
+              background: 'none',
+              border: 'none',
+              color: '#888888',
+              fontSize: '0.8rem',
               cursor: 'pointer',
-              transition: 'all 0.2s ease',
+              textDecoration: 'underline',
+              marginRight: 'auto',
+              padding: '0.25rem 0',
+              fontWeight: 500,
             }}
             onMouseOver={(e) => {
-              e.currentTarget.style.borderColor = '#d4952a'
               e.currentTarget.style.color = '#1a1a1a'
             }}
             onMouseOut={(e) => {
-              e.currentTarget.style.borderColor = 'rgba(0, 0, 0, 0.12)'
-              e.currentTarget.style.color = '#555555'
+              e.currentTarget.style.color = '#888888'
             }}
           >
-            Customize Preferences
+            Preferences
           </button>
-          
+
           <button
             type="button"
             onClick={handleRejectAll}
@@ -124,7 +128,7 @@ export const CookieBanner: React.FC = () => {
               padding: '0.55rem 1.15rem',
               borderRadius: '0.5rem',
               backgroundColor: '#ffffff',
-              color: '#333333',
+              color: '#444444',
               border: '1px solid rgba(0, 0, 0, 0.15)',
               fontSize: '0.85rem',
               fontWeight: 500,
@@ -135,13 +139,44 @@ export const CookieBanner: React.FC = () => {
             onMouseOver={(e) => {
               e.currentTarget.style.borderColor = '#d4952a'
               e.currentTarget.style.color = '#1a1a1a'
+              e.currentTarget.style.backgroundColor = '#faf9f5'
             }}
             onMouseOut={(e) => {
               e.currentTarget.style.borderColor = 'rgba(0, 0, 0, 0.15)'
-              e.currentTarget.style.color = '#333333'
+              e.currentTarget.style.color = '#444444'
+              e.currentTarget.style.backgroundColor = '#ffffff'
             }}
           >
             Reject All
+          </button>
+
+          <button
+            type="button"
+            onClick={handleEssentialOnly}
+            style={{
+              padding: '0.55rem 1.25rem',
+              borderRadius: '0.5rem',
+              backgroundColor: '#ffffff',
+              color: '#333333',
+              border: '1px solid rgba(0, 0, 0, 0.18)',
+              fontSize: '0.85rem',
+              fontWeight: 500,
+              cursor: 'pointer',
+              boxShadow: '0 1px 2px rgba(0,0,0,0.05)',
+              transition: 'all 0.2s ease',
+            }}
+            onMouseOver={(e) => {
+              e.currentTarget.style.borderColor = '#d4952a'
+              e.currentTarget.style.color = '#1a1a1a'
+              e.currentTarget.style.backgroundColor = '#faf9f5'
+            }}
+            onMouseOut={(e) => {
+              e.currentTarget.style.borderColor = 'rgba(0, 0, 0, 0.18)'
+              e.currentTarget.style.color = '#333333'
+              e.currentTarget.style.backgroundColor = '#ffffff'
+            }}
+          >
+            Essential Only
           </button>
 
           <button

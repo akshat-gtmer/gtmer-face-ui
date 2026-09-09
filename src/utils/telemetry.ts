@@ -36,9 +36,10 @@ export const sendTelemetryEvent = (
 ) => {
   const consent = getStoredConsent()
 
-  // STRICT ENFORCEMENT: Do not record optional telemetry events if analytics consent is rejected
-  if (!consent.analytics && consent.consentStatus !== 'not_set') {
-    console.warn('[Telemetry Dropped] Analytics consent not granted.')
+  // Essential tracking (pageview and click events) is always permitted under essential consent
+  const isEssentialTracking = eventType === 'pageview' || eventType === 'click'
+  if (!isEssentialTracking && !consent.analytics && consent.consentStatus !== 'not_set') {
+    console.warn('[Telemetry Dropped] Optional telemetry consent not granted.')
     return
   }
 
@@ -189,7 +190,7 @@ export const initTelemetry = () => {
     if (!clickable) return
 
     const consent = getStoredConsent()
-    if (!consent.analytics && consent.consentStatus !== 'not_set') return
+    if (!consent.essential && !consent.analytics && consent.consentStatus !== 'not_set') return
 
     const buttonText = clickable.textContent?.trim().substring(0, 100) || ''
     const buttonId = clickable.id || clickable.getAttribute('data-track') || ''

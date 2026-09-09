@@ -474,6 +474,18 @@ export const VisitorIntelligence: React.FC = () => {
                             </div>
                           )}
                         </>
+                      ) : v.organization?.organizationName ? (
+                        <>
+                          <div style={{ fontSize: '1.15rem', fontWeight: 700, color: '#1a1a1a', marginBottom: '0.2rem', fontFamily: "'Apercu Pro', sans-serif" }}>
+                            🏢 {v.organization.organizationName}
+                          </div>
+                          <div style={{ fontSize: '0.85rem', color: '#666666' }}>
+                            {v.organization.domain || v.organization.industry || 'Identified Organization'}
+                          </div>
+                          <div style={{ fontSize: '0.75rem', color: '#94a3b8', marginTop: '0.2rem', fontFamily: "'JetBrains Mono', monospace" }}>
+                            ID: {v.visitorId}
+                          </div>
+                        </>
                       ) : (
                         <>
                           <div style={{ fontSize: '1.05rem', fontWeight: 700, color: '#0f172a', marginBottom: '0.2rem', fontFamily: "'JetBrains Mono', monospace" }}>
