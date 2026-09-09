@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { API_BASE } from '../../config/api'
 import styles from './AdminLeads.module.css'
+import { isConsumerIsp } from '../../utils/organizationUtils'
 
 interface LeadRecord {
   id: string
@@ -58,7 +59,7 @@ interface AnalyticsSummary {
 }
 
 export const AdminLeads = () => {
-  const [activeTab, setActiveTab] = useState<'leads' | 'telemetry'>('leads')
+  const [activeTab, setActiveTab] = useState<'leads' | 'pages' | 'buttons' | 'telemetry'>('leads')
   const [telemetrySubView, setTelemetrySubView] = useState<'journeys' | 'stream'>('journeys')
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedUserJourney, setSelectedUserJourney] = useState<UserJourney | null>(null)
@@ -211,10 +212,22 @@ export const AdminLeads = () => {
             👥 Captured User Leads ({leads.length})
           </button>
           <button
+            className={`${styles.tabBtn} ${activeTab === 'pages' ? styles.activeTab : ''}`}
+            onClick={() => setActiveTab('pages')}
+          >
+            📄 Visited Pages ({analytics?.events?.filter(e => e.eventType === 'pageview').length || 0})
+          </button>
+          <button
+            className={`${styles.tabBtn} ${activeTab === 'buttons' ? styles.activeTab : ''}`}
+            onClick={() => setActiveTab('buttons')}
+          >
+            🖱️ Button Clicks ({analytics?.events?.filter(e => e.eventType === 'click').length || 0})
+          </button>
+          <button
             className={`${styles.tabBtn} ${activeTab === 'telemetry' ? styles.activeTab : ''}`}
             onClick={() => setActiveTab('telemetry')}
           >
-            📍 Per-User Telemetry & Click Traces ({analytics ? (analytics.userJourneys?.length || analytics.events.length) : 0})
+            📍 Per-User Telemetry ({analytics ? (analytics.userJourneys?.length || analytics.events.length) : 0})
           </button>
         </div>
 
@@ -265,6 +278,125 @@ export const AdminLeads = () => {
                         </td>
                       </tr>
                     ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
+        )}
+
+
+        {/* TAB: VISITED PAGES ONLY (PLAIN TEXT, NO JSON) */}
+        {activeTab === 'pages' && (
+          <div className={styles.tableCard}>
+            <div className={styles.cardHeader}>
+              <span className={styles.cardTitle}>
+                Visited Pages ({analytics?.events?.filter(e => e.eventType === 'pageview').length || 0} Page Views)
+              </span>
+            </div>
+
+            {(!analytics || !analytics.events || analytics.events.filter(e => e.eventType === 'pageview').length === 0) ? (
+              <div className={styles.emptyState}>
+                <p>No page view events recorded yet. Navigate pages across the site to generate pageview logs.</p>
+              </div>
+            ) : (
+              <div className={styles.tableWrapper}>
+                <table className={styles.table}>
+                  <thead>
+                    <tr>
+                      <th>Time</th>
+                      <th>Page Path / URL</th>
+                      <th>Page Title</th>
+                      <th>User / Visitor Identity</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {analytics.events
+                      .filter(e => e.eventType === 'pageview')
+                      .map((ev, idx) => (
+                        <tr key={ev.id || idx}>
+                          <td className={styles.monoCell}>
+                            {new Date(ev.receivedAt).toLocaleTimeString()}
+                          </td>
+                          <td className={styles.highlightCell}>
+                            <strong>{ev.pagePath || '/'}</strong>
+                          </td>
+                          <td>
+                            {ev.pageTitle || <span className={styles.muted}>Navigation</span>}
+                          </td>
+                          <td className={styles.monoCell}>
+                            {ev.userEmail ? (
+                              <span className={styles.emailTag}>📧 {ev.userEmail}</span>
+                            ) : (
+                              <span>👤 {ev.visitorId}</span>
+                            )}
+                          </td>
+                        </tr>
+                      ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* TAB: BUTTONS CLICKED ONLY (PLAIN TEXT, NO JSON) */}
+        {activeTab === 'buttons' && (
+          <div className={styles.tableCard}>
+            <div className={styles.cardHeader}>
+              <span className={styles.cardTitle}>
+                Clicked Buttons & CTAs ({analytics?.events?.filter(e => e.eventType === 'click').length || 0} Clicks)
+              </span>
+            </div>
+
+            {(!analytics || !analytics.events || analytics.events.filter(e => e.eventType === 'click').length === 0) ? (
+              <div className={styles.emptyState}>
+                <p>No button click events recorded yet. Click buttons or CTAs across the site to generate click logs.</p>
+              </div>
+            ) : (
+              <div className={styles.tableWrapper}>
+                <table className={styles.table}>
+                  <thead>
+                    <tr>
+                      <th>Time</th>
+                      <th>Button Name / Label</th>
+                      <th>Clicked on Page</th>
+                      <th>Target Destination</th>
+                      <th>User / Visitor Identity</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {analytics.events
+                      .filter(e => e.eventType === 'click')
+                      .map((ev, idx) => (
+                        <tr key={ev.id || idx}>
+                          <td className={styles.monoCell}>
+                            {new Date(ev.receivedAt).toLocaleTimeString()}
+                          </td>
+                          <td>
+                            <strong className={styles.clickDetail}>
+                              "{ev.buttonText || ev.buttonId || 'Button'}"
+                            </strong>
+                          </td>
+                          <td className={styles.highlightCell}>
+                            {ev.pagePath || '/'}
+                          </td>
+                          <td>
+                            {ev.targetUrl ? (
+                              <span className={styles.targetUrl}>➔ {ev.targetUrl}</span>
+                            ) : (
+                              <span className={styles.muted}>In-page action</span>
+                            )}
+                          </td>
+                          <td className={styles.monoCell}>
+                            {ev.userEmail ? (
+                              <span className={styles.emailTag}>📧 {ev.userEmail}</span>
+                            ) : (
+                              <span>👤 {ev.visitorId}</span>
+                            )}
+                          </td>
+                        </tr>
+                      ))}
                   </tbody>
                 </table>
               </div>
@@ -337,7 +469,7 @@ export const AdminLeads = () => {
                             </td>
                             <td>
                               {user.fullName ? (
-                                <strong>{user.fullName} {user.orgName ? `(${user.orgName})` : ''}</strong>
+                                <strong>{user.fullName} {user.orgName && !isConsumerIsp({ organizationName: user.orgName }) ? `(${user.orgName})` : ''}</strong>
                               ) : (
                                 <span className={styles.muted}>Anonymous Visitor</span>
                               )}
@@ -521,7 +653,7 @@ export const AdminLeads = () => {
                   <div className={styles.userSummaryItem}>
                     <span className={styles.userSummaryLabel}>Full Name / Org</span>
                     <span className={styles.userSummaryVal}>
-                      {selectedUserJourney.fullName || 'Anonymous Visitor'} {selectedUserJourney.orgName ? `(${selectedUserJourney.orgName})` : ''}
+                      {selectedUserJourney.fullName || 'Anonymous Visitor'} {selectedUserJourney.orgName && !isConsumerIsp({ organizationName: selectedUserJourney.orgName }) ? `(${selectedUserJourney.orgName})` : ''}
                     </span>
                   </div>
                   <div

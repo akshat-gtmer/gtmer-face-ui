@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { getOrCreateVisitorId } from '../../utils/cookieUtils'
+import { API_BASE } from '../../config/api'
 
 export const AuthCallback: React.FC = () => {
   const [searchParams] = useSearchParams()
@@ -28,11 +29,50 @@ export const AuthCallback: React.FC = () => {
 
       // 2. Link Visitor ID with Auth Session
       const visitorId = getOrCreateVisitorId()
-      
-      // 3. Mark auth status and redirect
+
+      // 3. Extract Google email & name from JWT token and associate with visitor
+      let userEmail = ''
+      try {
+        const payloadBase64 = accessToken.split('.')[1]
+        if (payloadBase64) {
+          const jsonPayload = decodeURIComponent(
+            atob(payloadBase64.replace(/-/g, '+').replace(/_/g, '/'))
+              .split('')
+              .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+              .join('')
+          )
+          const data = JSON.parse(jsonPayload)
+          userEmail = data.email || data.sub || ''
+          const userName = data.name || data.full_name || ''
+
+          if (userEmail) {
+            localStorage.setItem('gtmer_user_email', userEmail)
+            if (userName) localStorage.setItem('gtmer_user_name', userName)
+
+            // Associate Google user identity with VisitorLead in backend
+            fetch(`${API_BASE}/leads`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                visitorId,
+                email: userEmail,
+                name: userName,
+                source: 'google_login',
+              }),
+            }).catch((err) => console.warn('[AuthCallback] Lead link error:', err))
+          }
+        }
+      } catch (err) {
+        console.warn('[AuthCallback] Failed to parse access token:', err)
+      }
+
+      // 4. Mark auth status and redirect
       setStatusText('Signed in successfully! Redirecting...')
       setTimeout(() => {
-        navigate('/signup/success?provider=google', { replace: true })
+        navigate('/signup/success?provider=google', {
+          replace: true,
+          state: { email: userEmail },
+        })
       }, 800)
     } else {
       setError('No authentication token received.')

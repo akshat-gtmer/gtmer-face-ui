@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { API_BASE } from '../../config/api'
+import { isConsumerIsp, getRealOrganization } from '../../utils/organizationUtils'
 
 export interface Visitor {
   id: string
@@ -474,6 +475,18 @@ export const VisitorIntelligence: React.FC = () => {
                             </div>
                           )}
                         </>
+                      ) : getRealOrganization(v.organization)?.organizationName ? (
+                        <>
+                          <div style={{ fontSize: '1.15rem', fontWeight: 700, color: '#1a1a1a', marginBottom: '0.2rem', fontFamily: "'Apercu Pro', sans-serif" }}>
+                            🏢 {getRealOrganization(v.organization)?.organizationName}
+                          </div>
+                          <div style={{ fontSize: '0.85rem', color: '#666666' }}>
+                            {getRealOrganization(v.organization)?.domain || getRealOrganization(v.organization)?.industry || 'Identified Organization'}
+                          </div>
+                          <div style={{ fontSize: '0.75rem', color: '#94a3b8', marginTop: '0.2rem', fontFamily: "'JetBrains Mono', monospace" }}>
+                            ID: {v.visitorId}
+                          </div>
+                        </>
                       ) : (
                         <>
                           <div style={{ fontSize: '1.05rem', fontWeight: 700, color: '#0f172a', marginBottom: '0.2rem', fontFamily: "'JetBrains Mono', monospace" }}>
@@ -534,7 +547,7 @@ export const VisitorIntelligence: React.FC = () => {
                     </button>
 
                     <button
-                      onClick={() => handleConvertToLead(v.visitorId, v.organization?.organizationName)}
+                      onClick={() => handleConvertToLead(v.visitorId, getRealOrganization(v.organization)?.organizationName)}
                       disabled={convertingLeadId === v.visitorId}
                       style={{
                         padding: '0.55rem 0.85rem',
@@ -617,6 +630,15 @@ export const VisitorIntelligence: React.FC = () => {
                     </div>
                     <div style={{ fontSize: '0.85rem', color: '#2563eb', marginTop: '0.2rem' }}>
                       ✉️ {selectedVisitor.lead.email} {selectedVisitor.lead.phone ? `• 📞 ${selectedVisitor.lead.phone}` : ''}
+                    </div>
+                  </>
+                ) : getRealOrganization(selectedVisitor.organization)?.organizationName ? (
+                  <>
+                    <div style={{ fontWeight: 700, fontSize: '1.1rem', color: '#1a1a1a' }}>
+                      🏢 {getRealOrganization(selectedVisitor.organization)?.organizationName}
+                    </div>
+                    <div style={{ fontSize: '0.85rem', color: '#666666', marginTop: '0.2rem' }}>
+                      {getRealOrganization(selectedVisitor.organization)?.domain || getRealOrganization(selectedVisitor.organization)?.industry || 'Identified Organization'}
                     </div>
                   </>
                 ) : (

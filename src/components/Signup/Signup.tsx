@@ -13,6 +13,7 @@ import {
   type SavedEmailDraft,
 } from '../../utils/cookieUtils'
 import { setUserEmail } from '../../utils/telemetry'
+import { API_BASE } from '../../config/api'
 
 import { IconArrowRight, IconMail, IconLock, IconUsers, IconGlobe, IconCheck } from '../Icons'
 import styles from './Signup.module.css'
@@ -21,7 +22,7 @@ export const Signup = () => {
   const navigate = useNavigate()
   const location = useLocation()
   const isSuccess = location.pathname === '/signup/success'
-  const successEmail = location.state?.email || ''
+  const successEmail = location.state?.email || (typeof window !== 'undefined' ? localStorage.getItem('gtmer_user_email') : '') || ''
 
   const [formData, setFormData] = useState({
     fullName: '',
@@ -92,16 +93,6 @@ export const Signup = () => {
     setError(null)
   }
 
-  const getApiBase = () => 'https://dev.gtmer.ai'
-
-  // Tier 1: Google OAuth 2.0 / SSO Sign-In Handler (Minimal Scopes to prevent unverified app screen)
-  const handleGoogleOAuth = () => {
-    const visitorId = getOrCreateVisitorId()
-    const leadPayload = getScrapedLeadPayload()
-    const targetDomain = scrapedDomain || leadPayload?.domain || ''
-    window.location.href = `${getApiBase()}/api/v1/auth/google?visitor_id=${encodeURIComponent(visitorId)}&domain=${encodeURIComponent(targetDomain)}`
-  }
-
   // Tier 3: Send Lead Webhook Fallback Payload
   const handleWebhookFallbackSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -150,7 +141,7 @@ export const Signup = () => {
     const visitorId = getOrCreateVisitorId()
 
     try {
-      const response = await fetch(`${getApiBase()}/api/v1/auth/signup`, {
+      const response = await fetch(`${API_BASE}/auth/signup`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -234,25 +225,6 @@ export const Signup = () => {
                   )}
                 </div>
 
-                {/* CASCADE TIER 1 BUTTON */}
-                <div className={styles.tierCascade}>
-                  {/* Tier 1: Google OAuth 2.0 SSO */}
-                  <button type="button" onClick={handleGoogleOAuth} className={styles.googleBtn}>
-                    <svg className={styles.googleIcon} viewBox="0 0 24 24">
-                      <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
-                      <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
-                      <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" />
-                      <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" />
-                    </svg>
-                    <span>Continue with Google (1-Click SSO)</span>
-                  </button>
-                </div>
-
-
-                <div className={styles.divider}>
-                  <span className={styles.dividerText}>or continue with email</span>
-                </div>
-
                 {error && (
                   <div className={styles.errorAlert} role="alert">
                     <span>⚠️ {error}</span>
@@ -263,7 +235,10 @@ export const Signup = () => {
                 <div style={{ marginBottom: '1.5rem' }}>
                   <button
                     type="button"
-                    onClick={() => { window.location.href = 'https://dev.gtmer.ai/api/v1/oauth/login/google' }}
+                    onClick={() => {
+                      const redirectUrl = typeof window !== 'undefined' ? `${window.location.origin}/auth/callback` : 'https://gtmer.ai/auth/callback'
+                      window.location.href = `https://dev.gtmer.ai/api/v1/oauth/login/google?redirect_url=${encodeURIComponent(redirectUrl)}`
+                    }}
                     style={{
                       width: '100%',
                       display: 'flex',
@@ -301,16 +276,13 @@ export const Signup = () => {
 
                   <div style={{ display: 'flex', alignItems: 'center', margin: '1.25rem 0', color: '#94a3b8', fontSize: '0.75rem', fontWeight: 600 }}>
                     <div style={{ flex: 1, height: '1px', backgroundColor: 'rgba(255, 255, 255, 0.1)' }} />
-                    <span style={{ padding: '0 0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>OR REGISTER WITH EMAIL</span>
+                    <span style={{ padding: '0 0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>OR </span>
                     <div style={{ flex: 1, height: '1px', backgroundColor: 'rgba(255, 255, 255, 0.1)' }} />
                   </div>
                 </div>
 
                 {/* TIER 2: SMART AUTOFILL FORM */}
                 <form onSubmit={handleSubmit} className={styles.form}>
-                  <div className={styles.autofillBadge}>
-                    <span>✨ Browser 1-Tap Autofill Enabled</span>
-                  </div>
 
                   <div className={styles.inputGroup}>
                     <label htmlFor="orgName" className={styles.inputLabel}>
@@ -455,7 +427,7 @@ export const Signup = () => {
                       if (!successPhone.trim()) return
                       const targetEmail = successEmail || formData.email
                       try {
-                        await fetch(`${getApiBase()}/api/v1/auth/update-phone`, {
+                        await fetch(`${API_BASE}/auth/update-phone`, {
                           method: 'POST',
                           headers: { 'Content-Type': 'application/json' },
                           body: JSON.stringify({ email: targetEmail, phone: successPhone.trim() }),
@@ -477,7 +449,10 @@ export const Signup = () => {
                   )}
                 </div>
 
-                <div className={styles.successActions}>
+                <div className={styles.successActions} style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center' }}>
+                  <Link to="/" className={styles.submitBtn} style={{ marginTop: 0 }}>
+                    Return to GTMer
+                  </Link>
                   <a href={portalRedirectUrl} className={styles.successBtn}>
                     Go to Portal Dashboard
                   </a>

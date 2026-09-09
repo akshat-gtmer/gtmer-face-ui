@@ -5,6 +5,13 @@ export const GoogleOneTapPopup: React.FC = () => {
   const [dismissed, setDismissed] = useState(false)
 
   useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const p = window.location.pathname
+      if (p.includes('/auth') || p.includes('/signup/success')) {
+        setIsVisible(false)
+        return
+      }
+    }
     const isDismissed = sessionStorage.getItem('gtmer_google_onetap_dismissed')
     if (!isDismissed) {
       const timer = setTimeout(() => {
@@ -21,7 +28,8 @@ export const GoogleOneTapPopup: React.FC = () => {
   }
 
   const handleGoogleLogin = () => {
-    window.location.href = 'https://dev.gtmer.ai/api/v1/oauth/login/google'
+    const redirectUrl = typeof window !== 'undefined' ? `${window.location.origin}/auth/callback` : 'https://gtmer.ai/auth/callback'
+    window.location.href = `https://dev.gtmer.ai/api/v1/oauth/login/google?redirect_url=${encodeURIComponent(redirectUrl)}`
   }
 
   if (!isVisible || dismissed) return null
@@ -92,7 +100,7 @@ export const GoogleOneTapPopup: React.FC = () => {
           Continue to GTMer
         </div>
         <div style={{ fontSize: '0.78rem', color: '#64748b', lineHeight: 1.4 }}>
-          Deploy autonomous AI SDR agents and automated lead research with 1-click Google Sign-Up.
+          Deploy autonomous AI SDR agents and automated lead research with Google Sign-Up.
         </div>
       </div>
 
