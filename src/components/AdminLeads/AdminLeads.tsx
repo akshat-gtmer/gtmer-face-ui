@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { API_BASE } from '../../config/api'
 import styles from './AdminLeads.module.css'
+import { isConsumerIsp } from '../../utils/organizationUtils'
 
 interface LeadRecord {
   id: string
@@ -468,7 +469,7 @@ export const AdminLeads = () => {
                             </td>
                             <td>
                               {user.fullName ? (
-                                <strong>{user.fullName} {user.orgName ? `(${user.orgName})` : ''}</strong>
+                                <strong>{user.fullName} {user.orgName && !isConsumerIsp({ organizationName: user.orgName }) ? `(${user.orgName})` : ''}</strong>
                               ) : (
                                 <span className={styles.muted}>Anonymous Visitor</span>
                               )}
@@ -652,7 +653,7 @@ export const AdminLeads = () => {
                   <div className={styles.userSummaryItem}>
                     <span className={styles.userSummaryLabel}>Full Name / Org</span>
                     <span className={styles.userSummaryVal}>
-                      {selectedUserJourney.fullName || 'Anonymous Visitor'} {selectedUserJourney.orgName ? `(${selectedUserJourney.orgName})` : ''}
+                      {selectedUserJourney.fullName || 'Anonymous Visitor'} {selectedUserJourney.orgName && !isConsumerIsp({ organizationName: selectedUserJourney.orgName }) ? `(${selectedUserJourney.orgName})` : ''}
                     </span>
                   </div>
                   <div
