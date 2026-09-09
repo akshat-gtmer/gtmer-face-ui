@@ -1,4 +1,5 @@
 import { getStoredConsent } from './consentManager'
+import { setStoredUserEmail } from './cookieUtils'
 
 const API_BASE = 'http://localhost:5000/api/v1'
 
@@ -71,11 +72,12 @@ export const sendTelemetryEvent = (
 /**
  * Track a pageview event — call on every route change
  */
-export const trackPageView = (path?: string) => {
+export const trackPageView = (path?: string, pageTitle?: string) => {
   const pagePath = path || window.location.pathname
   sendTelemetryEvent('pageview', pagePath, {
     url: window.location.href,
     referrer: document.referrer,
+    pageTitle: pageTitle || document.title,
   })
 }
 
@@ -88,6 +90,34 @@ export const trackClick = (buttonText: string, buttonId?: string, targetUrl?: st
     buttonId: buttonId || '',
     targetUrl: targetUrl || '',
   })
+}
+
+/**
+ * Track button/action click with pagePath support (alias for backward compatibility with TelemetryTracker)
+ */
+export const trackButtonClick = (
+  buttonText: string,
+  buttonId?: string,
+  pagePath?: string,
+  targetUrl?: string
+) => {
+  sendTelemetryEvent('click', pagePath || window.location.pathname, {
+    buttonText,
+    buttonId: buttonId || '',
+    targetUrl: targetUrl || '',
+  })
+}
+
+/**
+ * Record and persist identified user email
+ */
+export const setUserEmail = (email: string): void => {
+  if (!email) return
+  try {
+    setStoredUserEmail(email)
+  } catch (err) {
+    console.error('[Telemetry] Error setting user email', err)
+  }
 }
 
 /**
