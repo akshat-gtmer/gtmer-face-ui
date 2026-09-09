@@ -29,11 +29,12 @@ import GtmAutomation from './components/GtmAutomation/GtmAutomation'
 import Signup from './components/Signup/Signup'
 import Scraper from './components/Scraper/Scraper'
 import VisitorIntelligence from './components/Admin/VisitorIntelligence'
+import AdminLeads from './components/AdminLeads/AdminLeads'
 import CookieBanner from './components/CookieBanner/CookieBanner'
 import AuthCallback from './components/Auth/AuthCallback'
 import GoogleOneTapPopup from './components/GoogleOneTap/GoogleOneTapPopup'
 
-import { getOrCreateVisitorId, captureAttributionData } from './utils/cookieUtils'
+import { getOrCreateVisitorId, captureAttributionData, getUrlQueryParameters } from './utils/cookieUtils'
 import { initTelemetry } from './utils/telemetry'
 
 /* Scroll to top + push page_view event to GTM dataLayer on route change */
@@ -41,9 +42,10 @@ const ScrollToTop = () => {
   const { pathname } = useLocation()
 
   useEffect(() => {
-    /* Initialize Anonymous Visitor ID & UTM Attribution Cookies on first load */
+    // Initialize Visitor ID, UTM Attribution Cookies, and Tokenized Magic Link parameters on load
     getOrCreateVisitorId()
     captureAttributionData()
+    getUrlQueryParameters()
 
     /* Scroll to top */
     window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -112,11 +114,13 @@ const App = () => {
           <Route path="/gtm-automation" element={<PageWithFooter><GtmAutomation /></PageWithFooter>} />
           <Route path="/signup" element={<PageWithFooter><Signup /></PageWithFooter>} />
           <Route path="/signup/success" element={<PageWithFooter><Signup /></PageWithFooter>} />
-                    <Route path="/auth/callback" element={<AuthCallback />} />
+          <Route path="/auth/callback" element={<AuthCallback />} />
           <Route path="/scraper" element={<PageWithFooter><Scraper /></PageWithFooter>} />
+          <Route path="/admin/leads" element={<PageWithFooter><AdminLeads /></PageWithFooter>} />
           <Route path="/admin/visitor-intelligence" element={<PageWithFooter><VisitorIntelligence /></PageWithFooter>} />
+          <Route path="*" element={<LandingPage />} />
         </Routes>
-                <GoogleOneTapPopup />
+        <GoogleOneTapPopup />
         <CookieBanner />
       </main>
     </>
@@ -124,3 +128,5 @@ const App = () => {
 }
 
 export default App
+
+

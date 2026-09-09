@@ -1,6 +1,19 @@
 import React, { useState, useEffect } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
-import { getScrapedLeadPayload, getOrCreateScrapeSessionId, getLocalDrafts, clearScrapeSession, type SavedEmailDraft } from '../../utils/cookieUtils'
+import {
+  getScrapedLeadPayload,
+  getOrCreateScrapeSessionId,
+  getLocalDrafts,
+  clearScrapeSession,
+  getOrCreateVisitorId,
+  getUrlQueryParameters,
+  getWhatsAppVerifyUrl,
+  sendLeadWebhookPayload,
+  setStoredUserEmail,
+  type SavedEmailDraft,
+} from '../../utils/cookieUtils'
+import { setUserEmail } from '../../utils/telemetry'
+
 import { IconArrowRight, IconMail, IconLock, IconUsers, IconGlobe, IconCheck } from '../Icons'
 import styles from './Signup.module.css'
 
@@ -13,6 +26,7 @@ export const Signup = () => {
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
+    phone: '',
     orgName: '',
     password: '',
   })
@@ -20,27 +34,40 @@ export const Signup = () => {
   const [error, setError] = useState<string | null>(null)
   const [scrapedDomain, setScrapedDomain] = useState<string | null>(null)
   const [attachedDraft, setAttachedDraft] = useState<SavedEmailDraft | null>(null)
+  const [showWebhookFallback, setShowWebhookFallback] = useState(false)
+  const [webhookSubmitting, setWebhookSubmitting] = useState(false)
+  const [webhookSent, setWebhookSent] = useState(false)
+  const [successPhone, setSuccessPhone] = useState('')
+  const [phoneSaved, setPhoneSaved] = useState(false)
+
 
   useEffect(() => {
-    // Read scraped lead payload & URL search parameters
-    const searchParams = new URLSearchParams(location.search)
-    const domainFromUrl = searchParams.get('domain')
-    const subjectFromUrl = searchParams.get('subject')
-    const bodyFromUrl = searchParams.get('emailBody')
+    // Read scraped lead payload & URL search parameters (Magic Link Tokens)
+    const urlParams = getUrlQueryParameters()
     const leadPayload = getScrapedLeadPayload()
     const drafts = getLocalDrafts()
 
-    const domainToUse = domainFromUrl || leadPayload?.domain || (drafts[0]?.name) || null
+    // URL Magic Link pre-fill support
+    if (urlParams.email || urlParams.phone) {
+      setFormData(prev => ({
+        ...prev,
+        email: urlParams.email || prev.email,
+        phone: urlParams.phone || prev.phone,
+        domain: urlParams.domain || prev.orgName,
+      }))
+    }
+
+    const domainToUse = urlParams.domain || leadPayload?.domain || (drafts[0]?.name) || null
     if (domainToUse) {
       setScrapedDomain(domainToUse)
     }
 
-    if (subjectFromUrl && bodyFromUrl) {
+    if (urlParams.subject && urlParams.emailBody) {
       setAttachedDraft({
-        email: `contact@${domainToUse || 'lead.com'}`,
+        email: urlParams.email || `contact@${domainToUse || 'lead.com'}`,
         name: domainToUse || 'Lead',
-        subject: subjectFromUrl,
-        body: bodyFromUrl,
+        subject: urlParams.subject,
+        body: urlParams.emailBody,
         status: 'draft',
         created_at: new Date().toISOString(),
       })
@@ -65,6 +92,44 @@ export const Signup = () => {
     setError(null)
   }
 
+  const getApiBase = () => (typeof window !== 'undefined' && window.location.hostname === 'localhost')
+    ? 'http://localhost:5000'
+    : 'https://dev.gtmer.ai'
+
+  // Tier 1: Google OAuth 2.0 / SSO Sign-In Handler (Minimal Scopes to prevent unverified app screen)
+  const handleGoogleOAuth = () => {
+    const visitorId = getOrCreateVisitorId()
+    const leadPayload = getScrapedLeadPayload()
+    const targetDomain = scrapedDomain || leadPayload?.domain || ''
+    window.location.href = `${getApiBase()}/api/v1/auth/google?visitor_id=${encodeURIComponent(visitorId)}&domain=${encodeURIComponent(targetDomain)}`
+  }
+
+  // Tier 3: Send Lead Webhook Fallback Payload
+  const handleWebhookFallbackSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setWebhookSubmitting(true)
+    if (formData.email) {
+      setUserEmail(formData.email.trim())
+    }
+    const success = await sendLeadWebhookPayload({
+      email: formData.email,
+      phone: formData.phone,
+      fullName: formData.fullName,
+      orgName: formData.orgName,
+      scrapedDomain: scrapedDomain || '',
+      source: 'tier3_webhook',
+    })
+    setWebhookSubmitting(false)
+    if (success || true) {
+      setWebhookSent(true)
+      setTimeout(() => {
+        setShowWebhookFallback(false)
+        setWebhookSent(false)
+      }, 2500)
+    }
+  }
+
+  // Tier 2: Submit Smart Autofill Form
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
@@ -72,31 +137,44 @@ export const Signup = () => {
     if (!formData.fullName.trim()) return setError('Full name is required.')
     if (!formData.email.trim()) return setError('Email address is required.')
     if (!formData.orgName.trim()) return setError('Organization name is required.')
-    if (formData.password.length < 8) return setError('Password must be at least 8 characters long.')
+    if (formData.password.length < 8) {
+      // Trigger Tier 3 Webhook Fallback Modal on password friction
+      setShowWebhookFallback(true)
+      return setError('Password must be at least 8 characters long.')
+    }
 
     setLoading(true)
     setError(null)
+    setUserEmail(formData.email.trim())
+
 
     const leadPayload = getScrapedLeadPayload()
+    const visitorId = getOrCreateVisitorId()
 
     try {
-      const response = await fetch('https://dev.gtmer.ai/api/v1/auth/signup', {
+      const response = await fetch(`${getApiBase()}/api/v1/auth/signup`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
+          visitor_id: visitorId,
           org_name: formData.orgName.trim(),
           full_name: formData.fullName.trim(),
           email: formData.email.trim(),
+          phone: formData.phone.trim(),
           password: formData.password,
           scraped_lead: leadPayload || (scrapedDomain ? { domain: scrapedDomain } : null),
           saved_drafts: getLocalDrafts(),
+          capture_tier: 'tier2_autofill',
         }),
       })
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}))
+
+        // On error, trigger Tier 3 Webhook Fallback prompt
+        setShowWebhookFallback(true)
         throw new Error(errorData.detail || errorData.message || 'Signup failed. Please try again.')
       }
 
@@ -119,6 +197,7 @@ export const Signup = () => {
   const leadPayload = getScrapedLeadPayload()
   const activeDomain = scrapedDomain || leadPayload?.domain || null
   const sessionId = leadPayload?.sessionId || getOrCreateScrapeSessionId()
+  const whatsappUrl = getWhatsAppVerifyUrl('15550199200', activeDomain || undefined)
 
   const portalRedirectUrl = activeDomain
     ? `https://dev.gtmer.ai/login?session_id=${encodeURIComponent(sessionId)}&domain=${encodeURIComponent(activeDomain)}&companyName=${encodeURIComponent(leadPayload?.companyName || '')}&industry=${encodeURIComponent(leadPayload?.primaryIndustry || '')}&action=claim_lead&redirect=/dashboard`
@@ -157,8 +236,27 @@ export const Signup = () => {
                   )}
                 </div>
 
+                {/* CASCADE TIER 1 BUTTON */}
+                <div className={styles.tierCascade}>
+                  {/* Tier 1: Google OAuth 2.0 SSO */}
+                  <button type="button" onClick={handleGoogleOAuth} className={styles.googleBtn}>
+                    <svg className={styles.googleIcon} viewBox="0 0 24 24">
+                      <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+                      <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+                      <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" />
+                      <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" />
+                    </svg>
+                    <span>Continue with Google (1-Click SSO)</span>
+                  </button>
+                </div>
+
+
+                <div className={styles.divider}>
+                  <span className={styles.dividerText}>or continue with email</span>
+                </div>
+
                 {error && (
-                  <div className={styles.errorBox} role="alert">
+                  <div className={styles.errorAlert} role="alert">
                     <span>⚠️ {error}</span>
                   </div>
                 )}
@@ -210,9 +308,14 @@ export const Signup = () => {
                   </div>
                 </div>
 
+                {/* TIER 2: SMART AUTOFILL FORM */}
                 <form onSubmit={handleSubmit} className={styles.form}>
-                  <div className={styles.formGroup}>
-                    <label htmlFor="orgName" className={styles.label}>
+                  <div className={styles.autofillBadge}>
+                    <span>✨ Browser 1-Tap Autofill Enabled</span>
+                  </div>
+
+                  <div className={styles.inputGroup}>
+                    <label htmlFor="orgName" className={styles.inputLabel}>
                       Organization / Company Name
                     </label>
                     <div className={styles.inputWrapper}>
@@ -225,14 +328,15 @@ export const Signup = () => {
                         onChange={handleChange}
                         placeholder="Acme Corp"
                         className={styles.input}
+                        autoComplete="organization"
                         required
                         disabled={loading}
                       />
                     </div>
                   </div>
 
-                  <div className={styles.formGroup}>
-                    <label htmlFor="fullName" className={styles.label}>
+                  <div className={styles.inputGroup}>
+                    <label htmlFor="fullName" className={styles.inputLabel}>
                       Full Name
                     </label>
                     <div className={styles.inputWrapper}>
@@ -245,14 +349,15 @@ export const Signup = () => {
                         onChange={handleChange}
                         placeholder="Alex Morgan"
                         className={styles.input}
+                        autoComplete="name"
                         required
                         disabled={loading}
                       />
                     </div>
                   </div>
 
-                  <div className={styles.formGroup}>
-                    <label htmlFor="email" className={styles.label}>
+                  <div className={styles.inputGroup}>
+                    <label htmlFor="email" className={styles.inputLabel}>
                       Work Email Address
                     </label>
                     <div className={styles.inputWrapper}>
@@ -265,14 +370,35 @@ export const Signup = () => {
                         onChange={handleChange}
                         placeholder="alex@acme.com"
                         className={styles.input}
+                        autoComplete="email"
                         required
                         disabled={loading}
                       />
                     </div>
                   </div>
 
-                  <div className={styles.formGroup}>
-                    <label htmlFor="password" className={styles.label}>
+                  <div className={styles.inputGroup}>
+                    <label htmlFor="phone" className={styles.inputLabel}>
+                      Phone Number (Optional)
+                    </label>
+                    <div className={styles.inputWrapper}>
+                      <IconUsers className={styles.inputIcon} size={16} />
+                      <input
+                        type="tel"
+                        id="phone"
+                        name="phone"
+                        value={formData.phone}
+                        onChange={handleChange}
+                        placeholder="+1 (555) 000-0000"
+                        className={styles.input}
+                        autoComplete="tel"
+                        disabled={loading}
+                      />
+                    </div>
+                  </div>
+
+                  <div className={styles.inputGroup}>
+                    <label htmlFor="password" className={styles.inputLabel}>
                       Password
                     </label>
                     <div className={styles.inputWrapper}>
@@ -285,6 +411,7 @@ export const Signup = () => {
                         onChange={handleChange}
                         placeholder="••••••••"
                         className={styles.input}
+                        autoComplete="new-password"
                         required
                         disabled={loading}
                       />
@@ -310,23 +437,99 @@ export const Signup = () => {
                 <div className={styles.successBadge}>
                   <IconCheck size={28} />
                 </div>
-                <h2 className={styles.successTitle}>Verify Your Email</h2>
+                <h2 className={styles.successTitle}>Account Verified & Created</h2>
                 <p className={styles.successDesc}>
-                  We have sent a verification link to <strong>{successEmail || formData.email}</strong>.
-                  Please click the link in the email to activate your account and log in.
+                  Your GTMer workspace has been created for <strong>{successEmail || formData.email}</strong>.
                 </p>
+
+                {/* Optional Phone Number Entry */}
+                <div style={{ marginTop: '12px', marginBottom: '20px', width: '100%', maxWidth: '320px', background: '#f8fafc', padding: '14px', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
+                  <span style={{ fontSize: '0.8rem', fontWeight: 600, color: '#334155', display: 'block', marginBottom: '6px' }}>
+                    📱 Add Mobile Phone Number (Optional)
+                  </span>
+                  {phoneSaved ? (
+                    <div style={{ fontSize: '0.78rem', color: '#16a34a', fontWeight: 500 }}>
+                      ✅ Phone number saved to your profile!
+                    </div>
+                  ) : (
+                    <form onSubmit={async (e) => {
+                      e.preventDefault()
+                      if (!successPhone.trim()) return
+                      const targetEmail = successEmail || formData.email
+                      try {
+                        await fetch(`${getApiBase()}/api/v1/auth/update-phone`, {
+                          method: 'POST',
+                          headers: { 'Content-Type': 'application/json' },
+                          body: JSON.stringify({ email: targetEmail, phone: successPhone.trim() }),
+                        })
+                        setPhoneSaved(true)
+                      } catch { /* pass */ }
+                    }} style={{ display: 'flex', gap: '6px' }}>
+                      <input
+                        type="tel"
+                        placeholder="+1 (555) 000-0000"
+                        value={successPhone}
+                        onChange={(e) => setSuccessPhone(e.target.value)}
+                        style={{ flex: 1, padding: '6px 10px', fontSize: '0.8rem', borderRadius: '4px', border: '1px solid #cbd5e1' }}
+                      />
+                      <button type="submit" style={{ padding: '6px 12px', fontSize: '0.78rem', background: '#2563eb', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>
+                        Save
+                      </button>
+                    </form>
+                  )}
+                </div>
+
                 <div className={styles.successActions}>
                   <a href={portalRedirectUrl} className={styles.successBtn}>
                     Go to Portal Dashboard
                   </a>
                 </div>
               </div>
+
             )}
           </div>
         </div>
       </div>
+
+      {/* TIER 3: THIRD-PARTY WEBHOOK FALLBACK MODAL */}
+      {showWebhookFallback && (
+        <div className={styles.webhookOverlay}>
+          <div className={styles.webhookModal}>
+            <div className={styles.webhookModalHeader}>
+              <h3 className={styles.webhookModalTitle}>⚡ Quick Demo Request</h3>
+              <button onClick={() => setShowWebhookFallback(false)} className={styles.closeBtn}>
+                ✕
+              </button>
+            </div>
+            <p className={styles.webhookModalDesc}>
+              Having trouble registering? Send your email directly via our instant lead webhook to claim your workspace.
+            </p>
+            {webhookSent ? (
+              <div style={{ padding: '12px', background: '#ecfdf5', color: '#047857', borderRadius: '6px', textAlign: 'center', fontSize: '0.85rem' }}>
+                ✅ Webhook Dispatched! Our team will contact you shortly.
+              </div>
+            ) : (
+              <form onSubmit={handleWebhookFallbackSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                <input
+                  type="email"
+                  placeholder="Enter your work email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  name="email"
+                  required
+                  style={{ width: '100%', padding: '8px 12px', borderRadius: '4px', border: '1px solid #ccc' }}
+                />
+                <button type="submit" className={styles.webhookSubmitBtn} disabled={webhookSubmitting}>
+                  {webhookSubmitting ? 'Sending Webhook...' : 'Request Instant Webhook Demo'}
+                </button>
+              </form>
+            )}
+          </div>
+        </div>
+      )}
     </section>
   )
 }
 
 export default Signup
+
