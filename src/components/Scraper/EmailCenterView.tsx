@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { API_BASE } from '../../config/api'
 import { type ScraperResult } from '../../services/scraperEngine'
 import {
   setScrapedLeadPayload,
@@ -86,7 +87,7 @@ export const EmailCenterView: React.FC<EmailCenterViewProps> = ({ results, onBac
     })
 
     // Backend Ingest Endpoint Sync
-    fetch('https://dev.gtmer.ai/api/v1/scraper/sessions', {
+    fetch(`${API_BASE}/scraper/sessions`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({

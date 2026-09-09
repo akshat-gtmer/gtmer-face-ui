@@ -1,6 +1,10 @@
 {
   "rewrites": [
     {
+      "source": "/api/:path*",
+      "destination": "https://dev.gtmer.ai/api/:path*"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }

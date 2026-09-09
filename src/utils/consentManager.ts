@@ -1,3 +1,5 @@
+import { API_BASE } from '../config/api'
+
 export interface CookieConsentState {
   essential: boolean
   functional: boolean
@@ -49,7 +51,7 @@ export const saveConsent = (consent: Partial<CookieConsentState>): CookieConsent
     localStorage.setItem('gtmer_visitor_id', visitorId)
   }
 
-  fetch('https://dev.gtmer.ai/api/v1/consent', {
+  fetch(`${API_BASE}/consent`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({

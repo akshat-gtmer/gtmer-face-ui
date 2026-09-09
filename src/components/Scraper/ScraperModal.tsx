@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { API_BASE } from '../../config/api'
 import { executeWebScrape, type ScraperResult, type ScrapedPageDetail } from '../../services/scraperEngine'
 import { checkDemoLimitBlocked, setScrapedCompanyCookie, setScrapedLeadPayload, getOrCreateScrapeSessionId } from '../../utils/cookieUtils'
 import { IconArrowRight, IconBolt } from '../Icons'
@@ -73,7 +74,7 @@ export const ScraperModal: React.FC<ScraperModalProps> = ({ isOpen, onClose, ini
       })
 
       // Send payload to backend session ingest endpoint
-      fetch('https://dev.gtmer.ai/api/v1/scraper/sessions', {
+      fetch(`${API_BASE}/scraper/sessions`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

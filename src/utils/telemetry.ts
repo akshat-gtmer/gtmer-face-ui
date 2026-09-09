@@ -1,7 +1,6 @@
 import { getStoredConsent } from './consentManager'
 import { setStoredUserEmail } from './cookieUtils'
-
-const API_BASE = 'https://dev.gtmer.ai/api/v1'
+import { API_BASE } from '../config/api'
 
 /**
  * Get or create persistent visitor ID

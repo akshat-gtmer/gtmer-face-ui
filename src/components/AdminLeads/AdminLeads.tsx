@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import { API_BASE } from '../../config/api'
 import styles from './AdminLeads.module.css'
 
 interface LeadRecord {
@@ -75,18 +76,17 @@ export const AdminLeads = () => {
   const fetchDashboardData = async (query = searchQuery) => {
     setLoading(true)
     setError(null)
-    const apiBase = getApiBase()
 
     try {
       // 1. Fetch Captured Leads
-      const leadsRes = await fetch(`${apiBase}/api/v1/leads`)
+      const leadsRes = await fetch(`${API_BASE}/leads`)
       if (!leadsRes.ok) throw new Error('Could not connect to backend engine.')
       const leadsData = await leadsRes.json()
       setLeads(leadsData.leads || [])
 
       // 2. Fetch Analytics & Telemetry Summary
       const queryParam = query ? `?search=${encodeURIComponent(query)}` : ''
-      const analyticsRes = await fetch(`${apiBase}/api/v1/analytics/summary${queryParam}`)
+      const analyticsRes = await fetch(`${API_BASE}/analytics/summary${queryParam}`)
       if (analyticsRes.ok) {
         const analyticsData = await analyticsRes.json()
         setAnalytics(analyticsData)
