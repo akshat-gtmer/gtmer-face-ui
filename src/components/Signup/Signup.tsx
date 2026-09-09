@@ -15,20 +15,19 @@ import {
 import { setUserEmail } from '../../utils/telemetry'
 import { API_BASE } from '../../config/api'
 
-import { IconArrowRight, IconMail, IconLock, IconUsers, IconGlobe, IconCheck } from '../Icons'
+import { IconArrowRight, IconMail, IconLock, IconUsers, IconGlobe } from '../Icons'
 import styles from './Signup.module.css'
 
 export const Signup = () => {
   const navigate = useNavigate()
   const location = useLocation()
-  const isSuccess = location.pathname === '/signup/success'
-  const successEmail = location.state?.email || (typeof window !== 'undefined' ? localStorage.getItem('gtmer_user_email') : '') || ''
 
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
     phone: '',
     orgName: '',
+    companyUrl: '',
     password: '',
   })
   const [loading, setLoading] = useState(false)
@@ -38,8 +37,12 @@ export const Signup = () => {
   const [showWebhookFallback, setShowWebhookFallback] = useState(false)
   const [webhookSubmitting, setWebhookSubmitting] = useState(false)
   const [webhookSent, setWebhookSent] = useState(false)
-  const [successPhone, setSuccessPhone] = useState('')
-  const [phoneSaved, setPhoneSaved] = useState(false)
+
+  useEffect(() => {
+    if (location.pathname === '/signup/success') {
+      navigate('/', { replace: true })
+    }
+  }, [location.pathname, navigate])
 
 
   useEffect(() => {
@@ -61,6 +64,10 @@ export const Signup = () => {
     const domainToUse = urlParams.domain || leadPayload?.domain || (drafts[0]?.name) || null
     if (domainToUse) {
       setScrapedDomain(domainToUse)
+      setFormData(prev => ({
+        ...prev,
+        companyUrl: prev.companyUrl || (domainToUse.startsWith('http') ? domainToUse : `https://${domainToUse}`),
+      }))
     }
 
     if (urlParams.subject && urlParams.emailBody) {
@@ -89,7 +96,16 @@ export const Signup = () => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
-    setFormData(prev => ({ ...prev, [name]: value }))
+    setFormData(prev => {
+      const next = { ...prev, [name]: value }
+      if (name === 'email' && !prev.companyUrl && value.includes('@')) {
+        const domainPart = value.split('@')[1]?.toLowerCase()
+        if (domainPart && !['gmail.com', 'yahoo.com', 'outlook.com', 'hotmail.com', 'icloud.com'].includes(domainPart)) {
+          next.companyUrl = `https://${domainPart}`
+        }
+      }
+      return next
+    })
     setError(null)
   }
 
@@ -126,9 +142,22 @@ export const Signup = () => {
     if (!formData.fullName.trim()) return setError('Full name is required.')
     if (!formData.email.trim()) return setError('Email address is required.')
     if (!formData.orgName.trim()) return setError('Organization name is required.')
+
+    let normalizedCompanyUrl = (formData.companyUrl.trim() || scrapedDomain || '').trim()
+    if (!normalizedCompanyUrl && formData.email.includes('@')) {
+      const domainPart = formData.email.split('@')[1]?.toLowerCase()
+      if (domainPart && !['gmail.com', 'yahoo.com', 'outlook.com', 'hotmail.com'].includes(domainPart)) {
+        normalizedCompanyUrl = domainPart
+      }
+    }
+    if (!normalizedCompanyUrl) {
+      return setError('Company website is mandatory to register your organization workspace.')
+    }
+    if (!normalizedCompanyUrl.startsWith('http://') && !normalizedCompanyUrl.startsWith('https://')) {
+      normalizedCompanyUrl = `https://${normalizedCompanyUrl}`
+    }
+
     if (formData.password.length < 8) {
-      // Trigger Tier 3 Webhook Fallback Modal on password friction
-      setShowWebhookFallback(true)
       return setError('Password must be at least 8 characters long.')
     }
 
@@ -136,9 +165,34 @@ export const Signup = () => {
     setError(null)
     setUserEmail(formData.email.trim())
 
-
-    const leadPayload = getScrapedLeadPayload()
     const visitorId = getOrCreateVisitorId()
+
+    // 1. Immediately link visitor lead with phone and company details
+    fetch(`${API_BASE}/leads`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        visitorId: visitorId,
+        email: formData.email.trim(),
+        name: formData.fullName.trim(),
+        fullName: formData.fullName.trim(),
+        company: formData.orgName.trim(),
+        orgName: formData.orgName.trim(),
+        companyUrl: normalizedCompanyUrl || undefined,
+        phone: formData.phone.trim() || undefined,
+        source: 'signup_form',
+      }),
+    }).catch(() => { /* non-blocking */ })
+
+    // Persist identity into localStorage so success screen and subsequent sessions retain it
+    setStoredUserEmail(formData.email.trim())
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('gtmer_user_name', formData.fullName.trim())
+      localStorage.setItem('gtmer_user_org', formData.orgName.trim())
+      if (formData.phone.trim()) {
+        localStorage.setItem('gtmer_user_phone', formData.phone.trim())
+      }
+    }
 
     try {
       const response = await fetch(`${API_BASE}/auth/signup`, {
@@ -147,31 +201,41 @@ export const Signup = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          visitor_id: visitorId,
           org_name: formData.orgName.trim(),
           full_name: formData.fullName.trim(),
           email: formData.email.trim(),
-          phone: formData.phone.trim(),
+          phone: formData.phone.trim() || undefined,
+          company_url: normalizedCompanyUrl,
           password: formData.password,
-          scraped_lead: leadPayload || (scrapedDomain ? { domain: scrapedDomain } : null),
           saved_drafts: getLocalDrafts(),
-          capture_tier: 'tier2_autofill',
         }),
       })
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}))
+        const errorMsg =
+          typeof errorData.detail === 'string'
+            ? errorData.detail
+            : Array.isArray(errorData.detail)
+            ? errorData.detail.map((d: any) => d.msg || JSON.stringify(d)).join(', ')
+            : errorData.message || 'Signup request failed. Please try again.'
 
-        // On error, trigger Tier 3 Webhook Fallback prompt
-        setShowWebhookFallback(true)
-        throw new Error(errorData.detail || errorData.message || 'Signup failed. Please try again.')
+        // For user/validation conflicts (400, 409, 422), render cleanly without popup modal
+        if (response.status === 409 || errorMsg.toLowerCase().includes('already registered') || errorMsg.toLowerCase().includes('already taken')) {
+          throw new Error(`${errorMsg}. Please sign in to your existing account.`)
+        }
+        if (response.status === 400 || response.status === 422) {
+          throw new Error(errorMsg)
+        }
+
+        throw new Error(errorMsg || 'Server encountered an error processing registration. Please try again.')
       }
 
       // Clear scrape session payload once successfully submitted
       clearScrapeSession()
 
-      // Success -> navigate to success screen
-      navigate('/signup/success', { state: { email: formData.email.trim() } })
+      // Success -> redirect directly to faceui
+      navigate('/', { replace: true })
     } catch (err: unknown) {
       if (err instanceof Error) {
         setError(err.message)
@@ -211,9 +275,7 @@ export const Signup = () => {
           </div>
 
           <div className={styles.windowBody}>
-            {!isSuccess ? (
-              <>
-                <div className={styles.headerText}>
+            <div className={styles.headerText}>
                   <h1 className={styles.title}>Start Automating Outbound</h1>
                   <p className={styles.subtitle}>
                     Create your GTMer workspace to deploy autonomous AI agents, automate prospect research, and generate hyper-personalized sales campaigns.
@@ -299,6 +361,27 @@ export const Signup = () => {
                         placeholder="Acme Corp"
                         className={styles.input}
                         autoComplete="organization"
+                        required
+                        disabled={loading}
+                      />
+                    </div>
+                  </div>
+
+                  <div className={styles.inputGroup}>
+                    <label htmlFor="companyUrl" className={styles.inputLabel}>
+                      Company Website URL
+                    </label>
+                    <div className={styles.inputWrapper}>
+                      <IconGlobe className={styles.inputIcon} size={16} />
+                      <input
+                        type="text"
+                        id="companyUrl"
+                        name="companyUrl"
+                        value={formData.companyUrl}
+                        onChange={handleChange}
+                        placeholder="acme.com or https://acme.com"
+                        className={styles.input}
+                        autoComplete="url"
                         required
                         disabled={loading}
                       />
@@ -401,65 +484,6 @@ export const Signup = () => {
                     Sign in here
                   </a>
                 </p>
-              </>
-            ) : (
-              <div className={styles.successState}>
-                <div className={styles.successBadge}>
-                  <IconCheck size={28} />
-                </div>
-                <h2 className={styles.successTitle}>Account Verified & Created</h2>
-                <p className={styles.successDesc}>
-                  Your GTMer workspace has been created for <strong>{successEmail || formData.email}</strong>.
-                </p>
-
-                {/* Optional Phone Number Entry */}
-                <div style={{ marginTop: '12px', marginBottom: '20px', width: '100%', maxWidth: '320px', background: '#f8fafc', padding: '14px', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
-                  <span style={{ fontSize: '0.8rem', fontWeight: 600, color: '#334155', display: 'block', marginBottom: '6px' }}>
-                    📱 Add Mobile Phone Number (Optional)
-                  </span>
-                  {phoneSaved ? (
-                    <div style={{ fontSize: '0.78rem', color: '#16a34a', fontWeight: 500 }}>
-                      ✅ Phone number saved to your profile!
-                    </div>
-                  ) : (
-                    <form onSubmit={async (e) => {
-                      e.preventDefault()
-                      if (!successPhone.trim()) return
-                      const targetEmail = successEmail || formData.email
-                      try {
-                        await fetch(`${API_BASE}/auth/update-phone`, {
-                          method: 'POST',
-                          headers: { 'Content-Type': 'application/json' },
-                          body: JSON.stringify({ email: targetEmail, phone: successPhone.trim() }),
-                        })
-                        setPhoneSaved(true)
-                      } catch { /* pass */ }
-                    }} style={{ display: 'flex', gap: '6px' }}>
-                      <input
-                        type="tel"
-                        placeholder="+1 (555) 000-0000"
-                        value={successPhone}
-                        onChange={(e) => setSuccessPhone(e.target.value)}
-                        style={{ flex: 1, padding: '6px 10px', fontSize: '0.8rem', borderRadius: '4px', border: '1px solid #cbd5e1' }}
-                      />
-                      <button type="submit" style={{ padding: '6px 12px', fontSize: '0.78rem', background: '#2563eb', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>
-                        Save
-                      </button>
-                    </form>
-                  )}
-                </div>
-
-                <div className={styles.successActions} style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center' }}>
-                  <Link to="/" className={styles.submitBtn} style={{ marginTop: 0 }}>
-                    Return to GTMer
-                  </Link>
-                  <a href={portalRedirectUrl} className={styles.successBtn}>
-                    Go to Portal Dashboard
-                  </a>
-                </div>
-              </div>
-
-            )}
           </div>
         </div>
       </div>

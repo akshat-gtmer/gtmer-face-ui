@@ -12,7 +12,10 @@ export default defineConfig({
       '/api': {
         target: 'https://dev.gtmer.ai',
         changeOrigin: true,
-        secure: true,
+        secure: false,
+        headers: {
+          Connection: 'keep-alive',
+        },
       },
     },
   },

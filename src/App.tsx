@@ -1,5 +1,5 @@
 import React from 'react'
-import { Routes, Route, useLocation } from 'react-router-dom'
+import { Routes, Route, useLocation, Navigate } from 'react-router-dom'
 import { useEffect } from 'react'
 
 /* Extend Window to include GTM dataLayer — avoids TypeScript errors */
@@ -113,7 +113,7 @@ const App = () => {
           <Route path="/faq" element={<PageWithFooter><FAQ /></PageWithFooter>} />
           <Route path="/gtm-automation" element={<PageWithFooter><GtmAutomation /></PageWithFooter>} />
           <Route path="/signup" element={<PageWithFooter><Signup /></PageWithFooter>} />
-          <Route path="/signup/success" element={<PageWithFooter><Signup /></PageWithFooter>} />
+          <Route path="/signup/success" element={<Navigate to="/" replace />} />
           <Route path="/auth/callback" element={<AuthCallback />} />
           <Route path="/scraper" element={<PageWithFooter><Scraper /></PageWithFooter>} />
           <Route path="/admin/leads" element={<PageWithFooter><AdminLeads /></PageWithFooter>} />
