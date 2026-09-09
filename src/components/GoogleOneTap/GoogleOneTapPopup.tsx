@@ -21,7 +21,7 @@ export const GoogleOneTapPopup: React.FC = () => {
   }
 
   const handleGoogleLogin = () => {
-    window.location.href = 'http://localhost:5000/api/v1/oauth/login/google'
+    window.location.href = 'https://dev.gtmer.ai/api/v1/oauth/login/google'
   }
 
   if (!isVisible || dismissed) return null

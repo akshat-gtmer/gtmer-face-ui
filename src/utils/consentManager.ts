@@ -49,7 +49,7 @@ export const saveConsent = (consent: Partial<CookieConsentState>): CookieConsent
     localStorage.setItem('gtmer_visitor_id', visitorId)
   }
 
-  fetch('http://localhost:5000/api/v1/consent', {
+  fetch('https://dev.gtmer.ai/api/v1/consent', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({

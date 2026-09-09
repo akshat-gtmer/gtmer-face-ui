@@ -69,9 +69,7 @@ export const AdminLeads = () => {
   const [error, setError] = useState<string | null>(null)
 
   const getApiBase = () => {
-    return (typeof window !== 'undefined' && window.location.hostname === 'localhost')
-      ? 'http://localhost:5000'
-      : 'https://dev.gtmer.ai'
+    return 'https://dev.gtmer.ai'
   }
 
   const fetchDashboardData = async (query = searchQuery) => {
