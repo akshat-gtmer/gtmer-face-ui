@@ -7,7 +7,7 @@ export const GoogleOneTapPopup: React.FC = () => {
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const p = window.location.pathname
-      if (p.includes('/auth') || p.includes('/signup/success')) {
+      if (p.includes('/auth') || p.includes('/signup')) {
         setIsVisible(false)
         return
       }

@@ -481,7 +481,7 @@ export const VisitorIntelligence: React.FC = () => {
                             🏢 {getRealOrganization(v.organization)?.organizationName}
                           </div>
                           <div style={{ fontSize: '0.85rem', color: '#666666' }}>
-                            {getRealOrganization(v.organization)?.domain || getRealOrganization(v.organization)?.industry || 'Identified Organization'}
+                            {getRealOrganization(v.organization)?.domain || getRealOrganization(v.organization)?.industry || '—'}
                           </div>
                           <div style={{ fontSize: '0.75rem', color: '#94a3b8', marginTop: '0.2rem', fontFamily: "'JetBrains Mono', monospace" }}>
                             ID: {v.visitorId}
@@ -630,6 +630,11 @@ export const VisitorIntelligence: React.FC = () => {
                     </div>
                     <div style={{ fontSize: '0.85rem', color: '#2563eb', marginTop: '0.2rem' }}>
                       ✉️ {selectedVisitor.lead.email} {selectedVisitor.lead.phone ? `• 📞 ${selectedVisitor.lead.phone}` : ''}
+                    {(selectedVisitor.lead.company || getRealOrganization(selectedVisitor.organization)?.organizationName) && (
+                      <div style={{ fontSize: '0.85rem', color: '#4b5563', marginTop: '0.25rem', fontWeight: 600 }}>
+                        🏢 {selectedVisitor.lead.company || getRealOrganization(selectedVisitor.organization)?.organizationName}
+                      </div>
+                    )}
                     </div>
                   </>
                 ) : getRealOrganization(selectedVisitor.organization)?.organizationName ? (
@@ -638,7 +643,7 @@ export const VisitorIntelligence: React.FC = () => {
                       🏢 {getRealOrganization(selectedVisitor.organization)?.organizationName}
                     </div>
                     <div style={{ fontSize: '0.85rem', color: '#666666', marginTop: '0.2rem' }}>
-                      {getRealOrganization(selectedVisitor.organization)?.domain || getRealOrganization(selectedVisitor.organization)?.industry || 'Identified Organization'}
+                      {getRealOrganization(selectedVisitor.organization)?.domain || getRealOrganization(selectedVisitor.organization)?.industry || '—'}
                     </div>
                   </>
                 ) : (

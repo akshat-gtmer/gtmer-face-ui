@@ -59,21 +59,20 @@ export const AuthCallback: React.FC = () => {
                 name: userName,
                 source: 'google_login',
               }),
-            }).catch((err) => console.warn('[AuthCallback] Lead link error:', err))
+            }).catch(() => { /* non-blocking */ })
           }
         }
       } catch (err) {
         console.warn('[AuthCallback] Failed to parse access token:', err)
       }
 
-      // 4. Mark auth status and redirect
+      // 4. Mark auth status and redirect directly to face-ui
       setStatusText('Signed in successfully! Redirecting...')
       setTimeout(() => {
-        navigate('/signup/success?provider=google', {
+        navigate('/', {
           replace: true,
-          state: { email: userEmail },
         })
-      }, 800)
+      }, 500)
     } else {
       setError('No authentication token received.')
       setStatusText('Authentication failed')
