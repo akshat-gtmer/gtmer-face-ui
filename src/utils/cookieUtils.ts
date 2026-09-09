@@ -1,3 +1,5 @@
+import { API_BASE } from '../config/api'
+
 /**
  * Utility functions for session cookie management & lead payload transfer.
  * Rule 1: Cookie collection & session lead tracking.
@@ -457,10 +459,8 @@ export const sendLeadWebhookPayload = async (payload: Partial<LeadWebhookPayload
     timestamp: new Date().toISOString(),
   }
 
-  const apiBase = 'https://dev.gtmer.ai'
-
   try {
-    const response = await fetch(`${apiBase}/api/v1/leads/webhook`, {
+    const response = await fetch(`${API_BASE}/leads/webhook`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(fullPayload),

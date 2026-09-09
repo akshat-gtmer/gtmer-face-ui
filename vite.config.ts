@@ -7,4 +7,13 @@ import react from '@vitejs/plugin-react'
 // Vercel & Netlify do this by default. For Nginx, add: try_files $uri /index.html;
 export default defineConfig({
   plugins: [react()],
+  server: {
+    proxy: {
+      '/api': {
+        target: 'https://dev.gtmer.ai',
+        changeOrigin: true,
+        secure: true,
+      },
+    },
+  },
 })

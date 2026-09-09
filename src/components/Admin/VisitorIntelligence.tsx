@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { API_BASE } from '../../config/api'
 
 export interface Visitor {
   id: string
@@ -81,7 +82,7 @@ export const VisitorIntelligence: React.FC = () => {
   const fetchVisitors = async () => {
     setLoading(true)
     try {
-      const res = await fetch('https://dev.gtmer.ai/api/v1/visitors')
+      const res = await fetch(`${API_BASE}/visitors`)
       const data = await res.json()
       setVisitors(data.visitors || [])
     } catch (e) {
@@ -97,7 +98,7 @@ export const VisitorIntelligence: React.FC = () => {
 
   const fetchDetail = async (visitorId: string) => {
     try {
-      const res = await fetch(`https://dev.gtmer.ai/api/v1/visitors/${visitorId}`)
+      const res = await fetch(`${API_BASE}/visitors/${visitorId}`)
       const data = await res.json()
       setSelectedVisitor(data)
     } catch (e) {
@@ -108,7 +109,7 @@ export const VisitorIntelligence: React.FC = () => {
   const handleConvertToLead = async (visitorId: string, companyName?: string) => {
     setConvertingLeadId(visitorId)
     try {
-      const res = await fetch('https://dev.gtmer.ai/api/v1/leads', {
+      const res = await fetch(`${API_BASE}/leads`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -133,7 +134,7 @@ export const VisitorIntelligence: React.FC = () => {
   const handleDeleteVisitor = async (visitorId: string) => {
     if (!window.confirm('Delete all data for this visitor (GDPR Right-to-be-Forgotten)?')) return
     try {
-      const res = await fetch(`https://dev.gtmer.ai/api/v1/visitors/${visitorId}`, {
+      const res = await fetch(`${API_BASE}/visitors/${visitorId}`, {
         method: 'DELETE',
       })
       if (res.ok) {
