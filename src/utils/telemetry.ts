@@ -95,6 +95,13 @@ export const trackClick = (buttonText: string, buttonId?: string, targetUrl?: st
 /**
  * Track button/action click with pagePath support (alias for backward compatibility with TelemetryTracker)
  */
+export const trackFormSubmit = (formName: string, pagePath?: string, extraData?: Record<string, any>) => {
+  sendTelemetryEvent('form_submit', pagePath || window.location.pathname, {
+    formName,
+    ...extraData,
+  })
+}
+
 export const trackButtonClick = (
   buttonText: string,
   buttonId?: string,
