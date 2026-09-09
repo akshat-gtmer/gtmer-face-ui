@@ -659,7 +659,7 @@ export const VisitorIntelligence: React.FC = () => {
 
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '0.75rem', paddingTop: '0.75rem', borderTop: '1px solid rgba(0, 0, 0, 0.05)' }}>
                   <span style={{ fontSize: '0.85rem', color: '#92400e', fontWeight: 600 }}>Intent Score: {selectedVisitor.intentScore} ({selectedVisitor.intentLevel})</span>
-                  <span style={{ fontSize: '0.85rem', color: selectedVisitor.consentStatus === 'accepted_all' ? '#16a34a' : '#dc2626', fontWeight: 600 }}>Consent: {selectedVisitor.consentStatus}</span>
+                  <span style={{ fontSize: '0.85rem', color: selectedVisitor.consentStatus === 'accepted_all' ? '#16a34a' : selectedVisitor.consentStatus === 'essential_only' ? '#b45309' : '#dc2626', fontWeight: 600 }}>Consent: {selectedVisitor.consentStatus === 'essential_only' ? 'Essential (Pages + Buttons)' : selectedVisitor.consentStatus}</span>
                 </div>
               </div>
 
@@ -780,6 +780,11 @@ export const VisitorIntelligence: React.FC = () => {
                                     "{e.eventData?.buttonText || 'Button'}"
                                   </span>
                                 </div>
+                                {e.eventData?.buttonId && (
+                                  <div style={{ fontSize: '0.7rem', color: '#7e22ce', marginTop: '0.15rem', fontFamily: "'JetBrains Mono', monospace" }}>
+                                    ID: {e.eventData.buttonId}
+                                  </div>
+                                )}
                                 <div style={{ fontSize: '0.75rem', color: '#666666', marginTop: '0.2rem' }}>
                                   Page: {e.pageUrl}
                                 </div>
@@ -889,11 +894,35 @@ export const VisitorIntelligence: React.FC = () => {
                         <div style={{ fontSize: '0.9rem', fontWeight: 700, color: '#1a1a1a', marginBottom: '1rem' }}>
                           GDPR / ePrivacy Consent Choices
                         </div>
+
+                        {/* Tracking scope banner for essential_only consent */}
+                        {selectedVisitor.consentStatus === 'essential_only' && (
+                          <div style={{
+                            padding: '0.75rem 1rem',
+                            backgroundColor: 'rgba(245, 158, 11, 0.08)',
+                            border: '1px solid rgba(245, 158, 11, 0.25)',
+                            borderRadius: '0.5rem',
+                            marginBottom: '1rem',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '0.5rem',
+                          }}>
+                            <span style={{ fontSize: '1rem' }}>📊</span>
+                            <div>
+                              <div style={{ fontSize: '0.8rem', fontWeight: 700, color: '#92400e' }}>Essential Tracking Active</div>
+                              <div style={{ fontSize: '0.75rem', color: '#b45309', marginTop: '0.1rem' }}>
+                                Tracking: <strong>Pages visited</strong> &amp; <strong>Button clicks</strong> • Visitor ID: <span style={{ fontFamily: "'JetBrains Mono', monospace" }}>{selectedVisitor.visitorId}</span>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+
                         {selectedVisitor.consentRecord ? (
                           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '0.75rem' }}>
                             <div style={{ backgroundColor: '#ffffff', padding: '0.75rem', borderRadius: '0.5rem', border: '1px solid rgba(0,0,0,0.05)' }}>
                               <div style={{ fontSize: '0.75rem', color: '#888888' }}>Essential</div>
                               <div style={{ fontSize: '0.85rem', fontWeight: 700, color: '#16a34a', marginTop: '0.2rem' }}>✓ Active</div>
+                              <div style={{ fontSize: '0.65rem', color: '#888888', marginTop: '0.15rem' }}>Pages &amp; Buttons</div>
                             </div>
                             <div style={{ backgroundColor: '#ffffff', padding: '0.75rem', borderRadius: '0.5rem', border: '1px solid rgba(0,0,0,0.05)' }}>
                               <div style={{ fontSize: '0.75rem', color: '#888888' }}>Functional</div>

@@ -12,7 +12,7 @@ import {
   setStoredUserEmail,
   type SavedEmailDraft,
 } from '../../utils/cookieUtils'
-import { setUserEmail } from '../../utils/telemetry'
+import { setUserEmail, trackFormSubmit } from '../../utils/telemetry'
 import { API_BASE } from '../../config/api'
 
 import { IconArrowRight, IconMail, IconLock, IconUsers, IconGlobe } from '../Icons'
@@ -115,6 +115,11 @@ export const Signup = () => {
     setWebhookSubmitting(true)
     if (formData.email) {
       setUserEmail(formData.email.trim())
+    trackFormSubmit('signup_form', '/signup', {
+      email: formData.email.trim(),
+      company: formData.orgName.trim(),
+      phone: formData.phone.trim() || undefined,
+    })
     }
     const success = await sendLeadWebhookPayload({
       email: formData.email,
