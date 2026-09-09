@@ -457,9 +457,7 @@ export const sendLeadWebhookPayload = async (payload: Partial<LeadWebhookPayload
     timestamp: new Date().toISOString(),
   }
 
-  const apiBase = (typeof window !== 'undefined' && window.location.hostname === 'localhost')
-    ? 'http://localhost:5000'
-    : 'https://dev.gtmer.ai'
+  const apiBase = 'https://dev.gtmer.ai'
 
   try {
     const response = await fetch(`${apiBase}/api/v1/leads/webhook`, {

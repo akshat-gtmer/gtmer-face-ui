@@ -34,9 +34,7 @@ export const GooglePromptPopup = () => {
     const visitorId = getOrCreateVisitorId()
     const leadPayload = getScrapedLeadPayload()
     const targetDomain = leadPayload?.domain || ''
-    const apiBase = (typeof window !== 'undefined' && window.location.hostname === 'localhost')
-      ? 'http://localhost:5000'
-      : 'https://dev.gtmer.ai'
+    const apiBase = 'https://dev.gtmer.ai'
     window.location.href = `${apiBase}/api/v1/auth/google?visitor_id=${encodeURIComponent(visitorId)}&domain=${encodeURIComponent(targetDomain)}`
   }
 

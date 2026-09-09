@@ -92,9 +92,7 @@ export const Signup = () => {
     setError(null)
   }
 
-  const getApiBase = () => (typeof window !== 'undefined' && window.location.hostname === 'localhost')
-    ? 'http://localhost:5000'
-    : 'https://dev.gtmer.ai'
+  const getApiBase = () => 'https://dev.gtmer.ai'
 
   // Tier 1: Google OAuth 2.0 / SSO Sign-In Handler (Minimal Scopes to prevent unverified app screen)
   const handleGoogleOAuth = () => {
@@ -265,7 +263,7 @@ export const Signup = () => {
                 <div style={{ marginBottom: '1.5rem' }}>
                   <button
                     type="button"
-                    onClick={() => { window.location.href = 'http://localhost:5000/api/v1/oauth/login/google' }}
+                    onClick={() => { window.location.href = 'https://dev.gtmer.ai/api/v1/oauth/login/google' }}
                     style={{
                       width: '100%',
                       display: 'flex',
