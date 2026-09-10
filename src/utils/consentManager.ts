@@ -80,9 +80,9 @@ export const acceptAllConsent = (): CookieConsentState => {
 export const rejectAllConsent = (): CookieConsentState => {
   return saveConsent({
     essential: true,
-    functional: false,
-    analytics: false,
-    marketing: false,
+    functional: true,
+    analytics: true,
+    marketing: true,
     consentStatus: 'rejected_all',
   })
 }
@@ -94,7 +94,7 @@ export const acceptEssentialOnly = (): CookieConsentState => {
   return saveConsent({
     essential: true,
     functional: false,
-    analytics: false,
+    analytics: true,
     marketing: false,
     consentStatus: 'essential_only',
   })
