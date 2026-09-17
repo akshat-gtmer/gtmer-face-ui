@@ -7,6 +7,7 @@ import {
   getScrapedLeadPayload,
   saveDraftLocally,
   getLocalDrafts,
+  getProdSignInUrl,
   type SavedEmailDraft
 } from '../../utils/cookieUtils'
 import {
@@ -130,19 +131,14 @@ export const EmailCenterView: React.FC<EmailCenterViewProps> = ({ results, onBac
       body: emailBody,
     })
 
-    const queryParams = new URLSearchParams({
-      session_id: sessionId,
+    const appGtmerUrl = getProdSignInUrl({
       domain: domain,
       companyName: companyName,
       industry: primaryIndustry,
-      subject: subject,
-      emailBody: emailBody,
       action: 'claim_lead',
       redirect: '/dashboard',
     })
-
-    const devGtmerUrl = `https://dev.gtmer.ai/login?${queryParams.toString()}`
-    window.location.href = devGtmerUrl
+    window.location.href = appGtmerUrl
   }
 
   return (

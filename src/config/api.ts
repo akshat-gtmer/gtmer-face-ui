@@ -8,4 +8,5 @@
  */
 
 export const BACKEND_URL = 'https://dev.gtmer.ai'
+export const PROD_URL = 'https://app.gtmer.ai'
 export const API_BASE = '/api/v1'

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
-import { getOrCreateVisitorId, getScrapedLeadPayload, getCookie, setCookie } from '../../utils/cookieUtils'
+import { getCookie, setCookie } from '../../utils/cookieUtils'
+import { BACKEND_URL } from '../../config/api'
 import styles from './GooglePromptPopup.module.css'
 
 export const GooglePromptPopup = () => {
@@ -31,11 +32,8 @@ export const GooglePromptPopup = () => {
   }
 
   const handleGoogleSignIn = () => {
-    const visitorId = getOrCreateVisitorId()
-    const leadPayload = getScrapedLeadPayload()
-    const targetDomain = leadPayload?.domain || ''
-    const apiBase = 'https://dev.gtmer.ai'
-    window.location.href = `${apiBase}/api/v1/auth/google?visitor_id=${encodeURIComponent(visitorId)}&domain=${encodeURIComponent(targetDomain)}`
+    const redirectUrl = typeof window !== 'undefined' ? `${window.location.origin}/auth/callback` : 'https://gtmer.ai/auth/callback'
+    window.location.href = `${BACKEND_URL}/api/v1/oauth/login/google?redirect_url=${encodeURIComponent(redirectUrl)}`
   }
 
 

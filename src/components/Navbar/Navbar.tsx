@@ -1,11 +1,10 @@
 import { useState, useEffect } from 'react'
 import { useLocation, Link } from 'react-router-dom'
-import { getOrCreateScrapeSessionId } from '../../utils/cookieUtils'
+import { getProdSignInUrl } from '../../utils/cookieUtils'
 import styles from './Navbar.module.css'
 
 const NAV_LINKS = [
   { label: 'Product', path: '/product' },
-
   { label: 'Use Cases', path: '/use-cases' },
   { label: 'Pricing', path: '/pricing' },
   { label: 'Testimonials', path: '/testimonials' },
@@ -24,6 +23,17 @@ const Navbar = () => {
   const location = useLocation()
   const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
+  const [signInUrl, setSignInUrl] = useState('https://app.gtmer.ai/login?redirect=/dashboard')
+
+  const updateSignInUrl = () => {
+    setSignInUrl(getProdSignInUrl())
+  }
+
+  useEffect(() => {
+    updateSignInUrl()
+    window.addEventListener('gtmer_auth_changed', updateSignInUrl)
+    return () => window.removeEventListener('gtmer_auth_changed', updateSignInUrl)
+  }, [])
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20)
@@ -35,6 +45,11 @@ const Navbar = () => {
   useEffect(() => {
     setMobileOpen(false)
   }, [location.pathname])
+
+  const handleSignInClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault()
+    window.location.href = getProdSignInUrl()
+  }
 
   const isMoreActive = MORE_LINKS.some(link => location.pathname === link.path)
 
@@ -89,7 +104,8 @@ const Navbar = () => {
         {/* Right: CTAs */}
         <div className={styles.navRight}>
           <a
-            href={`https://dev.gtmer.ai/login?session_id=${encodeURIComponent(getOrCreateScrapeSessionId())}&redirect=/dashboard`}
+            href={signInUrl}
+            onClick={handleSignInClick}
             className={styles.signInLink}
           >
             Sign in
@@ -140,6 +156,14 @@ const Navbar = () => {
           </Link>
         ))}
         <div className={styles.mobileCta}>
+          <a
+            href={signInUrl}
+            onClick={handleSignInClick}
+            className={styles.signInLink}
+            style={{ textAlign: 'center', display: 'block', marginBottom: '0.75rem' }}
+          >
+            Sign in
+          </a>
           <Link
             to="/signup"
             className={styles.ctaButton}

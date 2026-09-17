@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
-import { getOrCreateVisitorId } from '../../utils/cookieUtils'
+import { getOrCreateVisitorId, setCookie } from '../../utils/cookieUtils'
 import { API_BASE } from '../../config/api'
 
 export const AuthCallback: React.FC = () => {
@@ -21,10 +21,18 @@ export const AuthCallback: React.FC = () => {
     }
 
     if (accessToken) {
-      // 1. Store JWT Tokens
+      // 1. Store JWT Tokens in LocalStorage & Cookies
       localStorage.setItem('gtmer_access_token', accessToken)
+      localStorage.setItem('access_token', accessToken)
+      localStorage.setItem('token', accessToken)
+      setCookie('gtmer_access_token', accessToken, 30)
+      setCookie('access_token', accessToken, 30)
+
       if (refreshToken) {
         localStorage.setItem('gtmer_refresh_token', refreshToken)
+        localStorage.setItem('refresh_token', refreshToken)
+        setCookie('gtmer_refresh_token', refreshToken, 30)
+        setCookie('refresh_token', refreshToken, 30)
       }
 
       // 2. Link Visitor ID with Auth Session
@@ -47,6 +55,7 @@ export const AuthCallback: React.FC = () => {
 
           if (userEmail) {
             localStorage.setItem('gtmer_user_email', userEmail)
+            setCookie('gtmer_user_email', userEmail, 30)
             if (userName) localStorage.setItem('gtmer_user_name', userName)
 
             // Associate Google user identity with VisitorLead in backend
@@ -66,13 +75,18 @@ export const AuthCallback: React.FC = () => {
         console.warn('[AuthCallback] Failed to parse access token:', err)
       }
 
-      // 4. Mark auth status and redirect directly to face-ui
-      setStatusText('Signed in successfully! Redirecting...')
+      // 4. Dispatch auth event so UI components refresh immediately
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new Event('gtmer_auth_changed'))
+      }
+
+      // 5. Mark auth status and redirect directly to face-ui
+      setStatusText('Signed in successfully! Redirecting to GTMer...')
       setTimeout(() => {
         navigate('/', {
           replace: true,
         })
-      }, 500)
+      }, 400)
     } else {
       setError('No authentication token received.')
       setStatusText('Authentication failed')
