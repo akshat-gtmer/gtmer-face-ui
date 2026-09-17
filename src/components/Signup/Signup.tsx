@@ -10,10 +10,11 @@ import {
   getWhatsAppVerifyUrl,
   sendLeadWebhookPayload,
   setStoredUserEmail,
+  getProdSignInUrl,
   type SavedEmailDraft,
 } from '../../utils/cookieUtils'
 import { setUserEmail, trackFormSubmit } from '../../utils/telemetry'
-import { API_BASE } from '../../config/api'
+import { API_BASE, BACKEND_URL } from '../../config/api'
 
 import { IconArrowRight, IconMail, IconLock, IconUsers, IconGlobe } from '../Icons'
 import styles from './Signup.module.css'
@@ -257,9 +258,13 @@ export const Signup = () => {
   const sessionId = leadPayload?.sessionId || getOrCreateScrapeSessionId()
   const whatsappUrl = getWhatsAppVerifyUrl('15550199200', activeDomain || undefined)
 
-  const portalRedirectUrl = activeDomain
-    ? `https://dev.gtmer.ai/login?session_id=${encodeURIComponent(sessionId)}&domain=${encodeURIComponent(activeDomain)}&companyName=${encodeURIComponent(leadPayload?.companyName || '')}&industry=${encodeURIComponent(leadPayload?.primaryIndustry || '')}&action=claim_lead&redirect=/dashboard`
-    : `https://dev.gtmer.ai/login?session_id=${encodeURIComponent(sessionId)}&redirect=/dashboard`
+  const portalRedirectUrl = getProdSignInUrl({
+    domain: activeDomain || undefined,
+    companyName: leadPayload?.companyName || undefined,
+    industry: leadPayload?.primaryIndustry || undefined,
+    action: activeDomain ? 'claim_lead' : undefined,
+    redirect: '/dashboard',
+  })
 
   return (
     <section className={styles.section}>
@@ -303,8 +308,8 @@ export const Signup = () => {
                   <button
                     type="button"
                     onClick={() => {
-                      const redirectUrl = typeof window !== 'undefined' ? `${window.location.origin}/auth/callback` : 'https://gtmer.ai/auth/callback'
-                      window.location.href = `https://dev.gtmer.ai/api/v1/oauth/login/google?redirect_url=${encodeURIComponent(redirectUrl)}`
+                      const prodRedirectUrl = 'https://app.gtmer.ai/login?redirect=/dashboard'
+                      window.location.href = `${BACKEND_URL}/api/v1/oauth/login/google?redirect_url=${encodeURIComponent(prodRedirectUrl)}`
                     }}
                     style={{
                       width: '100%',

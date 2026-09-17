@@ -68,7 +68,9 @@ export const setCookie = (name: string, value: string, days = 30): void => {
     date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000)
     expires = '; expires=' + date.toUTCString()
   }
-  document.cookie = `${name}=${encodeURIComponent(value)}${expires}; path=/; SameSite=Lax`
+  const isGtmerDomain = typeof window !== 'undefined' && window.location.hostname.includes('gtmer.ai')
+  const domainPart = isGtmerDomain ? '; domain=.gtmer.ai' : ''
+  document.cookie = `${name}=${encodeURIComponent(value)}${expires}; path=/${domainPart}; SameSite=Lax`
 }
 
 /**
@@ -508,6 +510,58 @@ export const captureAttributionData = (): AttributionData | null => {
 
   return data
 }
+
+/**
+ * Gets the redirect URL to authenticate / sign into prod (app.gtmer.ai).
+ * Passes both session tracking parameters and OAuth tokens (if available)
+ * directly to prod's login handler so it authenticates seamlessly.
+ */
+export const getProdSignInUrl = (options?: {
+  domain?: string
+  companyName?: string
+  industry?: string
+  action?: string
+  redirect?: string
+}): string => {
+  const sessionId = getOrCreateScrapeSessionId()
+  const params = new URLSearchParams({
+    session_id: sessionId,
+    redirect: options?.redirect || '/dashboard',
+  })
+
+  if (typeof window !== 'undefined') {
+    const accessToken =
+      localStorage.getItem('gtmer_access_token') ||
+      localStorage.getItem('access_token') ||
+      getCookie('gtmer_access_token') ||
+      getCookie('access_token')
+
+    const refreshToken =
+      localStorage.getItem('gtmer_refresh_token') ||
+      localStorage.getItem('refresh_token') ||
+      getCookie('gtmer_refresh_token') ||
+      getCookie('refresh_token')
+
+    const userEmail = localStorage.getItem('gtmer_user_email') || getCookie('gtmer_user_email')
+    const userName = localStorage.getItem('gtmer_user_name')
+
+    if (accessToken) {
+      params.set('access_token', accessToken)
+      params.set('token', accessToken)
+      if (refreshToken) params.set('refresh_token', refreshToken)
+      if (userEmail) params.set('email', userEmail)
+      if (userName) params.set('name', userName)
+    }
+  }
+
+  if (options?.domain) params.set('domain', options.domain)
+  if (options?.companyName) params.set('companyName', options.companyName)
+  if (options?.industry) params.set('industry', options.industry)
+  if (options?.action) params.set('action', options.action)
+
+  return `https://app.gtmer.ai/login?${params.toString()}`
+}
+
 
 
 

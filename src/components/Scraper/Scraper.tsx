@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { API_BASE } from '../../config/api'
 import { executeWebScrape, type ScraperResult, type ScrapedPageDetail } from '../../services/scraperEngine'
-import { checkDemoLimitBlocked, setScrapedCompanyCookie, setScrapedLeadPayload, getOrCreateScrapeSessionId } from '../../utils/cookieUtils'
+import { checkDemoLimitBlocked, setScrapedCompanyCookie, setScrapedLeadPayload, getOrCreateScrapeSessionId, getProdSignInUrl } from '../../utils/cookieUtils'
 import { IconArrowRight, IconBolt } from '../Icons'
 import EmailCenterView from './EmailCenterView'
 import styles from './Scraper.module.css'
@@ -24,9 +24,8 @@ export const Scraper = () => {
     // Limit check: 1 company scrape per anonymous demo session. On scanning a 2nd website, redirect directly to login page!
     const limitCheck = checkDemoLimitBlocked(urlToScrape)
     if (limitCheck.blocked) {
-      const sessionId = getOrCreateScrapeSessionId()
       const targetDomain = limitCheck.existingDomain || urlToScrape
-      window.location.href = `https://dev.gtmer.ai/login?session_id=${encodeURIComponent(sessionId)}&target_domain=${encodeURIComponent(targetDomain)}&action=claim_lead&redirect=/dashboard`
+      window.location.href = getProdSignInUrl({ domain: targetDomain, action: 'claim_lead', redirect: '/dashboard' })
       return
     }
 
@@ -156,7 +155,7 @@ export const Scraper = () => {
                   To scrape unlimited company websites and export enriched prospect profiles, please sign in to your GTMer account.
                 </div>
                 <a
-                  href={`https://dev.gtmer.ai/login?session_id=${getOrCreateScrapeSessionId()}&domain=${encodeURIComponent(blockedInfo.existingDomain || '')}&action=claim_lead&redirect=/dashboard`}
+                  href={getProdSignInUrl({ domain: blockedInfo.existingDomain || '', action: 'claim_lead', redirect: '/dashboard' })}
                   className={styles.alertBtn}
                 >
                   Sign In to Scrape Unlimited Companies

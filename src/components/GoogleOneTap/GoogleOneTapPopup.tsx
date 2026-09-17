@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { BACKEND_URL } from '../../config/api'
 
 export const GoogleOneTapPopup: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false)
@@ -29,7 +30,7 @@ export const GoogleOneTapPopup: React.FC = () => {
 
   const handleGoogleLogin = () => {
     const redirectUrl = typeof window !== 'undefined' ? `${window.location.origin}/auth/callback` : 'https://gtmer.ai/auth/callback'
-    window.location.href = `https://dev.gtmer.ai/api/v1/oauth/login/google?redirect_url=${encodeURIComponent(redirectUrl)}`
+    window.location.href = `${BACKEND_URL}/api/v1/oauth/login/google?redirect_url=${encodeURIComponent(redirectUrl)}`
   }
 
   if (!isVisible || dismissed) return null
