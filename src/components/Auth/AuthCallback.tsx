@@ -38,8 +38,26 @@ export const AuthCallback: React.FC = () => {
       // 2. Link Visitor ID with Auth Session
       const visitorId = getOrCreateVisitorId()
 
-      // 3. Extract Google email & name from JWT token and associate with visitor
-      let userEmail = ''
+      // Helper to associate verified email with VisitorLead
+      const linkVisitorLead = (email: string, name: string) => {
+        if (!email || !email.includes('@')) return
+        fetch(`${API_BASE}/leads`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            visitorId,
+            email,
+            name: name || '',
+            source: 'google_login',
+          }),
+        }).catch((leadErr) => {
+          console.warn('[AuthCallback] Non-blocking lead association notice:', leadErr)
+        })
+      }
+
+      // 3. Extract Google email & name from JWT or /auth/me profile
+      let tokenEmail = ''
+      let tokenName = ''
       try {
         const payloadBase64 = accessToken.split('.')[1]
         if (payloadBase64) {
@@ -50,30 +68,48 @@ export const AuthCallback: React.FC = () => {
               .join('')
           )
           const data = JSON.parse(jsonPayload)
-          userEmail = data.email || data.sub || ''
-          const userName = data.name || data.full_name || ''
+          // Strictly ensure email has an '@' symbol and never fallback to UUID (sub)
+          if (data.email && typeof data.email === 'string' && data.email.includes('@')) {
+            tokenEmail = data.email
+          }
+          tokenName = data.name || data.full_name || ''
 
-          if (userEmail) {
-            localStorage.setItem('gtmer_user_email', userEmail)
-            setCookie('gtmer_user_email', userEmail, 30)
-            if (userName) localStorage.setItem('gtmer_user_name', userName)
-
-            // Associate Google user identity with VisitorLead in backend
-            fetch(`${API_BASE}/leads`, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                visitorId,
-                email: userEmail,
-                name: userName,
-                source: 'google_login',
-              }),
-            }).catch(() => { /* non-blocking */ })
+          if (tokenEmail) {
+            localStorage.setItem('gtmer_user_email', tokenEmail)
+            setCookie('gtmer_user_email', tokenEmail, 30)
+            if (tokenName) localStorage.setItem('gtmer_user_name', tokenName)
+            linkVisitorLead(tokenEmail, tokenName)
           }
         }
       } catch (err) {
         console.warn('[AuthCallback] Failed to parse access token:', err)
       }
+
+      // Fetch authentic user profile from /auth/me for guaranteed accuracy
+      fetch(`${API_BASE}/auth/me`, {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+        },
+      })
+        .then((res) => {
+          if (res.ok) return res.json()
+          return null
+        })
+        .then((profile) => {
+          if (profile && profile.email && profile.email.includes('@')) {
+            const verifiedEmail = profile.email
+            const verifiedName = profile.full_name || tokenName
+            localStorage.setItem('gtmer_user_email', verifiedEmail)
+            setCookie('gtmer_user_email', verifiedEmail, 30)
+            if (verifiedName) localStorage.setItem('gtmer_user_name', verifiedName)
+            if (!tokenEmail) {
+              linkVisitorLead(verifiedEmail, verifiedName)
+            }
+          }
+        })
+        .catch((err) => {
+          console.warn('[AuthCallback] Could not retrieve profile from /auth/me:', err)
+        })
 
       // 4. Dispatch auth event so UI components refresh immediately
       if (typeof window !== 'undefined') {
