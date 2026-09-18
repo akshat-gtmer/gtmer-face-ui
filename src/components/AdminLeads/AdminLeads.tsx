@@ -240,7 +240,7 @@ export const AdminLeads = () => {
 
             {leads.length === 0 ? (
               <div className={styles.emptyState}>
-                <p>No captured leads yet. Go to <Link to="/signup">/signup</Link> or test the Google prompt to generate test records!</p>
+                <p>No captured leads yet. Go to <Link to="/signup">/signup</Link> to generate test records!</p>
               </div>
             ) : (
               <div className={styles.tableWrapper}>

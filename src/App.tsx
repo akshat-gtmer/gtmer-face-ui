@@ -32,7 +32,6 @@ import VisitorIntelligence from './components/Admin/VisitorIntelligence'
 import AdminLeads from './components/AdminLeads/AdminLeads'
 import CookieBanner from './components/CookieBanner/CookieBanner'
 import AuthCallback from './components/Auth/AuthCallback'
-import GoogleOneTapPopup from './components/GoogleOneTap/GoogleOneTapPopup'
 
 import { getOrCreateVisitorId, captureAttributionData, getUrlQueryParameters } from './utils/cookieUtils'
 import { initTelemetry } from './utils/telemetry'
@@ -120,7 +119,6 @@ const App = () => {
           <Route path="/admin/visitor-intelligence" element={<PageWithFooter><VisitorIntelligence /></PageWithFooter>} />
           <Route path="*" element={<LandingPage />} />
         </Routes>
-        <GoogleOneTapPopup />
         <CookieBanner />
       </main>
     </>
